@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
+
 
 const ProfileScreen = () => {
   const navigation = useNavigation<any>();
@@ -21,10 +23,7 @@ const ProfileScreen = () => {
           underlayColor="transparent"
           onPress={() => navigation.goBack()}
           className="w-[18px] ml-[20px] mt-[26px]">
-          <Image
-            source={require('../assests/icons/leftArrow.png')}
-            style={{width: 18, height: 18}}
-          />
+          <LeftArrowIcon name="arrowleft" size={20} color="white" />
         </TouchableHighlight>
         <View className="max-h-full my-auto mx-4">
           <View className="gap-5 mt-[40px]">

@@ -1,5 +1,7 @@
 import {View, Text, Image, TextInput, StatusBar} from 'react-native';
 import React from 'react';
+import Octicons from 'react-native-vector-icons/Octicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const Header = () => {
   return (
@@ -9,11 +11,8 @@ const Header = () => {
       />
     <View className="bg-[#1D1CA3] pt-7 pb-4 pl-5">
       <View className="flex-row items-center gap-2 mb-4">
-        <Image
-          source={require('../assests/icons/locationIcon.png')}
-          style={{width: 19, height: 19}}
-        />
-        <Text className="text-white text-xs">Vijay Nagar Indore</Text>
+        <Octicons name="location" size={20} color="white" />
+        <Text className="text-white" style={{fontSize:14}}>Vijay Nagar Indore</Text>
       </View>
       <View className="flex-row items-center gap-5">
         <TextInput
@@ -22,10 +21,11 @@ const Header = () => {
           style={{width: 296, height: 45}}
           placeholderTextColor="white"
         />
-        <Image
+        {/* <Image
           source={require('../assests/icons/filterIcon.png')}
           style={{width: 20, height: 18}}
-        />
+        /> */}
+        <AntDesign name="filter" size={30} color="white" />
       </View>
     </View>
     </>
