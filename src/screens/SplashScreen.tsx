@@ -11,7 +11,7 @@ const SplashScreen = () => {
   const [index, setIndex] = useState(0);
   const navigation = useNavigation<any>();
 
-  const skipToProfile = () => navigation.navigate('Profile');
+  const skipToProfile = () => navigation.navigate('ProfileScreen');
 
   const nextIndex = () => {
     if (index === dataLength - 1) {

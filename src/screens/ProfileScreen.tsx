@@ -1,15 +1,13 @@
+import {useNavigation} from '@react-navigation/native';
+import React from 'react';
 import {
-  View,
-  Text,
   ImageBackground,
+  Text,
   TextInput,
   TouchableHighlight,
-  Image,
+  View,
 } from 'react-native';
-import React from 'react';
-import {useNavigation} from '@react-navigation/native';
 import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
-
 
 const ProfileScreen = () => {
   const navigation = useNavigation<any>();

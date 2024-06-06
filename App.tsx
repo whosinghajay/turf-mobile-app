@@ -35,6 +35,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SplashScreen from './src/screens/SplashScreen';
 import TabNavigation from './src/navigators/TabNavigation';
 import ProfileScreen from './src/screens/ProfileScreen';
+import TurfInformation from './src/screens/TurfInformation';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,8 +52,12 @@ const App = () => {
           component={TabNavigation}
           options={{animation: 'slide_from_bottom'}}></Stack.Screen>
         <Stack.Screen
-          name="Profile"
+          name="ProfileScreen"
           component={ProfileScreen}
+          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+        <Stack.Screen
+          name="TurfInformation"
+          component={TurfInformation}
           options={{animation: 'slide_from_bottom'}}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
