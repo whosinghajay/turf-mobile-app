@@ -1,10 +1,7 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import {Alert, Image, Text, TouchableHighlight, View} from 'react-native';
-import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
-import FavouriteIcon from 'react-native-vector-icons/AntDesign';
-import ShareIcon from 'react-native-vector-icons/AntDesign';
-import CheckIcon from 'react-native-vector-icons/AntDesign';
-import {useNavigation} from '@react-navigation/native';
+import { Alert, Image, Text, TouchableHighlight, View } from 'react-native';
+import { default as CheckIcon, default as FavouriteIcon, default as LeftArrowIcon, default as ShareIcon } from 'react-native-vector-icons/AntDesign';
 import LocationIcon from 'react-native-vector-icons/Octicons';
 
 const TurfInformation = () => {
@@ -12,6 +9,7 @@ const TurfInformation = () => {
 
   return (
     <View className="mx-4 mt-4">
+      {/* header */}
       <View className="flex-row justify-between">
         <View className="flex-row gap-2 items-center">
           <TouchableHighlight
@@ -31,6 +29,7 @@ const TurfInformation = () => {
         </View>
       </View>
 
+      {/* turf image */}
       <View className="max-w-fit mx-auto mt-[20px] drop-shadow-md">
         <Image
           source={require('../assests/backgroundImage/bgImage.png')}
@@ -42,6 +41,7 @@ const TurfInformation = () => {
         />
       </View>
 
+      {/* Services section */}
       <View className="border-[2.5px] mt-3 px-3 py-2 border-slate-300 rounded-xl">
         <Text className="text-base font-semibold text-black mb-2">
           Services
@@ -72,21 +72,52 @@ const TurfInformation = () => {
         </View>
       </View>
 
+      {/* court section */}
       <View className="border-[2.5px] mt-3 px-3 py-2 border-slate-300 rounded-xl">
         <Text className="text-base font-semibold text-black mb-2">Court</Text>
 
-        <View className='h-[128px]'>
-            {/* remember to remove h-[128px] */}
-          <TouchableHighlight>
-            <View>
-              <Text>Court1</Text>
+        <View className="flex-row flex-wrap">
+          {/* remember to remove h-[128px] */}
+          <TouchableHighlight
+            onPress={() => Alert.alert('You clicked on one of the court')}
+            className='rounded-full m-1'
+            underlayColor={"#DCDCDC"}>
+            <View className="border-[1.5px] border-slate-500 rounded-full w-[106px] h-[36px] items-center justify-center">
+              <Text className="text-black text-md">Court 1</Text>
+            </View>
+          </TouchableHighlight>
+
+          {/* remove to delete below TouchableHighlight */}
+          <TouchableHighlight
+            onPress={() => Alert.alert('You clicked on one of the court')}
+            className='rounded-full m-1'
+            underlayColor={"#DCDCDC"}>
+            <View className="border-[1.5px] border-slate-500 rounded-full w-[106px] h-[36px] items-center justify-center">
+              <Text className="text-black text-md">Court 1</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('You clicked on one of the court')}
+            className='rounded-full m-1'
+            underlayColor={"#DCDCDC"}>
+            <View className="border-[1.5px] border-slate-500 rounded-full w-[106px] h-[36px] items-center justify-center">
+              <Text className="text-black text-md">Court 1</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('You clicked on one of the court')}
+            className='rounded-full m-1'
+            underlayColor={"#DCDCDC"}>
+            <View className="border-[1.5px] border-slate-500 rounded-full w-[106px] h-[36px] items-center justify-center">
+              <Text className="text-black text-md">Court 1</Text>
             </View>
           </TouchableHighlight>
         </View>
       </View>
 
+      {/* location section */}
       <View className="border-[2.5px] mt-3 px-3 py-2 border-slate-300 rounded-xl flex-row justify-between">
-        <View className='w-[70%]'>
+        <View className="w-[70%]">
           <Text className="text-base font-semibold text-black mb-2">
             Location
           </Text>
@@ -105,15 +136,16 @@ const TurfInformation = () => {
           <Image
             source={require('../assests/images/mapImageSmall.png')}
             style={{width: 76, height: 76}}
-            className='border rounded-xl'
+            className="border rounded-xl"
           />
         </View>
       </View>
 
+      {/* button section */}
       <TouchableHighlight
         underlayColor="#4141eb"
         className="bg-[#1D1CA3] mt-3 rounded-xl"
-        onPress={() => Alert.alert('You long-pressed the button!')}>
+        onPress={() => navigation.navigate('BookCourt')}>
         <Text className="text-lg text-center text-white py-3">Next</Text>
       </TouchableHighlight>
     </View>

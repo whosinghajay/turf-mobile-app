@@ -36,13 +36,15 @@ import SplashScreen from './src/screens/SplashScreen';
 import TabNavigation from './src/navigators/TabNavigation';
 import ProfileScreen from './src/screens/ProfileScreen';
 import TurfInformation from './src/screens/TurfInformation';
+import BookCourtPage from './src/screens/BookCourtPage';
+import BookCourtRecieptPage from './src/screens/BookCourtRecieptPage';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown:false}}>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen
           name="Splash Screen"
           component={SplashScreen}
@@ -58,6 +60,14 @@ const App = () => {
         <Stack.Screen
           name="TurfInformation"
           component={TurfInformation}
+          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+        <Stack.Screen
+          name="BookCourt"
+          component={BookCourtPage}
+          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+        <Stack.Screen
+          name="BookCourtReciept"
+          component={BookCourtRecieptPage}
           options={{animation: 'slide_from_bottom'}}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

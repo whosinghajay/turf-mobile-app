@@ -1,18 +1,17 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import Header from '../components/Header';
+import {
+  Image,
+  ScrollView,
+  Text,
+  TouchableHighlight,
+  View
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import CommentIcon from 'react-native-vector-icons/Feather';
 import FavouriteIcon from 'react-native-vector-icons/AntDesign';
-import {useNavigation} from '@react-navigation/native';
+import CommentIcon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import Header from '../components/Header';
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
