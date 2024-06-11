@@ -29,15 +29,15 @@
 // });
 
 // export default App;
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import SplashScreen from './src/screens/SplashScreen';
 import TabNavigation from './src/navigators/TabNavigation';
-import ProfileScreen from './src/screens/ProfileScreen';
-import TurfInformation from './src/screens/TurfInformation';
 import BookCourtPage from './src/screens/BookCourtPage';
 import BookCourtRecieptPage from './src/screens/BookCourtRecieptPage';
+import ProfileScreen from './src/screens/ProfileScreen';
+import SplashScreen from './src/screens/SplashScreen';
+import TurfInformation from './src/screens/TurfInformation';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,7 +52,8 @@ const App = () => {
         <Stack.Screen
           name="Tab"
           component={TabNavigation}
-          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          options={{animation: 'slide_from_bottom'}}>
+          </Stack.Screen>
         <Stack.Screen
           name="ProfileScreen"
           component={ProfileScreen}

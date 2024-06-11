@@ -1,16 +1,18 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { Text, View } from 'react-native';
-import FavouriteIcon from 'react-native-vector-icons/AntDesign';
+import {Text, View} from 'react-native';
+import BookingIcon from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ProfileIcon from 'react-native-vector-icons/FontAwesome';
-import { default as NotificationIcon, default as SettingIcon } from 'react-native-vector-icons/Ionicons';
-import FavouriteScreen from '../screens/FavouriteScreen';
+import {
+  default as NotificationIcon,
+  default as SettingIcon,
+} from 'react-native-vector-icons/Ionicons';
+import BookingScreen from '../screens/BookingScreen';
 import HomeScreen from '../screens/HomeScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import SettingScreen from '../screens/SettingScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
-
 
 const Tab = createBottomTabNavigator();
 
@@ -41,14 +43,14 @@ const TabNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="Favourite"
-        component={FavouriteScreen}
+        name="Booking"
+        component={BookingScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <View className="gap-1 items-center">
-              <FavouriteIcon name="hearto" size={26} color="white" />
+              <BookingIcon name="calendar" size={26} color="white" />
               <Text className="text-white font-semibold text-xs">
-                Favourite
+                Booking
               </Text>
             </View>
           ),
@@ -64,7 +66,11 @@ const TabNavigation = () => {
                 source={require('../assests/icons/notificationIcon.png')}
                 style={{width: 22, height: 22.01}}
               /> */}
-              <NotificationIcon name="notifications-outline" size={27} color="white" />
+              <NotificationIcon
+                name="notifications-outline"
+                size={27}
+                color="white"
+              />
               <Text className="text-white font-semibold text-xs">
                 Notification
               </Text>
