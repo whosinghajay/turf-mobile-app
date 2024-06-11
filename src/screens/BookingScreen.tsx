@@ -106,20 +106,20 @@ const FavouriteScreen = () => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}>
-        <View className="w-[90%] mx-auto my-auto items-center border-[3px] bg-white border-[#1D1CA3] rounded-2xl py-6 px-6">
+        <View className="w-[90%] mx-auto my-auto items-center border-[3px] bg-white border-[#49B114] rounded-2xl py-6 px-6">
           <Text
             className="w-[80%] font-semibold text-black text-center"
             style={{fontSize: 16}}>
             Are you sure you want to cancel the booking?
           </Text>
           <View className="w-[100%] flex-row justify-between mt-6">
-            <TouchableHighlight className="border-2 border-[#1D1CA3] w-[45%] py-[6px] rounded-full items-center">
+            <TouchableHighlight className="border-2 border-[#49B114] w-[45%] py-[6px] rounded-full items-center">
               <Text className="text-black text-lg font-semibold">Confirm</Text>
             </TouchableHighlight>
             <TouchableHighlight
               underlayColor={'white'}
               onPress={() => setModalVisible(false)}
-              className="border-2 border-[#1D1CA3] w-[45%] py-[6px] rounded-full items-center">
+              className="border-2 border-[#49B114] w-[45%] py-[6px] rounded-full items-center">
               <Text className="text-black text-lg font-semibold">Cancel</Text>
             </TouchableHighlight>
           </View>
