@@ -2,7 +2,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import {Text, View} from 'react-native';
 import BookingIcon from 'react-native-vector-icons/FontAwesome';
-import Entypo from 'react-native-vector-icons/Entypo';
+import HomeIcon from 'react-native-vector-icons/Ionicons';
 import ProfileIcon from 'react-native-vector-icons/FontAwesome';
 import {
   default as NotificationIcon,
@@ -36,7 +36,7 @@ const TabNavigation = () => {
         options={{
           tabBarIcon: ({focused}) => (
             <View className="gap-1 items-center">
-              <Entypo name="home" size={27} color="white" />
+              <HomeIcon name={focused?"home":"home-outline"} size={27} color="white" />
               <Text className="text-white font-semibold text-xs">Home</Text>
             </View>
           ),
@@ -48,10 +48,8 @@ const TabNavigation = () => {
         options={{
           tabBarIcon: ({focused}) => (
             <View className="gap-1 items-center">
-              <BookingIcon name="calendar" size={26} color="white" />
-              <Text className="text-white font-semibold text-xs">
-                Booking
-              </Text>
+              <BookingIcon name={focused?"calendar":"calendar-o"} size={26} color="white" />
+              <Text className="text-white font-semibold text-xs">Booking</Text>
             </View>
           ),
         }}
@@ -62,12 +60,8 @@ const TabNavigation = () => {
         options={{
           tabBarIcon: ({focused}) => (
             <View className="gap-1 items-center">
-              {/* <Image
-                source={require('../assests/icons/notificationIcon.png')}
-                style={{width: 22, height: 22.01}}
-              /> */}
               <NotificationIcon
-                name="notifications-outline"
+                name={focused?"notifications":"notifications-outline"}
                 size={27}
                 color="white"
               />
@@ -84,7 +78,7 @@ const TabNavigation = () => {
         options={{
           tabBarIcon: ({focused}) => (
             <View className="gap-1 items-center">
-              <SettingIcon name="settings-outline" size={27} color="white" />
+              <SettingIcon name={focused?"settings":"settings-outline"} size={27} color="white" />
               <Text className="text-white font-semibold text-xs">Setting</Text>
             </View>
           ),
@@ -96,7 +90,7 @@ const TabNavigation = () => {
         options={{
           tabBarIcon: ({focused}) => (
             <View className="gap-1 items-center pt-1">
-              <ProfileIcon name="user-o" size={27} color="white" />
+              <ProfileIcon name={focused?"user":"user-o"} size={27} color="white" />
               <Text className="text-white font-semibold text-xs">Profile</Text>
             </View>
           ),
