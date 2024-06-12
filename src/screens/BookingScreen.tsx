@@ -16,7 +16,6 @@ import LocationIcon from 'react-native-vector-icons/Octicons';
 
 const FavouriteScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
-
   const navigation = useNavigation<any>();
 
   return (

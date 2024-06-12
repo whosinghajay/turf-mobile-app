@@ -29,8 +29,8 @@
 // });
 
 // export default App;
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import TabNavigation from './src/navigators/TabNavigation';
 import BookCourtPage from './src/screens/BookCourtPage';
@@ -38,6 +38,7 @@ import BookCourtRecieptPage from './src/screens/BookCourtRecieptPage';
 import ProfileScreen from './src/screens/ProfileScreen';
 import SplashScreen from './src/screens/SplashScreen';
 import TurfInformation from './src/screens/TurfInformation';
+import FavouritePage from './src/screens/FavouritePage';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,8 +53,7 @@ const App = () => {
         <Stack.Screen
           name="Tab"
           component={TabNavigation}
-          options={{animation: 'slide_from_bottom'}}>
-          </Stack.Screen>
+          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
         <Stack.Screen
           name="ProfileScreen"
           component={ProfileScreen}
@@ -69,6 +69,10 @@ const App = () => {
         <Stack.Screen
           name="BookCourtReciept"
           component={BookCourtRecieptPage}
+          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+        <Stack.Screen
+          name="Favourite"
+          component={FavouritePage}
           options={{animation: 'slide_from_bottom'}}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

@@ -13,23 +13,37 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import CrossIcon from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import LocationIcon2 from 'react-native-vector-icons/FontAwesome6';
+import FavouriteIcon from 'react-native-vector-icons/AntDesign';
+import { useNavigation } from '@react-navigation/native';
 
 const Header = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation<any>();
   return (
     <>
       <StatusBar backgroundColor="#1D1CA3" />
       <View className="bg-[#1D1CA3] pt-7 pb-4 pl-5">
-        <TouchableHighlight
-          underlayColor={'transparent'}
-          onPress={() => setModalVisible(true)}>
-          <View className="flex-row items-center gap-2 mb-4">
-            <Octicons name="location" size={20} color="white" />
-            <Text className="text-white" style={{fontSize: 14}}>
-              Vijay Nagar Indore
-            </Text>
-          </View>
-        </TouchableHighlight>
+        <View className="flex-row justify-between">
+          <TouchableHighlight
+            underlayColor={'transparent'}
+            onPress={() => setModalVisible(true)}>
+            <View className="flex-row items-center gap-2 mb-4">
+              <Octicons name="location" size={20} color="white" />
+              <Text className="text-white" style={{fontSize: 14}}>
+                Vijay Nagar Indore
+              </Text>
+            </View>
+          </TouchableHighlight>
+
+          <TouchableHighlight
+            underlayColor={'transparent'}
+            onPress={() => navigation.navigate('Favourite')}>
+            <View className="mr-8">
+              <FavouriteIcon name="hearto" size={21} color="white" />
+            </View>
+          </TouchableHighlight>
+        </View>
+
         <View className="flex-row items-center gap-5">
           <TextInput
             placeholder="Search"
@@ -37,7 +51,11 @@ const Header = () => {
             style={{width: 296, height: 45}}
             placeholderTextColor="white"
           />
-          <AntDesign name="filter" size={30} color="white" />
+          <TouchableHighlight
+            underlayColor={'transparent'}
+            onPress={() => Alert.alert('filter button')}>
+            <AntDesign name="filter" size={30} color="white" />
+          </TouchableHighlight>
         </View>
       </View>
 
@@ -91,9 +109,9 @@ const Header = () => {
 
           <Text className="text-black font-semibold mt-4">Recent</Text>
 
-          <View className='flex-row mt-2'>
+          <View className="flex-row mt-2">
             <Octicons name="location" size={20} color="black" />
-            <View className='ml-2'>
+            <View className="ml-2">
               <Text className="text-black font-bold" style={{fontSize: 14}}>
                 Vijay Nagar
               </Text>
