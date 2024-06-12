@@ -61,10 +61,9 @@ const Header = () => {
 
       {/* modal */}
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
-        hardwareAccelerated={true}
         onRequestClose={() => setModalVisible(false)}>
         <View className="w-full absolute bottom-0 bg-white rounded-t-2xl py-6 px-6">
           <View className="flex-row-reverse">

@@ -31,7 +31,7 @@ const ProfileScreen = () => {
               </Text>
               <TextInput
                 placeholder="Enter Your Full Name"
-                className="h-[60px] border-[1px] pl-6 rounded-xl border-white"
+                className="h-[60px] border-[1px] pl-6 rounded-xl text-white border-white"
                 placeholderTextColor={'rgba(255, 255, 255, 0.5)'}
               />
             </View>
@@ -41,7 +41,7 @@ const ProfileScreen = () => {
               </Text>
               <TextInput
                 placeholder="Enter Your Location"
-                className="h-[60px] border-[1px] pl-6 rounded-xl border-white"
+                className="h-[60px] border-[1px] pl-6 rounded-xl text-white border-white"
                 placeholderTextColor={'rgba(255, 255, 255, 0.5)'}
               />
             </View>
