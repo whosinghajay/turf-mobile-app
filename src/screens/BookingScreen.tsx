@@ -19,7 +19,8 @@ const FavouriteScreen = () => {
   const navigation = useNavigation<any>();
 
   return (
-    <ScrollView className="mx-4 mt-4">
+    <View className="h-full px-4 pt-4">
+    {/* <ScrollView className="mx-4 mt-4"> */}
       {/* header */}
       <View className="flex-row justify-between">
         <View className="flex-row gap-2 items-center">
@@ -46,8 +47,9 @@ const FavouriteScreen = () => {
         </View>
       </View>
 
+      <ScrollView>
       {/* Booking id  */}
-      <View className="mt-5 border-2 border-slate-300 rounded-xl">
+      <View className="mt-5 pt-2 border-2 border-slate-300 rounded-xl">
         <View className="flex-row justify-between mx-4 items-center">
           <Text className="font-semibold text-base text-black">
             Booking ID: RJ023NP
@@ -125,8 +127,10 @@ const FavouriteScreen = () => {
         </View>
       </Modal>
 
+      
+
       {/* remember delete this */}
-      <View className="mt-5 border-2 border-slate-300 rounded-xl">
+      <View className="mt-5 pt-2 border-2 border-slate-300 rounded-xl">
         <View className="flex-row justify-between mx-4 items-center">
           <Text className="font-semibold text-base text-black">
             Booking ID: RJ023NP
@@ -178,6 +182,11 @@ const FavouriteScreen = () => {
         </View>
       </View>
     </ScrollView>
+    {/* dim background */}
+    {modalVisible && (
+        <View className="absolute top-0 bottom-0 right-0 left-0 z-[1]" style={{backgroundColor:"rgba(0, 0, 0, 0.6)"}}></View>
+      )}
+    </View>
   );
 };
 

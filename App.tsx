@@ -39,6 +39,8 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import SplashScreen from './src/screens/SplashScreen';
 import TurfInformation from './src/screens/TurfInformation';
 import FavouritePage from './src/screens/FavouritePage';
+import PhoneNumber from './src/screens/PhoneNumber';
+import OTP from './src/screens/OTPScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -73,6 +75,14 @@ const App = () => {
         <Stack.Screen
           name="Favourite"
           component={FavouritePage}
+          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+        <Stack.Screen
+          name="PhoneNumber"
+          component={PhoneNumber}
+          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+        <Stack.Screen
+          name="OTP"
+          component={OTP}
           options={{animation: 'slide_from_bottom'}}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

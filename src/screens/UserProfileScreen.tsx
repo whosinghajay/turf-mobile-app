@@ -28,25 +28,28 @@ const UserProfileScreen = () => {
 
       {/* info section */}
       <View className="mx-auto mt-6">
+
+        {/* enter your name wala section */}
         <View className="mb-4">
           <Text className="text-black text-base font-semibold mb-1">
             Enter Your Full Name
           </Text>
           <TextInput
             placeholder="Enter Your Full Name"
-            className="border-[1.5px] rounded-lg border-black text-black pl-5"
+            className="border-[1px] rounded-lg border-black text-black pl-5"
             style={{width: 310, height: 50}}
             placeholderTextColor="black"
           />
         </View>
 
+        {/* enter your location wala section */}
         <View>
           <Text className="text-black text-base font-semibold mb-1">
-            Enter Your Full Name
+            Enter Your Location
           </Text>
           <TextInput
             placeholder="Enter Your Location"
-            className="border-[1.5px] rounded-lg border-black text-black pl-5"
+            className="border-[1px] rounded-lg border-black text-black pl-5"
             style={{width: 310, height: 50}}
             placeholderTextColor="black"
           />
