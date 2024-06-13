@@ -1,13 +1,12 @@
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
+import {Alert, Image, Text, TouchableHighlight, View} from 'react-native';
 import {
-  Alert,
-  Image,
-  Text,
-  TouchableHighlight,
-  View
-} from 'react-native';
-import { default as CalendarIcon, default as FavouriteIcon, default as LeftArrowIcon, default as ShareIcon } from 'react-native-vector-icons/AntDesign';
+  default as CalendarIcon,
+  default as FavouriteIcon,
+  default as LeftArrowIcon,
+  default as ShareIcon,
+} from 'react-native-vector-icons/AntDesign';
 
 const BookCourtPage = () => {
   const navigation = useNavigation<any>();
@@ -22,7 +21,9 @@ const BookCourtPage = () => {
             onPress={() => navigation.navigate('TurfInformation')}>
             <LeftArrowIcon name="arrowleft" size={23} color="#000000" />
           </TouchableHighlight>
-          <Text className="text-black text-[18px] font-semibold">Book Court</Text>
+          <Text className="text-black text-[18px] font-semibold">
+            Book Court
+          </Text>
         </View>
         <View className="flex-row gap-3 items-center">
           <TouchableHighlight>
@@ -61,201 +62,200 @@ const BookCourtPage = () => {
       </View>
 
       {/* price per hour wala section */}
-        <View className="pt-4 pb-2 mx-2">
-          <Text className="text-black text-base font-semibold">
-            Price - 1000 hourly
-          </Text>
-          <View className="pt-3 flex-row flex-wrap gap-3">
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:11 AM</Text>
-              </View>
-            </TouchableHighlight>
+      <View className="pt-4 pb-2 mx-2">
+        <Text className="text-black text-base font-semibold">
+          Price - 1000 hourly
+        </Text>
+        <View className="pt-3 flex-row flex-wrap gap-3 mx-auto">
+          <TouchableHighlight
+            underlayColor={'transparent'}
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl">
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:11 AM</Text>
+            </View>
+          </TouchableHighlight>
 
-            {/* remember to delete neche wale */}
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Alert.alert('hello boss')}
-              className="border-2 border-slate-300 rounded-xl"
-              //   underlayColor={"#979797"}
-            >
-              <View className="px-2 py-3">
-                <Text className="text-xs font-semibold">01:00 AM</Text>
-              </View>
-            </TouchableHighlight>
-          </View>
+          {/* remember to delete neche wale */}
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => Alert.alert('hello boss')}
+            className="border-2 border-slate-300 rounded-xl"
+            //   underlayColor={"#979797"}
+          >
+            <View className="px-2 py-3">
+              <Text className="text-xs font-semibold">01:00 AM</Text>
+            </View>
+          </TouchableHighlight>
         </View>
+      </View>
 
       {/* button section */}
       <TouchableHighlight
         underlayColor="#4141eb"
         className="bg-[#1D1CA3] mt-3 rounded-xl"
-        onPress={() => navigation.navigate("BookCourtReciept")}>
+        onPress={() => navigation.navigate('BookCourtReciept')}>
         <Text className="text-lg text-center text-white py-3">
           Proceed to Pay ₹1000
         </Text>
