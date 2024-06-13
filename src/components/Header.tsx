@@ -44,7 +44,7 @@ const Header = () => {
           </TouchableHighlight>
         </View>
 
-        <View className="flex-row items-center gap-5">
+        <View className="flex-row items-center justify-between">
           <TextInput
             placeholder="Search"
             className="border-[1.5px] rounded-lg border-white text-white pl-5"
@@ -53,7 +53,8 @@ const Header = () => {
           />
           <TouchableHighlight
             underlayColor={'transparent'}
-            onPress={() => Alert.alert('filter button')}>
+            onPress={() => Alert.alert('filter button')}
+            className='mr-7'>
             <AntDesign name="filter" size={30} color="white" />
           </TouchableHighlight>
         </View>
