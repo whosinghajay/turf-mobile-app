@@ -165,13 +165,13 @@ const HomeScreen = () => {
               }}>
               {/* This LinearGradient covers the entire image */}
             </LinearGradient>
-            <View className="absolute bottom-3 left-4 gap-[3px]">
-              <Text className="text-white font-semibold" style={{fontSize: 22}}>
+            <View className="absolute bottom-3 left-4 gap-[3px] right-4">
+              <Text className="text-white font-semibold" style={{fontSize: 24}}>
                 B3 Turf
               </Text>
               <View className="flex-row items-center">
                 <Icon name="location-pin" size={14} color="white" />
-                <Text className="text-white ml-1" style={{fontSize: 13}}>
+                <Text className="text-white ml-1" style={{fontSize: 14}}>
                   Swadesh Bhawan, behind Shreemaya Hotel LIG Square
                 </Text>
               </View>

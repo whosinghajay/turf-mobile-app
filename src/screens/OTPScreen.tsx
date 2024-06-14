@@ -1,17 +1,13 @@
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
-  Image,
   ImageBackground,
-  ScrollView,
   Text,
-  TextInput,
   TouchableHighlight,
-  View,
+  View
 } from 'react-native';
+import { OtpInput } from "react-native-otp-entry";
 import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
-import DownArrowIcon from 'react-native-vector-icons/MaterialIcons';
-import {OtpInput} from 'react-native-otp-entry';
 
 const OTP = () => {
   const navigation = useNavigation<any>();
