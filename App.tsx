@@ -41,51 +41,55 @@ import TurfInformation from './src/screens/TurfInformation';
 import FavouritePage from './src/screens/FavouritePage';
 import PhoneNumber from './src/screens/PhoneNumber';
 import OTP from './src/screens/OTPScreen';
+import {Provider} from 'react-redux';
+import {store} from './src/redux/store';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen
-          name="Splash Screen"
-          component={SplashScreen}
-          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
-        <Stack.Screen
-          name="Tab"
-          component={TabNavigation}
-          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
-        <Stack.Screen
-          name="ProfileScreen"
-          component={ProfileScreen}
-          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
-        <Stack.Screen
-          name="TurfInformation"
-          component={TurfInformation}
-          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
-        <Stack.Screen
-          name="BookCourt"
-          component={BookCourtPage}
-          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
-        <Stack.Screen
-          name="BookCourtReciept"
-          component={BookCourtRecieptPage}
-          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
-        <Stack.Screen
-          name="Favourite"
-          component={FavouritePage}
-          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
-        <Stack.Screen
-          name="PhoneNumber"
-          component={PhoneNumber}
-          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
-        <Stack.Screen
-          name="OTP"
-          component={OTP}
-          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+          <Stack.Screen
+            name="Splash Screen"
+            component={SplashScreen}
+            options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          <Stack.Screen
+            name="Tab"
+            component={TabNavigation}
+            options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          <Stack.Screen
+            name="ProfileScreen"
+            component={ProfileScreen}
+            options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          <Stack.Screen
+            name="TurfInformation"
+            component={TurfInformation}
+            options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          <Stack.Screen
+            name="BookCourt"
+            component={BookCourtPage}
+            options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          <Stack.Screen
+            name="BookCourtReciept"
+            component={BookCourtRecieptPage}
+            options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          <Stack.Screen
+            name="Favourite"
+            component={FavouritePage}
+            options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          <Stack.Screen
+            name="PhoneNumber"
+            component={PhoneNumber}
+            options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          <Stack.Screen
+            name="OTP"
+            component={OTP}
+            options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 };
 

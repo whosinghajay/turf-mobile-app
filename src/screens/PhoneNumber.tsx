@@ -1,18 +1,36 @@
-import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useState} from 'react';
 import {
-    Image,
-    ImageBackground,
-    Text,
-    TextInput,
-    TouchableHighlight,
-    View
+  Image,
+  ImageBackground,
+  Text,
+  TextInput,
+  TouchableHighlight,
+  View,
 } from 'react-native';
 import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
 import DownArrowIcon from 'react-native-vector-icons/MaterialIcons';
 
 const PhoneNumber = () => {
   const navigation = useNavigation<any>();
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
+    undefined,
+  );
+
+  const onChangeHandler = (value: string) => {
+    // Clear the previous timeout
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    // Set a new timeout to log the value after 1000ms (1 second)
+    const newTimeoutId = setTimeout(() => {
+      console.log(value);
+    }, 1000);
+
+    // Save the timeout ID to state
+    setTimeoutId(newTimeoutId);
+  };
 
   return (
     <ImageBackground
@@ -59,6 +77,7 @@ const PhoneNumber = () => {
                   className="h-[60px] pl-6 rounded-xl text-white "
                   placeholderTextColor={'rgba(255, 255, 255, 0.5)'}
                   keyboardType="numeric"
+                  onChangeText={onChangeHandler}
                 />
               </View>
             </View>

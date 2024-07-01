@@ -5,6 +5,7 @@ import {default as LeftArrowIcon} from 'react-native-vector-icons/AntDesign';
 import {default as RightArrowIcon} from 'react-native-vector-icons/MaterialIcons';
 import {default as LogoutIcon} from 'react-native-vector-icons/MaterialCommunityIcons';
 import {default as ToggleIcon} from 'react-native-vector-icons/FontAwesome6';
+import RadioButtons from '../components/RadioButtons';
 
 const SettingScreen = () => {
   const [toggle, setToggle] = useState(false);

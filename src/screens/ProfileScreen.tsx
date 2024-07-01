@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {
   ImageBackground,
@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
+import RadioButtons from '../components/RadioButtons';
 
 const ProfileScreen = () => {
   const navigation = useNavigation<any>();
@@ -17,14 +18,18 @@ const ProfileScreen = () => {
       source={require('../assests/images/Otp/OtpScreenBackground.png')}
       resizeMode="cover">
       <View className="h-full">
+        {/* back button */}
         <TouchableHighlight
           underlayColor="transparent"
           onPress={() => navigation.goBack()}
           className="w-[18px] ml-[20px] mt-[26px]">
           <LeftArrowIcon name="arrowleft" size={20} color="white" />
         </TouchableHighlight>
+
+        {/* main body */}
         <View className="max-h-full my-auto mx-4">
-          <View className="gap-5 mt-[40px]">
+          <View className="gap-5 mt-[140px]">
+            {/* name section */}
             <View>
               <Text className="text-white text-lg pb-1 pl-[2px]">
                 Enter Your Full Name
@@ -35,6 +40,7 @@ const ProfileScreen = () => {
                 placeholderTextColor={'rgba(255, 255, 255, 0.5)'}
               />
             </View>
+            {/* location section */}
             <View>
               <Text className="text-white text-lg pb-1 pl-[2px]">
                 Enter Your Location
@@ -45,7 +51,18 @@ const ProfileScreen = () => {
                 placeholderTextColor={'rgba(255, 255, 255, 0.5)'}
               />
             </View>
-            <View className="bg-white h-[17%] rounded-lg ">
+            {/* gender section */}
+            <View className="">
+              <Text className="text-white text-lg ml-[10px] pb-1">Gender</Text>
+              <RadioButtons optionOne='male' optionTwo='female' />
+            </View>
+            {/* role section */}
+            <View className="">
+              <Text className="text-white text-lg ml-[10px] pb-1">Role</Text>
+              <RadioButtons optionOne='user' optionTwo='turfPoster' />
+            </View>
+            {/* next button */}
+            <View className="bg-white h-[11%] rounded-lg">
               <TouchableHighlight
                 underlayColor="#e9e9e9"
                 className="w-full h-full rounded-lg items-center justify-center"
