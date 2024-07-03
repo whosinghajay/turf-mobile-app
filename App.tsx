@@ -43,6 +43,7 @@ import PhoneNumber from './src/screens/PhoneNumber';
 import OTP from './src/screens/OTPScreen';
 import {Provider} from 'react-redux';
 import {store} from './src/redux/store';
+import Toast from 'react-native-toast-message';
 
 const Stack = createNativeStackNavigator();
 
@@ -89,6 +90,7 @@ const App = () => {
             options={{animation: 'slide_from_bottom'}}></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
+      <Toast/>
     </Provider>
   );
 };

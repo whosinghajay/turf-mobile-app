@@ -1,11 +1,10 @@
-import {View, Text, TouchableHighlight, Alert} from 'react-native';
-import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {default as LeftArrowIcon} from 'react-native-vector-icons/AntDesign';
-import {default as RightArrowIcon} from 'react-native-vector-icons/MaterialIcons';
-import {default as LogoutIcon} from 'react-native-vector-icons/MaterialCommunityIcons';
-import {default as ToggleIcon} from 'react-native-vector-icons/FontAwesome6';
-import RadioButtons from '../components/RadioButtons';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { Alert, Text, TouchableHighlight, View } from 'react-native';
+import { default as LeftArrowIcon } from 'react-native-vector-icons/AntDesign';
+import { default as ToggleIcon } from 'react-native-vector-icons/FontAwesome6';
+import { default as LogoutIcon } from 'react-native-vector-icons/MaterialCommunityIcons';
+import { default as RightArrowIcon } from 'react-native-vector-icons/MaterialIcons';
 
 const SettingScreen = () => {
   const [toggle, setToggle] = useState(false);

@@ -8,16 +8,23 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
+import Toast from 'react-native-toast-message';
 import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
 import DownArrowIcon from 'react-native-vector-icons/MaterialIcons';
+import {useAppDispatch} from '../redux/hooks';
+import {userLogin} from '../redux/reducer/userReducer';
+import {User} from '../types/types';
 
 const PhoneNumber = () => {
   const navigation = useNavigation<any>();
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
     undefined,
   );
+  const [phoneNumber, setPhoneNumber] = useState<number>();
 
-  const onChangeHandler = (value: string) => {
+  const dispatch = useAppDispatch();
+
+  const onChangeHandler = (e: string) => {
     // Clear the previous timeout
     if (timeoutId) {
       clearTimeout(timeoutId);
@@ -25,11 +32,34 @@ const PhoneNumber = () => {
 
     // Set a new timeout to log the value after 1000ms (1 second)
     const newTimeoutId = setTimeout(() => {
-      console.log(value);
+      setPhoneNumber(Number(e));
     }, 1000);
 
     // Save the timeout ID to state
     setTimeoutId(newTimeoutId);
+  };
+
+  // const onPressHandler = () => navigation.navigate('OTP');
+
+  const onPressHandler = () => {
+    if (!phoneNumber) {
+      Toast.show({
+        type: 'error',
+        text1: 'Empty Field',
+        text2: 'Enter your phone number',
+      });
+    }
+    if (phoneNumber) {
+      const user: User = {
+        phoneNumber,
+        gender: '',
+        fullName: '',
+        location: '',
+        role: '',
+      };
+      dispatch(userLogin(user));
+      navigation.navigate('OTP');
+    }
   };
 
   return (
@@ -87,7 +117,7 @@ const PhoneNumber = () => {
               <TouchableHighlight
                 underlayColor="#e9e9e9"
                 className="w-full h-full rounded-lg items-center justify-center"
-                onPress={() => navigation.navigate('OTP')}>
+                onPress={onPressHandler}>
                 <Text className="text-xl text-black font-medium">Send OTP</Text>
               </TouchableHighlight>
             </View>
