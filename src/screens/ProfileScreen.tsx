@@ -13,11 +13,14 @@ import Toast from 'react-native-toast-message';
 import {User, userInfoType} from '../types/types';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import {userLogin} from '../redux/reducer/userReducer';
+import {useCreateUserMutation} from '../redux/api/userAPI';
 
 const ProfileScreen = () => {
   const navigation = useNavigation<any>();
 
   const dispatch = useAppDispatch();
+
+  const [createUser] = useCreateUserMutation();
 
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
     undefined,
@@ -32,24 +35,32 @@ const ProfileScreen = () => {
     role: '',
   });
 
+  // const onNameChangeHandler = (e: string) => {
+  //   if (timeoutId) clearTimeout(timeoutId);
+
+  //   const newTimeoutId = setTimeout(() => {
+  //     setUserInfo({...userInfo, fullName: e});
+  //   }, 1000);
+
+  //   setTimeoutId(newTimeoutId);
+  // };
+
+  // const onLocationChangeHandler = (e: string) => {
+  //   if (timeoutId) clearTimeout(timeoutId);
+
+  //   const newTimeoutId = setTimeout(() => {
+  //     setUserInfo({...userInfo, location: e});
+  //   }, 1000);
+
+  //   setTimeoutId(newTimeoutId);
+  // };
+
   const onNameChangeHandler = (e: string) => {
-    if (timeoutId) clearTimeout(timeoutId);
-
-    const newTimeoutId = setTimeout(() => {
-      setUserInfo({...userInfo, fullName: e});
-    }, 1000);
-
-    setTimeoutId(newTimeoutId);
+    setUserInfo({...userInfo, fullName: e});
   };
 
   const onLocationChangeHandler = (e: string) => {
-    if (timeoutId) clearTimeout(timeoutId);
-
-    const newTimeoutId = setTimeout(() => {
-      setUserInfo({...userInfo, location: e});
-    }, 1000);
-
-    setTimeoutId(newTimeoutId);
+    setUserInfo({...userInfo, location: e});
   };
 
   const onGenderChangeHandler = (e: string) => {
@@ -60,7 +71,7 @@ const ProfileScreen = () => {
     setUserInfo({...userInfo, role: e});
   };
 
-  const onPressNextButton = () => {
+  const onPressNextButton = async () => {
     const user: User = {
       phoneNumber: userData.user.phoneNumber,
       gender: userInfo.gender!,
@@ -69,6 +80,7 @@ const ProfileScreen = () => {
       role: userInfo.role!,
     };
     dispatch(userLogin(user));
+    await createUser(user);
     navigation.navigate('Tab');
   };
 

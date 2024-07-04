@@ -33,7 +33,7 @@ const PhoneNumber = () => {
     // Set a new timeout to log the value after 1000ms (1 second)
     const newTimeoutId = setTimeout(() => {
       setPhoneNumber(Number(e));
-    }, 1000);
+    }, 300);
 
     // Save the timeout ID to state
     setTimeoutId(newTimeoutId);
