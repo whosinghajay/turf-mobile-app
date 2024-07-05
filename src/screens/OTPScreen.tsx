@@ -45,9 +45,9 @@ const OTP = () => {
       if (data.success) {
         if (data.message.includes('Welcome back')) {
           navigation.navigate('Tab');
-        } else {
-          navigation.navigate('ProfileScreen');
         }
+      } else {
+        navigation.navigate('ProfileScreen');
       }
     } else {
       Toast.show({

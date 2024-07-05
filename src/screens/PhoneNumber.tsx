@@ -108,6 +108,7 @@ const PhoneNumber = () => {
                   placeholderTextColor={'rgba(255, 255, 255, 0.5)'}
                   keyboardType="numeric"
                   onChangeText={onChangeHandler}
+                  maxLength={10}
                 />
               </View>
             </View>
