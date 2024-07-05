@@ -22,10 +22,6 @@ const ProfileScreen = () => {
 
   const [createUser] = useCreateUserMutation();
 
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
-    undefined,
-  );
-
   const userData = useAppSelector(state => state.user);
 
   const [userInfo, setUserInfo] = useState<userInfoType>({
@@ -34,26 +30,6 @@ const ProfileScreen = () => {
     gender: '',
     role: '',
   });
-
-  // const onNameChangeHandler = (e: string) => {
-  //   if (timeoutId) clearTimeout(timeoutId);
-
-  //   const newTimeoutId = setTimeout(() => {
-  //     setUserInfo({...userInfo, fullName: e});
-  //   }, 1000);
-
-  //   setTimeoutId(newTimeoutId);
-  // };
-
-  // const onLocationChangeHandler = (e: string) => {
-  //   if (timeoutId) clearTimeout(timeoutId);
-
-  //   const newTimeoutId = setTimeout(() => {
-  //     setUserInfo({...userInfo, location: e});
-  //   }, 1000);
-
-  //   setTimeoutId(newTimeoutId);
-  // };
 
   const onNameChangeHandler = (e: string) => {
     setUserInfo({...userInfo, fullName: e});
@@ -72,6 +48,20 @@ const ProfileScreen = () => {
   };
 
   const onPressNextButton = async () => {
+    if (
+      !userInfo.fullName ||
+      !userInfo.location ||
+      !userInfo.gender ||
+      !userInfo.role
+    ) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please fill in all fields.',
+      });
+      return;
+    }
+
     const user: User = {
       phoneNumber: userData.user.phoneNumber,
       gender: userInfo.gender!,
@@ -79,9 +69,22 @@ const ProfileScreen = () => {
       location: userInfo.location!,
       role: userInfo.role!,
     };
-    dispatch(userLogin(user));
-    await createUser(user);
-    navigation.navigate('Tab');
+    try {
+      dispatch(userLogin(user));
+      await createUser(user);
+      navigation.navigate('Tab');
+      Toast.show({
+        type: 'success',
+        text1: `Welcome! ${user.fullName}`,
+        text2: 'Account Created Successfully',
+      });
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: String(error),
+        text2: 'Error in creating account',
+      });
+    }
   };
 
   return (

@@ -4,6 +4,8 @@ import {ImageBackground, Text, TouchableHighlight, View} from 'react-native';
 import {OtpInput} from 'react-native-otp-entry';
 import Toast from 'react-native-toast-message';
 import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
+import {server} from '../redux/store';
+import {useAppSelector} from '../redux/hooks';
 
 const correctOTP = 1234;
 
@@ -13,6 +15,7 @@ const OTP = () => {
     undefined,
   );
   const [otp, setOtp] = useState<number>();
+  const userData = useAppSelector(state => state.user);
 
   const textChangeHandler = (e: string) => {
     if (timeoutId) clearTimeout(timeoutId);
@@ -24,9 +27,29 @@ const OTP = () => {
     setTimeoutId(newTimeoutId);
   };
 
-  const nextPageHandler = () => {
-    if (otp === correctOTP) navigation.navigate('ProfileScreen');
-    else {
+  const nextPageHandler = async () => {
+    if (otp === correctOTP) {
+      // navigation.navigate('ProfileScreen');
+      const response = await fetch(`${server}/api/v1/user/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phoneNumber: userData.user.phoneNumber,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        if (data.message.includes('Welcome back')) {
+          navigation.navigate('Tab');
+        } else {
+          navigation.navigate('ProfileScreen');
+        }
+      }
+    } else {
       Toast.show({
         type: 'error',
         text1: 'Wrong OTP',

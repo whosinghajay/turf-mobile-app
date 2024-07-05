@@ -2,8 +2,7 @@ import {configureStore} from '@reduxjs/toolkit';
 import userReducer from './reducer/userReducer';
 import {userAPI} from './api/userAPI';
 
-// export const server = 'http://localhost:3000';
-// console.log(server);
+export const server = 'https://5557-122-168-182-60.ngrok-free.app';
 
 export const store = configureStore({
   reducer: {
