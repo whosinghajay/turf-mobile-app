@@ -1,18 +1,77 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { Alert, Text, TouchableHighlight, View } from 'react-native';
-import { default as LeftArrowIcon } from 'react-native-vector-icons/AntDesign';
-import { default as ToggleIcon } from 'react-native-vector-icons/FontAwesome6';
-import { default as LogoutIcon } from 'react-native-vector-icons/MaterialCommunityIcons';
-import { default as RightArrowIcon } from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {Alert, Modal, Text, TouchableHighlight, View} from 'react-native';
+import {default as LeftArrowIcon} from 'react-native-vector-icons/AntDesign';
+import {default as ToggleIcon} from 'react-native-vector-icons/FontAwesome6';
+import {default as LogoutIcon} from 'react-native-vector-icons/MaterialCommunityIcons';
+import {default as RightArrowIcon} from 'react-native-vector-icons/MaterialIcons';
+import {useDeleteUserMutation} from '../redux/api/userAPI';
+
+interface User {
+  _id: string;
+  phoneNumber: number;
+  gender: string;
+  fullName: string;
+  location: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
 
 const SettingScreen = () => {
   const [toggle, setToggle] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+  const [userData, setUserData] = useState<User | null>(null);
   const navigation = useNavigation<any>();
+  const [deleteUser] = useDeleteUserMutation();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const jsonValue = await AsyncStorage.getItem('my-data');
+      const data: User = jsonValue != null ? JSON.parse(jsonValue) : null;
+      setUserData(data);
+    };
+    getUser();
+  }, []);
 
   const toggleLocationOnOff = () => {
     setToggle(!toggle);
   };
+
+  const logoutHandler = async () => {
+    await AsyncStorage.removeItem('my-data');
+    setModalVisible(false);
+    navigation.navigate('Splash Screen');
+  };
+
+  // const deleteHandler = async () => {
+  //   await deleteUser(userData?._id!);
+  //   await AsyncStorage.removeItem('my-data');
+  //   setModalVisible(false);
+  //   navigation.navigate('Splash Screen');
+  // };
+
+  const deleteHandler = async () => {
+    try {
+      if (userData?._id) {
+        const aa = await deleteUser(userData?._id);
+        console.log(aa);
+        
+        await AsyncStorage.removeItem('my-data');
+        setModalDeleteVisible(false);
+        navigation.navigate('Splash Screen');
+      } else {
+        console.error('User ID is missing');
+      }
+    } catch (error) {
+      console.error('Failed to delete user:', error);
+      Alert.alert('Error', 'Failed to delete user. Please try again.');
+    }
+  };
+
   return (
     <>
       {/* header */}
@@ -49,7 +108,7 @@ const SettingScreen = () => {
               underlayColor={'transparent'}
               onPress={toggleLocationOnOff}>
               <ToggleIcon
-                name={toggle ? "toggle-on" : "toggle-off"}
+                name={toggle ? 'toggle-on' : 'toggle-off'}
                 size={26}
                 color="#0064D2"
               />
@@ -89,7 +148,7 @@ const SettingScreen = () => {
 
         {/* delete account */}
         <TouchableHighlight
-          onPress={() => Alert.alert('clicked')}
+          onPress={() => setModalDeleteVisible(true)}
           underlayColor={'#EFEFEF'}>
           <View className="flex-row items-center justify-between border-b-2 pb-2 my-2 border-slate-200">
             <Text className="text-black text-base">Delete Account</Text>
@@ -99,13 +158,71 @@ const SettingScreen = () => {
 
         {/* logout */}
         <TouchableHighlight
-          onPress={() => Alert.alert('clicked')}
+          onPress={() => setModalVisible(true)}
           underlayColor={'#EFEFEF'}>
           <View className="flex-row items-center justify-between border-b-2 pb-2 my-2 border-slate-200">
             <Text className="text-black text-base">Logout</Text>
             <LogoutIcon name="logout" size={20} color="black" />
           </View>
         </TouchableHighlight>
+
+        {/* modal for logout */}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}>
+          <View className="w-[90%] mx-auto my-auto items-center border-[3px] bg-white border-[#ff1414] rounded-2xl py-6 px-6">
+            <Text
+              className="w-[80%] font-semibold text-black text-center"
+              style={{fontSize: 16}}>
+              Are you sure you want to logout?
+            </Text>
+            <View className="w-[100%] flex-row justify-between mt-6">
+              <TouchableHighlight
+                underlayColor={'white'}
+                onPress={logoutHandler}
+                className="border-2 border-[#ff1414] w-[45%] py-[6px] rounded-full items-center">
+                <Text className="text-black text-lg font-semibold">Logout</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                underlayColor={'white'}
+                onPress={() => setModalVisible(false)}
+                className="border-2 border-[#ff1414] w-[45%] py-[6px] rounded-full items-center">
+                <Text className="text-black text-lg font-semibold">Cancel</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
+
+        {/* modal for delete */}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalDeleteVisible}
+          onRequestClose={() => setModalDeleteVisible(false)}>
+          <View className="w-[90%] mx-auto my-auto items-center border-[3px] bg-white border-[#ff1414] rounded-2xl py-6 px-6">
+            <Text
+              className="w-[80%] font-semibold text-black text-center"
+              style={{fontSize: 16}}>
+              Are you sure you want to delete your account?
+            </Text>
+            <View className="w-[100%] flex-row justify-between mt-6">
+              <TouchableHighlight
+                underlayColor={'white'}
+                onPress={deleteHandler}
+                className="border-2 border-[#ff1414] w-[45%] py-[6px] rounded-full items-center">
+                <Text className="text-black text-lg font-semibold">Delete</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                underlayColor={'white'}
+                onPress={() => setModalDeleteVisible(false)}
+                className="border-2 border-[#ff1414] w-[45%] py-[6px] rounded-full items-center">
+                <Text className="text-black text-lg font-semibold">Cancel</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
       </View>
     </>
   );

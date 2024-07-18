@@ -6,10 +6,26 @@ import {
   TouchableHighlight,
   Alert,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {default as ShareIcon} from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {userDataType} from '../types/types';
 
 const UserProfileScreen = () => {
+  const [userData, setUserData] = useState<userDataType>();
+  console.log(userData?.location, "hjhjhjhjh")
+
+  useEffect(() => {
+    const getUser = async () => {
+      const jsonValue = await AsyncStorage.getItem('my-data');
+      const data = jsonValue != null ? JSON.parse(jsonValue) : null;
+      setUserData(data);
+      console.log(data, "here is the data");
+      
+    };
+    getUser();
+  }, []);
+
   return (
     <>
       {/* header */}
@@ -20,7 +36,7 @@ const UserProfileScreen = () => {
             source={require('../assests/images/profileImage.png')}
             style={{width: 92.82, height: 92.82}}
           />
-          <View className='absolute top-[72px] left-[69px] bg-white rounded-full p-[2px]'>
+          <View className="absolute top-[72px] left-[69px] bg-white rounded-full p-[2px]">
             <ShareIcon name="share-square-o" size={14} color="black" />
           </View>
         </View>
@@ -28,14 +44,13 @@ const UserProfileScreen = () => {
 
       {/* info section */}
       <View className="mx-auto mt-6">
-
         {/* enter your name wala section */}
         <View className="mb-4">
           <Text className="text-black text-base font-semibold mb-1">
             Enter Your Full Name
           </Text>
           <TextInput
-            placeholder="Enter Your Full Name"
+            placeholder={userData?.fullName}
             className="border-[1px] rounded-lg border-black text-black pl-5"
             style={{width: 310, height: 50}}
             placeholderTextColor="black"
@@ -48,7 +63,7 @@ const UserProfileScreen = () => {
             Enter Your Location
           </Text>
           <TextInput
-            placeholder="Enter Your Location"
+            placeholder={userData?.location}
             className="border-[1px] rounded-lg border-black text-black pl-5"
             style={{width: 310, height: 50}}
             placeholderTextColor="black"

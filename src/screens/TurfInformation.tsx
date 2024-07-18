@@ -1,11 +1,22 @@
-import { useNavigation } from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import React from 'react';
-import { Alert, Image, Text, TouchableHighlight, View } from 'react-native';
-import { default as CheckIcon, default as FavouriteIcon, default as LeftArrowIcon, default as ShareIcon } from 'react-native-vector-icons/AntDesign';
+import {Alert, Image, Text, TouchableHighlight, View} from 'react-native';
+import {
+  default as CheckIcon,
+  default as FavouriteIcon,
+  default as LeftArrowIcon,
+  default as ShareIcon,
+} from 'react-native-vector-icons/AntDesign';
 import LocationIcon from 'react-native-vector-icons/Octicons';
+import {server} from '../redux/store';
+import {useAppSelector} from '../redux/hooks';
 
 const TurfInformation = () => {
   const navigation = useNavigation<any>();
+  // const route = useRoute<any>();
+  // const {turf} = route.params;
+  const userData = useAppSelector(state => state.turf);
+  // console.log(userData, 'hellllllll');
 
   return (
     <View className="mx-4 mt-4">
@@ -17,7 +28,9 @@ const TurfInformation = () => {
             onPress={() => navigation.navigate('Home')}>
             <LeftArrowIcon name="arrowleft" size={23} color="#000000" />
           </TouchableHighlight>
-          <Text className="text-black text-[18px] font-semibold">B3 Turf</Text>
+          <Text className="text-black text-[18px] font-semibold">
+            {userData.turf.turfName}
+          </Text>
         </View>
         <View className="flex-row gap-3 items-center">
           <TouchableHighlight>
@@ -32,7 +45,7 @@ const TurfInformation = () => {
       {/* turf image */}
       <View className="max-w-fit mx-auto mt-[20px] drop-shadow-md">
         <Image
-          source={require('../assests/backgroundImage/bgImage.png')}
+          source={{uri: `${server}/${userData.turf.image}`}}
           style={{
             width: 364,
             height: 172.86,
@@ -49,23 +62,31 @@ const TurfInformation = () => {
         <View className="gap-8 flex-row">
           <View className="flex-col justify-between">
             <View className="flex-row gap-[6px] items-center mb-1">
-              <CheckIcon name="checkcircle" size={15} color="#09AB10" />
+              <CheckIcon
+                name="checkcircle"
+                size={15}
+                color={userData.turf.services[0] ? '#09AB10' : '#FF0000'}
+              />
               <Text className="text-black text-base">Parking</Text>
             </View>
             <View className="flex-row gap-[6px] items-center">
-              <CheckIcon name="checkcircle" size={15} color="#09AB10" />
-              <Text className="text-black text-base">Washroom</Text>
+              <CheckIcon name="checkcircle" size={15} color={userData.turf.services[1] ? '#09AB10' : '#FF0000'} />
+              <Text className="text-black text-base">
+                Washroom
+              </Text>
             </View>
           </View>
           <View className="flex-col justify-between">
             <View className="flex-row gap-[6px] items-center">
-              <CheckIcon name="checkcircle" size={15} color="#09AB10" />
-              <Text className="text-black text-base">Cafeteria</Text>
+              <CheckIcon name="checkcircle" size={15} color={userData.turf.services[2] ? '#09AB10' : '#FF0000'} />
+              <Text className="text-black text-base">
+                Cafeteria
+              </Text>
             </View>
             <View className="flex-row gap-[6px] items-center">
-              <CheckIcon name="checkcircle" size={15} color="#09AB10" />
+              <CheckIcon name="checkcircle" size={15} color={userData.turf.services[3] ? '#09AB10' : '#FF0000'}/>
               <Text className="text-black text-base">
-                Locker & Dressing room
+                Locker & Dressing Room
               </Text>
             </View>
           </View>
@@ -80,8 +101,8 @@ const TurfInformation = () => {
           {/* remember to remove h-[128px] */}
           <TouchableHighlight
             onPress={() => Alert.alert('You clicked on one of the court')}
-            className='rounded-full m-1'
-            underlayColor={"#DCDCDC"}>
+            className="rounded-full m-1"
+            underlayColor={'#DCDCDC'}>
             <View className="border-[1.5px] border-slate-500 rounded-full w-[106px] h-[36px] items-center justify-center">
               <Text className="text-black text-md">Court 1</Text>
             </View>
@@ -90,24 +111,24 @@ const TurfInformation = () => {
           {/* remove to delete below TouchableHighlight */}
           <TouchableHighlight
             onPress={() => Alert.alert('You clicked on one of the court')}
-            className='rounded-full m-1'
-            underlayColor={"#DCDCDC"}>
+            className="rounded-full m-1"
+            underlayColor={'#DCDCDC'}>
             <View className="border-[1.5px] border-slate-500 rounded-full w-[106px] h-[36px] items-center justify-center">
               <Text className="text-black text-md">Court 1</Text>
             </View>
           </TouchableHighlight>
           <TouchableHighlight
             onPress={() => Alert.alert('You clicked on one of the court')}
-            className='rounded-full m-1'
-            underlayColor={"#DCDCDC"}>
+            className="rounded-full m-1"
+            underlayColor={'#DCDCDC'}>
             <View className="border-[1.5px] border-slate-500 rounded-full w-[106px] h-[36px] items-center justify-center">
               <Text className="text-black text-md">Court 1</Text>
             </View>
           </TouchableHighlight>
           <TouchableHighlight
             onPress={() => Alert.alert('You clicked on one of the court')}
-            className='rounded-full m-1'
-            underlayColor={"#DCDCDC"}>
+            className="rounded-full m-1"
+            underlayColor={'#DCDCDC'}>
             <View className="border-[1.5px] border-slate-500 rounded-full w-[106px] h-[36px] items-center justify-center">
               <Text className="text-black text-md">Court 1</Text>
             </View>
@@ -126,8 +147,7 @@ const TurfInformation = () => {
             <View className="flex-row gap-1 items-start">
               <LocationIcon name="location" size={20} color="black" />
               <Text className="text-black text-sm">
-                Yeshwant Plaza, Terrace Station Road, behind TI Next Mall,
-                Indore,
+                {userData.turf.turfLocation}
               </Text>
             </View>
           </View>

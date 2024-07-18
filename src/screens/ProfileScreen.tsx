@@ -7,13 +7,14 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
+import Toast from 'react-native-toast-message';
 import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
 import RadioButtons from '../components/RadioButtons';
-import Toast from 'react-native-toast-message';
-import {User, userInfoType} from '../types/types';
+import {useCreateUserMutation} from '../redux/api/userAPI';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import {userLogin} from '../redux/reducer/userReducer';
-import {useCreateUserMutation} from '../redux/api/userAPI';
+import {User, userInfoType} from '../types/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = () => {
   const navigation = useNavigation<any>();
@@ -71,7 +72,8 @@ const ProfileScreen = () => {
     };
     try {
       dispatch(userLogin(user));
-      await createUser(user);
+      const newUser = await createUser(user);
+      await AsyncStorage.setItem('my-data', JSON.stringify(newUser));
       navigation.navigate('Tab');
       Toast.show({
         type: 'success',

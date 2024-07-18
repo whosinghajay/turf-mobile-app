@@ -5,6 +5,7 @@ import {default as LeftArrowIcon} from 'react-native-vector-icons/AntDesign';
 
 const FavouritePage = () => {
   const navigation = useNavigation<any>();
+
   return (
     <>
       <View className="flex-row justify-between mt-4 mx-4">
@@ -20,10 +21,10 @@ const FavouritePage = () => {
         </View>
       </View>
 
-      <View className='mx-auto my-auto'>
+      <View className="mx-auto my-auto">
         <Image
           source={require('../assests/images/emptylistImageFavourite.png')}
-          style={{width:211, height:200}}
+          style={{width: 211, height: 200}}
         />
       </View>
     </>

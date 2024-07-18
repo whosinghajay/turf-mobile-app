@@ -2,7 +2,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 // import {server} from '../store';
 import {MessageResponse} from '../../types/api-types';
 import {User} from '../../types/types';
-import { server } from '../store';
+import {server} from '../store';
 
 export const userAPI = createApi({
   reducerPath: 'userApi',
@@ -17,8 +17,15 @@ export const userAPI = createApi({
         body: user,
       }),
     }),
-    getUser: builder.query<User[], string>({query: () => 'all'})
+    getUsers: builder.query<User[], void>({query: () => 'all'}),
+    deleteUser: builder.mutation<MessageResponse, string>({
+      query: id => ({
+        url: `${id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
-export const {useCreateUserMutation, useGetUserQuery} = userAPI;
+export const {useCreateUserMutation, useGetUsersQuery, useDeleteUserMutation} =
+  userAPI;

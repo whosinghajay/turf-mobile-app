@@ -29,9 +29,9 @@
 // });
 
 // export default App;
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import TabNavigation from './src/navigators/TabNavigation';
 import BookCourtPage from './src/screens/BookCourtPage';
 import BookCourtRecieptPage from './src/screens/BookCourtRecieptPage';
@@ -44,14 +44,46 @@ import OTP from './src/screens/OTPScreen';
 import {Provider} from 'react-redux';
 import {store} from './src/redux/store';
 import Toast from 'react-native-toast-message';
+import Map from './src/screens/Map';
+import {ActivityIndicator, View} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+  const [initialRoute, setInitialRoute] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkAsyncStorage = async () => {
+      try {
+        const userData = await AsyncStorage.getItem('my-data');
+
+        if (userData) {
+          setInitialRoute('Tab');
+        } else {
+          setInitialRoute('Splash Screen');
+        }
+      } catch (error) {
+        console.error('Error reading AsyncStorage:', error);
+        setInitialRoute('Splash Screen');
+      }
+    };
+
+    checkAsyncStorage();
+  }, []);
+
+  if (!initialRoute) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={initialRoute}>
           <Stack.Screen
             name="Splash Screen"
             component={SplashScreen}
@@ -88,9 +120,13 @@ const App = () => {
             name="OTP"
             component={OTP}
             options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          <Stack.Screen
+            name="Map"
+            component={Map}
+            options={{animation: 'slide_from_bottom'}}></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
-      <Toast/>
+      <Toast />
     </Provider>
   );
 };

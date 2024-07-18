@@ -6,6 +6,7 @@ import Toast from 'react-native-toast-message';
 import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
 import {server} from '../redux/store';
 import {useAppSelector} from '../redux/hooks';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const correctOTP = 1234;
 
@@ -44,6 +45,7 @@ const OTP = () => {
 
       if (data.success) {
         if (data.message.includes('Welcome back')) {
+          await AsyncStorage.setItem('my-data', JSON.stringify(data.user));
           navigation.navigate('Tab');
         }
       } else {
