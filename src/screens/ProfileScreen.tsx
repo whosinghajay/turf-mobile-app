@@ -73,7 +73,7 @@ const ProfileScreen = () => {
     try {
       dispatch(userLogin(user));
       const newUser = await createUser(user);
-      await AsyncStorage.setItem('my-data', JSON.stringify(newUser));
+      await AsyncStorage.setItem('my-data', JSON.stringify(newUser.data?.user));
       navigation.navigate('Tab');
       Toast.show({
         type: 'success',

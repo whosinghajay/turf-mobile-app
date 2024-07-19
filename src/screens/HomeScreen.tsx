@@ -26,6 +26,7 @@ import {Turf} from '../types/types';
 import {server} from '../redux/store';
 import {useAppDispatch} from '../redux/hooks';
 import {turfData} from '../redux/reducer/turfReducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import Header from '../components/Header';
 
 const HomeScreen = () => {

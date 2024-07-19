@@ -70,21 +70,29 @@ const TurfInformation = () => {
               <Text className="text-black text-base">Parking</Text>
             </View>
             <View className="flex-row gap-[6px] items-center">
-              <CheckIcon name="checkcircle" size={15} color={userData.turf.services[1] ? '#09AB10' : '#FF0000'} />
-              <Text className="text-black text-base">
-                Washroom
-              </Text>
+              <CheckIcon
+                name="checkcircle"
+                size={15}
+                color={userData.turf.services[1] ? '#09AB10' : '#FF0000'}
+              />
+              <Text className="text-black text-base">Washroom</Text>
             </View>
           </View>
           <View className="flex-col justify-between">
             <View className="flex-row gap-[6px] items-center">
-              <CheckIcon name="checkcircle" size={15} color={userData.turf.services[2] ? '#09AB10' : '#FF0000'} />
-              <Text className="text-black text-base">
-                Cafeteria
-              </Text>
+              <CheckIcon
+                name="checkcircle"
+                size={15}
+                color={userData.turf.services[2] ? '#09AB10' : '#FF0000'}
+              />
+              <Text className="text-black text-base">Cafeteria</Text>
             </View>
             <View className="flex-row gap-[6px] items-center">
-              <CheckIcon name="checkcircle" size={15} color={userData.turf.services[3] ? '#09AB10' : '#FF0000'}/>
+              <CheckIcon
+                name="checkcircle"
+                size={15}
+                color={userData.turf.services[3] ? '#09AB10' : '#FF0000'}
+              />
               <Text className="text-black text-base">
                 Locker & Dressing Room
               </Text>

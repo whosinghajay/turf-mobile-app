@@ -26,13 +26,17 @@ const SettingScreen = () => {
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [userData, setUserData] = useState<User | null>(null);
   const navigation = useNavigation<any>();
-  const [deleteUser] = useDeleteUserMutation();
+  const [deleteUser, {isLoading, error}] = useDeleteUserMutation();
+
+  // console.log(userData?.data.user._id, 'userData at setting screen');
+  console.log(userData, 'userData at setting screen');
 
   useEffect(() => {
     const getUser = async () => {
       const jsonValue = await AsyncStorage.getItem('my-data');
       const data: User = jsonValue != null ? JSON.parse(jsonValue) : null;
       setUserData(data);
+      console.log(data, 'data data');
     };
     getUser();
   }, []);
@@ -54,13 +58,31 @@ const SettingScreen = () => {
   //   navigation.navigate('Splash Screen');
   // };
 
+  // const deleteHandler = async () => {
+  //   try {
+  //     if (userData?._id) {
+  //       const aa = await deleteUser(userData?._id);
+  //       console.log(aa);
+
+  //       await AsyncStorage.removeItem('my-data');
+  //       setModalDeleteVisible(false);
+  //       navigation.navigate('Splash Screen');
+  //     } else {
+  //       console.error('User ID is missing');
+  //     }
+  //   } catch (error) {
+  //     console.error('Failed to delete user:', error);
+  //     Alert.alert('Error', 'Failed to delete user. Please try again.');
+  //   }
+  // };
+
   const deleteHandler = async () => {
+    await AsyncStorage.removeItem('my-data');
     try {
       if (userData?._id) {
-        const aa = await deleteUser(userData?._id);
-        console.log(aa);
-        
-        await AsyncStorage.removeItem('my-data');
+        const response = await deleteUser(userData?._id).unwrap();
+        console.log('Delete response:', response);
+
         setModalDeleteVisible(false);
         navigation.navigate('Splash Screen');
       } else {
