@@ -23,10 +23,11 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {useGetTurfQuery} from '../redux/api/turfAPI';
 import {Turf} from '../types/types';
-import {server} from '../redux/store';
+// import {server} from '../redux/store';
 import {useAppDispatch} from '../redux/hooks';
 import {turfData} from '../redux/reducer/turfReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_SERVER } from '../../envVar';
 // import Header from '../components/Header';
 
 const HomeScreen = () => {
@@ -34,6 +35,8 @@ const HomeScreen = () => {
   const navigation = useNavigation<any>();
   const {isLoading, isError, isSuccess, data, error} = useGetTurfQuery();
   const [turfList, setTurfList] = useState<Turf[]>([]);
+
+  // console.log(process.env.API_SERVER, "server id hai yeh");
 
   const dispatch = useAppDispatch();
 
@@ -62,7 +65,7 @@ const HomeScreen = () => {
         onPress={navigateHandler}>
         <View className="mx-2 mt-[12px] relative">
           <Image
-            source={{uri: `${server}/${item.image}`}}
+            source={{uri: `${API_SERVER}/${item.image}`}}
             style={{
               width: 394,
               height: 172.86,

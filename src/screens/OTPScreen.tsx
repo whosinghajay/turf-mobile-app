@@ -4,9 +4,10 @@ import {ImageBackground, Text, TouchableHighlight, View} from 'react-native';
 import {OtpInput} from 'react-native-otp-entry';
 import Toast from 'react-native-toast-message';
 import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
-import {server} from '../redux/store';
+// import {server} from '../redux/store';
 import {useAppSelector} from '../redux/hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_SERVER } from '../../envVar';
 
 const correctOTP = 1234;
 
@@ -31,7 +32,7 @@ const OTP = () => {
   const nextPageHandler = async () => {
     if (otp === correctOTP) {
       // navigation.navigate('ProfileScreen');
-      const response = await fetch(`${server}/api/v1/user/create`, {
+      const response = await fetch(`${API_SERVER}/api/v1/user/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

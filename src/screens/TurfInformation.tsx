@@ -8,8 +8,9 @@ import {
   default as ShareIcon,
 } from 'react-native-vector-icons/AntDesign';
 import LocationIcon from 'react-native-vector-icons/Octicons';
-import {server} from '../redux/store';
+// import {server} from '../redux/store';
 import {useAppSelector} from '../redux/hooks';
+import {API_SERVER} from '../../envVar';
 
 const TurfInformation = () => {
   const navigation = useNavigation<any>();
@@ -45,7 +46,7 @@ const TurfInformation = () => {
       {/* turf image */}
       <View className="max-w-fit mx-auto mt-[20px] drop-shadow-md">
         <Image
-          source={{uri: `${server}/${userData.turf.image}`}}
+          source={{uri: `${API_SERVER}/${userData.turf.image}`}}
           style={{
             width: 364,
             height: 172.86,

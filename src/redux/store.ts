@@ -4,7 +4,7 @@ import {userAPI} from './api/userAPI';
 import {turfAPI} from './api/turfAPI';
 import turfReducer from './reducer/turfReducer';
 
-export const server = 'https://624a-27-5-6-82.ngrok-free.app';
+// export const server = 'https://624a-27-5-6-82.ngrok-free.app';
 
 export const store = configureStore({
   reducer: {
