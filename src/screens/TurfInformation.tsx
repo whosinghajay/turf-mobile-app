@@ -1,5 +1,5 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import React from 'react';
+import React, {useState} from 'react';
 import {Alert, Image, Text, TouchableHighlight, View} from 'react-native';
 import {
   default as CheckIcon,
@@ -18,6 +18,20 @@ const TurfInformation = () => {
   // const {turf} = route.params;
   const userData = useAppSelector(state => state.turf);
   // console.log(userData, 'hellllllll');
+
+  const [selectedCourt, setSelectedCourt] = useState(null);
+
+  // const courts = ['Court 1', 'Court 2', 'Court 3', 'Court 4'];
+  const courts: string[] = [];
+
+  for (let i = 0; i < userData.turf.courtNumbers; i++) {
+    courts.push(`Court ${i + 1}`);
+  }
+
+  const handleCourtClick = (court: any) => {
+    setSelectedCourt(court);
+    // Alert.alert(`You clicked on ${court}`);
+  };
 
   return (
     <View className="mx-4 mt-4">
@@ -105,43 +119,28 @@ const TurfInformation = () => {
       {/* court section */}
       <View className="border-[2.5px] mt-3 px-3 py-2 border-slate-300 rounded-xl">
         <Text className="text-base font-semibold text-black mb-2">Court</Text>
-
         <View className="flex-row flex-wrap">
-          {/* remember to remove h-[128px] */}
-          <TouchableHighlight
-            onPress={() => Alert.alert('You clicked on one of the court')}
-            className="rounded-full m-1"
-            underlayColor={'#DCDCDC'}>
-            <View className="border-[1.5px] border-slate-500 rounded-full w-[106px] h-[36px] items-center justify-center">
-              <Text className="text-black text-md">Court 1</Text>
-            </View>
-          </TouchableHighlight>
-
-          {/* remove to delete below TouchableHighlight */}
-          <TouchableHighlight
-            onPress={() => Alert.alert('You clicked on one of the court')}
-            className="rounded-full m-1"
-            underlayColor={'#DCDCDC'}>
-            <View className="border-[1.5px] border-slate-500 rounded-full w-[106px] h-[36px] items-center justify-center">
-              <Text className="text-black text-md">Court 1</Text>
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight
-            onPress={() => Alert.alert('You clicked on one of the court')}
-            className="rounded-full m-1"
-            underlayColor={'#DCDCDC'}>
-            <View className="border-[1.5px] border-slate-500 rounded-full w-[106px] h-[36px] items-center justify-center">
-              <Text className="text-black text-md">Court 1</Text>
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight
-            onPress={() => Alert.alert('You clicked on one of the court')}
-            className="rounded-full m-1"
-            underlayColor={'#DCDCDC'}>
-            <View className="border-[1.5px] border-slate-500 rounded-full w-[106px] h-[36px] items-center justify-center">
-              <Text className="text-black text-md">Court 1</Text>
-            </View>
-          </TouchableHighlight>
+          {courts.map((court, index) => (
+            <TouchableHighlight
+              key={index}
+              onPress={() => handleCourtClick(court)}
+              className="rounded-full m-1"
+              underlayColor={'#DCDCDC'}
+              style={{
+                backgroundColor:
+                  selectedCourt === court ? 'green' : 'transparent',
+              }}>
+              <View className="border-[1.5px] border-slate-500 rounded-full w-[106px] h-[36px] items-center justify-center">
+                <Text
+                  className="text-black text-md"
+                  style={{
+                    color: selectedCourt === court ? 'white' : 'black',
+                  }}>
+                  {court}
+                </Text>
+              </View>
+            </TouchableHighlight>
+          ))}
         </View>
       </View>
 
