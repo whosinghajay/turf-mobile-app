@@ -1,6 +1,6 @@
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {Alert, Image, Text, TouchableHighlight, View} from 'react-native';
+import {Image, Text, TouchableHighlight, View} from 'react-native';
 import {
   default as CheckIcon,
   default as FavouriteIcon,
@@ -9,8 +9,8 @@ import {
 } from 'react-native-vector-icons/AntDesign';
 import LocationIcon from 'react-native-vector-icons/Octicons';
 // import {server} from '../redux/store';
-import {useAppSelector} from '../redux/hooks';
 import {API_SERVER} from '../../envVar';
+import {useAppSelector} from '../redux/hooks';
 
 const TurfInformation = () => {
   const navigation = useNavigation<any>();
@@ -20,6 +20,7 @@ const TurfInformation = () => {
   // console.log(userData, 'hellllllll');
 
   const [selectedCourt, setSelectedCourt] = useState(null);
+  const isDisabled = !selectedCourt;
 
   // const courts = ['Court 1', 'Court 2', 'Court 3', 'Court 4'];
   const courts: string[] = [];
@@ -172,8 +173,14 @@ const TurfInformation = () => {
       {/* button section */}
       <TouchableHighlight
         underlayColor="#4141eb"
-        className="bg-[#1D1CA3] mt-3 rounded-xl"
-        onPress={() => navigation.navigate('BookCourt')}>
+        className="mt-3 rounded-xl"
+        style={{
+          backgroundColor: isDisabled ? '#A9A9A9' : '#1D1CA3', // Gray when disabled, original color when enabled
+        }}
+        disabled={isDisabled}
+        onPress={() =>
+          navigation.navigate('BookCourt', {court: selectedCourt})
+        }>
         <Text className="text-lg text-center text-white py-3">Next</Text>
       </TouchableHighlight>
     </View>

@@ -1,7 +1,7 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {turfDataInfoType, User} from '../../types/types';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {turfDataInfoType} from '../../types/types';
 
-const initialState = {
+const initialState: {turf: turfDataInfoType} = {
   turf: {
     _id: '',
     comments: [],
@@ -9,7 +9,22 @@ const initialState = {
     image: '',
     price: 0,
     services: [],
-    slot: [],
+    slot: [
+      {
+        courtNumber: 0,
+        days: [
+          {
+            date: new Date().toISOString(), // or set it to null if you prefer
+            slots: [
+              {
+                time: '',
+                booked: false,
+              },
+            ],
+          },
+        ],
+      },
+    ],
     turfLocation: '',
     turfName: '',
     typeOfCourt: '',

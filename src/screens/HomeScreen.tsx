@@ -24,10 +24,9 @@ import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {useGetTurfQuery} from '../redux/api/turfAPI';
 import {Turf} from '../types/types';
 // import {server} from '../redux/store';
+import {API_SERVER} from '../../envVar';
 import {useAppDispatch} from '../redux/hooks';
 import {turfData} from '../redux/reducer/turfReducer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { API_SERVER } from '../../envVar';
 // import Header from '../components/Header';
 
 const HomeScreen = () => {

@@ -13,6 +13,21 @@ export interface userInfoType {
   role?: string;
 }
 
+interface timeSlotType {
+  time: string;
+  booked: boolean;
+}
+
+interface dayType {
+  date: string;
+  slots: timeSlotType[];
+}
+
+interface SlotType {
+  courtNumber: Number;
+  days: dayType[];
+}
+
 export interface Turf {
   image: string;
   turfName: string;
@@ -23,7 +38,7 @@ export interface Turf {
   typeOfCourt: string;
   _id: any;
   comments: [];
-  slot: [];
+  slot: SlotType[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -38,12 +53,12 @@ export interface userDataType {
 
 export interface turfDataInfoType {
   _id: string;
-  comments: [];
+  comments: string[];
   courtNumbers: number;
   image: string;
   price: number;
-  services: [];
-  slot: [];
+  services: string[];
+  slot: SlotType[];
   turfLocation: string;
   turfName: string;
   typeOfCourt: string;
