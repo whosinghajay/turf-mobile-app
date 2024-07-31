@@ -14,7 +14,8 @@ const initialState: {turf: turfDataInfoType} = {
         courtNumber: 0,
         days: [
           {
-            date: new Date().toISOString(), // or set it to null if you prefer
+            // date: new Date().toISOString(), // or set it to null if you prefer
+            date: '',
             slots: [
               {
                 time: '',
@@ -28,6 +29,7 @@ const initialState: {turf: turfDataInfoType} = {
     turfLocation: '',
     turfName: '',
     typeOfCourt: '',
+    createdAt: undefined,
   },
 };
 

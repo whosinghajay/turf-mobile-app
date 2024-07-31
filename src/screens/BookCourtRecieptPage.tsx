@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {Alert, Image, Text, TouchableHighlight, View} from 'react-native';
 import {
   default as CheckIcon,
@@ -8,9 +8,62 @@ import {
   default as ShareIcon,
 } from 'react-native-vector-icons/AntDesign';
 import LocationIcon from 'react-native-vector-icons/Octicons';
+import {useAppSelector} from '../redux/hooks';
+import {API_SERVER} from '../../envVar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BookCourtRecieptPage = () => {
   const navigation = useNavigation<any>();
+
+  const [userData, setUserData] = useState({
+    id: '',
+    name: '',
+    phoneNumber: '',
+  });
+
+  const route = useRoute();
+  const {court, time, date} = route.params as {
+    court: string;
+    time: string;
+    date: string;
+  };
+
+  const turfData = useAppSelector(state => state.turf);
+  // console.log(turfData.turf.turfName, 'turfdata');
+
+  const getUserData = async () => {
+    try {
+      const data = await AsyncStorage.getItem('my-data');
+      if (data !== null) {
+        const parsedData = JSON.parse(data);
+        return parsedData;
+      } else {
+        console.log('No data found');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+      return null;
+    }
+  };
+
+  // Usage in an async function
+  const logUserData = async () => {
+    const data = await getUserData();
+    if (data) {
+      const {_id, fullName, phoneNumber} = data;
+      console.log(_id, fullName, phoneNumber, 'userData is here');
+      setUserData({
+        id: _id,
+        name: fullName,
+        phoneNumber: phoneNumber, // Ensure this matches the state property name
+      });
+    }
+  };
+
+  useEffect(() => {
+    logUserData();
+  }, []);
 
   return (
     <View className="mx-4 mt-4">
@@ -19,7 +72,7 @@ const BookCourtRecieptPage = () => {
         <View className="flex-row gap-2 items-center">
           <TouchableHighlight
             underlayColor={'#EFEFEF'}
-            onPress={() => navigation.navigate('BookCourt')}>
+            onPress={() => navigation.navigate('BookCourt', {court})}>
             <LeftArrowIcon name="arrowleft" size={23} color="#000000" />
           </TouchableHighlight>
           <Text className="text-black text-[18px] font-semibold">
@@ -39,7 +92,7 @@ const BookCourtRecieptPage = () => {
       {/* turf image */}
       <View className="max-w-fit mx-auto mt-[20px] drop-shadow-md">
         <Image
-          source={require('../assests/backgroundImage/bgImage.png')}
+          source={{uri: `${API_SERVER}/${turfData.turf.image}`}}
           style={{
             width: 364,
             height: 172.86,
@@ -50,9 +103,12 @@ const BookCourtRecieptPage = () => {
 
       {/* turf name and booking timing section */}
       <View className="pt-3 pl-1">
-        <Text className="text-lg text-black font-semibold">B3 Turf</Text>
+        <Text className="text-lg text-black font-semibold">
+          {turfData.turf.turfName}
+        </Text>
         <Text className="text-base text-black font-semibold">
-          Wed,15 Feb,02:00 PM-05:00PM
+          {/* Wed,15 Feb,02:00 PM-05:00PM */}
+          {date}, {time}
         </Text>
         <Image
           source={require('../assests/images/breakLine.png')}
@@ -75,9 +131,15 @@ const BookCourtRecieptPage = () => {
           </View>
           {/* second side */}
           <View className="gap-2">
-            <Text className="text-sm font-[500] text-black">Sohail Ansari</Text>
-            <Text className="text-sm font-[500] text-black">0123456789</Text>
-            <Text className="text-sm font-[500] text-black">₹1000</Text>
+            <Text className="text-sm font-[500] text-black">
+              {userData.name}
+            </Text>
+            <Text className="text-sm font-[500] text-black">
+              {userData.phoneNumber}
+            </Text>
+            <Text className="text-sm font-[500] text-black">
+              {turfData.turf.price}
+            </Text>
             <Text className="text-sm font-[500] text-black">10%</Text>
           </View>
         </View>
@@ -98,8 +160,7 @@ const BookCourtRecieptPage = () => {
             <View className="flex-row gap-1 items-start">
               <LocationIcon name="location" size={20} color="black" />
               <Text className="text-black text-sm">
-                Yeshwant Plaza, Terrace Station Road, behind TI Next Mall,
-                Indore,
+                {turfData.turf.turfLocation}
               </Text>
             </View>
           </View>

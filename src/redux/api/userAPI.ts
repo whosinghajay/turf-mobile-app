@@ -1,9 +1,9 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 // import {server} from '../store';
-import {MessageResponse} from '../../types/api-types';
 import {User} from '../../types/types';
 // import {server} from '../store';
 import {API_SERVER} from '../../../envVar';
+import {UserMessageResponse} from '../../types/api-types';
 
 export const userAPI = createApi({
   reducerPath: 'userApi',
@@ -11,7 +11,7 @@ export const userAPI = createApi({
     baseUrl: `${API_SERVER}/api/v1/user`,
   }),
   endpoints: builder => ({
-    createUser: builder.mutation<MessageResponse, User>({
+    createUser: builder.mutation<UserMessageResponse, User>({
       query: user => ({
         url: 'create',
         method: 'POST',
@@ -19,7 +19,7 @@ export const userAPI = createApi({
       }),
     }),
     getUsers: builder.query<User[], void>({query: () => 'all'}),
-    deleteUser: builder.mutation<MessageResponse, string>({
+    deleteUser: builder.mutation<UserMessageResponse, string>({
       query: id => ({
         url: `${id}`,
         method: 'DELETE',

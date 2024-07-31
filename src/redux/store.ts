@@ -3,6 +3,7 @@ import userReducer from './reducer/userReducer';
 import {userAPI} from './api/userAPI';
 import {turfAPI} from './api/turfAPI';
 import turfReducer from './reducer/turfReducer';
+import {bookingAPI} from './api/bookingAPI';
 
 // export const server = 'https://624a-27-5-6-82.ngrok-free.app';
 
@@ -12,9 +13,14 @@ export const store = configureStore({
     turf: turfReducer,
     [userAPI.reducerPath]: userAPI.reducer,
     [turfAPI.reducerPath]: turfAPI.reducer,
+    [bookingAPI.reducerPath]: bookingAPI.reducer,
   },
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat(userAPI.middleware, turfAPI.middleware),
+    getDefaultMiddleware().concat(
+      userAPI.middleware,
+      turfAPI.middleware,
+      bookingAPI.middleware,
+    ),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

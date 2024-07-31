@@ -24,7 +24,7 @@ interface dayType {
 }
 
 interface SlotType {
-  courtNumber: Number;
+  courtNumber: number;
   days: dayType[];
 }
 
@@ -32,12 +32,12 @@ export interface Turf {
   image: string;
   turfName: string;
   turfLocation: string;
-  services: [];
+  services: string[];
   courtNumbers: number;
   price: number;
   typeOfCourt: string;
   _id: any;
-  comments: [];
+  comments: string[];
   slot: SlotType[];
   createdAt: Date;
   updatedAt: Date;
@@ -52,6 +52,7 @@ export interface userDataType {
 }
 
 export interface turfDataInfoType {
+  createdAt: any;
   _id: string;
   comments: string[];
   courtNumbers: number;
@@ -62,4 +63,23 @@ export interface turfDataInfoType {
   turfLocation: string;
   turfName: string;
   typeOfCourt: string;
+}
+
+export interface Booking {
+  userId: string;
+  status: string;
+  turfInfo: {
+    turfName: string;
+    turfPhoto: string;
+    turfPrice: number;
+    turfLocation: string;
+    turfId: string;
+    slot: {
+      courtNumber: number;
+      date: string;
+      time: string;
+      booked: boolean;
+    };
+  };
+  total: number;
 }
