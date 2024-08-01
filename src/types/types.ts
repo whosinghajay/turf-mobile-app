@@ -79,7 +79,7 @@ export interface Booking {
       date: string;
       time: string;
       booked: boolean;
-    };
+    }[];
   };
   total: number;
 }

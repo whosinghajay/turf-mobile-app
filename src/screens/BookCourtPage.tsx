@@ -12,7 +12,7 @@ import {API_SERVER} from '../../envVar';
 import {useAppSelector} from '../redux/hooks';
 import {useCreateBookingMutation} from '../redux/api/bookingAPI';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useUpdateTurfMutation} from '../redux/api/turfAPI';
+// import {useUpdateTurfMutation} from '../redux/api/turfAPI';
 // import { format, parseISO } from 'date-fns';
 
 type FlattenedSlot = {
@@ -38,7 +38,7 @@ const BookCourtPage = () => {
   const [flattenedSlots, setFlattenedSlots] = useState<FlattenedSlot[]>([]);
 
   const [currentDay, setCurrentDay] = useState('today');
-  const [selectedSlot, setSelectedSlot] = useState('');
+  const [selectedSlot, setSelectedSlot] = useState<string[]>([]);
 
   // console.log(calendarState);
 
@@ -48,11 +48,10 @@ const BookCourtPage = () => {
     phoneNumber: '',
   });
 
-  const [updateTurf] = useUpdateTurfMutation();
+  // const [updateTurf] = useUpdateTurfMutation();
 
   const [createBooking] = useCreateBookingMutation();
   const turfData = useAppSelector(state => state.turf);
-  // console.log(turfData.turf.turfName, 'turfdata');
 
   const getUserData = async () => {
     try {
@@ -129,7 +128,7 @@ const BookCourtPage = () => {
       }, []) || [];
     // console.log(flattenedSlots);
     setFlattenedSlots(newFlattenedSlots);
-    setSelectedSlot('');
+    setSelectedSlot([]);
   }, [selectedDate]);
 
   const selectDateHandler = () => {
@@ -146,7 +145,16 @@ const BookCourtPage = () => {
     setCurrentDay('tomorrow');
   };
 
-  const isDisabled = !selectedSlot;
+  const toggleSlotSelection = (slotTime: string) => {
+    if (selectedSlot.includes(slotTime)) {
+      setSelectedSlot(selectedSlot.filter(time => time !== slotTime));
+    } else {
+      setSelectedSlot([...selectedSlot, slotTime]);
+    }
+  };
+
+  // const isDisabled = !selectedSlot;
+  const isDisabled = selectedSlot.length === 0;
 
   const bookingData = {
     userId: user.id,
@@ -157,19 +165,27 @@ const BookCourtPage = () => {
       turfPrice: turfData.turf.price,
       turfLocation: turfData.turf.turfLocation,
       turfId: turfData.turf._id,
-      slot: {
+      //   slot: {
+      //     courtNumber,
+      //     date: selectedDate,
+      //     time: selectedSlot,
+      //     booked: true,
+      //   },
+      // },
+      slot: selectedSlot.map(slot => ({
         courtNumber,
         date: selectedDate,
-        time: selectedSlot,
+        time: slot,
         booked: true,
-      },
+      })),
     },
-    total: turfData.turf.price,
+    // total: turfData.turf.price,
+    total: turfData.turf.price * selectedSlot.length,
   };
 
   const onPressHandler = async () => {
     const newBooking = await createBooking(bookingData);
-    console.log(newBooking);
+    console.log(newBooking, 'New Booking');
 
     // Find the slot to be updated
     // const updatedSlots = turfData.turf.slot.map(court => {
@@ -204,7 +220,8 @@ const BookCourtPage = () => {
           court.days.forEach(day => {
             if (day.date === selectedDate) {
               day.slots.forEach(slot => {
-                if (slot.time === selectedSlot) {
+                // if (slot.time === selectedSlot) {
+                if (selectedSlot.includes(slot.time)) {
                   acc.push({
                     courtNumber: court.courtNumber,
                     date: day.date,
@@ -256,7 +273,8 @@ const BookCourtPage = () => {
     navigation.navigate('BookCourtReciept', {
       court,
       date: selectedDate,
-      time: selectedSlot,
+      // time: selectedSlot,
+      time: selectedSlot.join(', '),
     });
   };
 
@@ -356,7 +374,7 @@ const BookCourtPage = () => {
       {/* price per hour wala section */}
       <View className="pt-4 pb-2 mx-2">
         <Text className="text-black text-base font-semibold">
-          Price - 1000 hourly
+          Price - {turfData.turf.price} hourly
         </Text>
         <View className="pt-3 flex-row flex-wrap gap-3 mx-auto">
           {/* <TouchableHighlight
@@ -372,7 +390,8 @@ const BookCourtPage = () => {
               key={index}
               underlayColor={'transparent'}
               // onPress={() => Alert.alert('Slot selected', `Time: ${slot.time}`)}
-              onPress={() => setSelectedSlot(slot.time)}
+              // onPress={() => setSelectedSlot([...selectedSlot, slot.time])}
+              onPress={() => toggleSlotSelection(slot.time)}
               className="border-2 border-slate-300 rounded-xl"
               // style={{
               //   backgroundColor: slot.booked === true ? 'grey' : 'transparent',
@@ -383,7 +402,8 @@ const BookCourtPage = () => {
                 style={{
                   backgroundColor: slot.booked
                     ? 'grey'
-                    : selectedSlot === slot.time
+                    : // : selectedSlot === slot.time
+                    selectedSlot.includes(slot.time)
                     ? '#49B114'
                     : '#e0e0e0',
                 }}>
@@ -392,7 +412,8 @@ const BookCourtPage = () => {
                   style={{
                     color: slot.booked
                       ? 'white'
-                      : selectedSlot === slot.time
+                      : // : selectedSlot === slot.time
+                      selectedSlot.includes(slot.time)
                       ? '#fff'
                       : '#000',
                   }}>
@@ -414,7 +435,7 @@ const BookCourtPage = () => {
         }}
         onPress={onPressHandler}>
         <Text className="text-lg text-center text-white py-3">
-          Proceed to Pay ₹{turfData.turf.price}
+          Proceed to Pay ₹{turfData.turf.price * selectedSlot.length}
         </Text>
       </TouchableHighlight>
 
