@@ -1,5 +1,9 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Image, Text, TouchableHighlight, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {
@@ -12,6 +16,7 @@ import {API_SERVER} from '../../envVar';
 import {useAppSelector} from '../redux/hooks';
 import {useCreateBookingMutation} from '../redux/api/bookingAPI';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useGetSingleTurfQuery} from '../redux/api/turfAPI';
 // import {useUpdateTurfMutation} from '../redux/api/turfAPI';
 // import { format, parseISO } from 'date-fns';
 
@@ -53,6 +58,15 @@ const BookCourtPage = () => {
   const [createBooking] = useCreateBookingMutation();
   const turfData = useAppSelector(state => state.turf);
 
+  const {
+    isLoading,
+    isError,
+    isSuccess,
+    data,
+    error,
+    refetch: refetchSingleTurf,
+  } = useGetSingleTurfQuery(turfData.turf._id);
+
   const getUserData = async () => {
     try {
       const data = await AsyncStorage.getItem('my-data');
@@ -91,12 +105,15 @@ const BookCourtPage = () => {
 
   const courtNumber = Number(court.split(' ')[1]);
 
-  const userData = useAppSelector(state => state.turf);
-  // console.log(userData, 'userData on booking page');
+  // const userData = useAppSelector(state => state.turf);
 
-  const selectedCourt = userData.turf.slot.find(
-    court => court.courtNumber === courtNumber,
-  );
+  // const selectedCourt = userData.turf.slot.find(
+  //   court => court.courtNumber === courtNumber,
+  // );
+  const selectedCourt =
+    isSuccess &&
+    data?.turf.slot.find(court => court.courtNumber === courtNumber);
+  console.log(selectedCourt, 'llll');
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -106,16 +123,37 @@ const BookCourtPage = () => {
   // Format tomorrow's date in YYYY-MM-DD format
   const tomorrow = tomorrowDate.toISOString().split('T')[0];
 
+  // useEffect(() => {
+  //   const newFlattenedSlots: FlattenedSlot[] =
+  //     selectedCourt?.days.reduce<FlattenedSlot[]>((acc, day) => {
+  //       // const dayDate = new Date(day.date).toISOString().split('T')[0];
+
+  //       // if (dayDate === selectedDate) {
+  //       if (day.date === selectedDate) {
+  //         // console.log(today);
+  //         // console.log(dayDate);
+
+  //         day.slots.forEach(slot => {
+  //           acc.push({
+  //             date: day.date,
+  //             time: slot.time,
+  //             booked: slot.booked,
+  //           });
+  //         });
+  //       }
+  //       return acc;
+  //     }, []) || [];
+  //   // console.log(flattenedSlots);
+  //   setFlattenedSlots(newFlattenedSlots);
+  //   setSelectedSlot([]);
+  // }, [selectedDate]);
+
   useEffect(() => {
-    const newFlattenedSlots: FlattenedSlot[] =
-      selectedCourt?.days.reduce<FlattenedSlot[]>((acc, day) => {
-        // const dayDate = new Date(day.date).toISOString().split('T')[0];
-
-        // if (dayDate === selectedDate) {
+    if (selectedCourt) {
+      const newFlattenedSlots: FlattenedSlot[] = selectedCourt.days.reduce<
+        FlattenedSlot[]
+      >((acc, day) => {
         if (day.date === selectedDate) {
-          // console.log(today);
-          // console.log(dayDate);
-
           day.slots.forEach(slot => {
             acc.push({
               date: day.date,
@@ -125,11 +163,11 @@ const BookCourtPage = () => {
           });
         }
         return acc;
-      }, []) || [];
-    // console.log(flattenedSlots);
-    setFlattenedSlots(newFlattenedSlots);
-    setSelectedSlot([]);
-  }, [selectedDate]);
+      }, []);
+      setFlattenedSlots(newFlattenedSlots);
+      setSelectedSlot([]);
+    }
+  }, [selectedDate, selectedCourt]);
 
   const selectDateHandler = () => {
     setCalendarState(true);
@@ -160,11 +198,11 @@ const BookCourtPage = () => {
     userId: user.id,
     status: 'booked',
     turfInfo: {
-      turfName: turfData.turf.turfName,
-      turfPhoto: turfData.turf.image,
-      turfPrice: turfData.turf.price,
-      turfLocation: turfData.turf.turfLocation,
-      turfId: turfData.turf._id,
+      turfName: isSuccess ? data.turf.turfName : '',
+      turfPhoto: isSuccess ? data.turf.image : '',
+      turfPrice: isSuccess ? data.turf.price : 0,
+      turfLocation: isSuccess ? data.turf.turfLocation : '',
+      turfId: isSuccess ? data.turf._id : '',
       //   slot: {
       //     courtNumber,
       //     date: selectedDate,
@@ -180,7 +218,7 @@ const BookCourtPage = () => {
       })),
     },
     // total: turfData.turf.price,
-    total: turfData.turf.price * selectedSlot.length,
+    total: isSuccess ? data.turf.price * selectedSlot.length : 0,
   };
 
   const onPressHandler = async () => {
@@ -214,33 +252,55 @@ const BookCourtPage = () => {
     //   return court;
     // });
 
-    const updatedSlot: UpdatedSlot[] = turfData.turf.slot.reduce(
-      (acc: UpdatedSlot[], court) => {
-        if (court.courtNumber === courtNumber) {
-          court.days.forEach(day => {
-            if (day.date === selectedDate) {
-              day.slots.forEach(slot => {
-                // if (slot.time === selectedSlot) {
-                if (selectedSlot.includes(slot.time)) {
-                  acc.push({
-                    courtNumber: court.courtNumber,
-                    date: day.date,
-                    time: slot.time,
-                    booked: true,
-                  });
-                }
-              });
-            }
-          });
-        }
-        return acc;
-      },
-      [],
-    );
+    // const updatedSlot: UpdatedSlot[] = isSuccess && data.turf.slot.reduce(
+    //   (acc: UpdatedSlot[], court) => {
+    //     if (court.courtNumber === courtNumber) {
+    //       court.days.forEach(day => {
+    //         if (day.date === selectedDate) {
+    //           day.slots.forEach(slot => {
+    //             // if (slot.time === selectedSlot) {
+    //             if (selectedSlot.includes(slot.time)) {
+    //               acc.push({
+    //                 courtNumber: court.courtNumber,
+    //                 date: day.date,
+    //                 time: slot.time,
+    //                 booked: true,
+    //               });
+    //             }
+    //           });
+    //         }
+    //       });
+    //     }
+    //     return acc;
+    //   },
+    //   [],
+    // );
+
+    const updatedSlot: UpdatedSlot[] = isSuccess
+      ? data.turf.slot.reduce((acc: UpdatedSlot[], court) => {
+          if (court.courtNumber === courtNumber) {
+            court.days.forEach(day => {
+              if (day.date === selectedDate) {
+                day.slots.forEach(slot => {
+                  if (selectedSlot.includes(slot.time)) {
+                    acc.push({
+                      courtNumber: court.courtNumber,
+                      date: day.date,
+                      time: slot.time,
+                      booked: true,
+                    });
+                  }
+                });
+              }
+            });
+          }
+          return acc;
+        }, [])
+      : [];
 
     // Create the body for the update request
     const updateRequest = {
-      turfId: turfData.turf._id,
+      turfId: isSuccess && data.turf._id,
       body: {
         // ...turfData.turf,
         // slot: updatedSlots,
@@ -278,6 +338,17 @@ const BookCourtPage = () => {
     });
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      refetchSingleTurf();
+    }, []),
+  );
+
+  const todayy = new Date();
+  const sevenDaysLater = new Date();
+  sevenDaysLater.setDate(new Date().getDate() + 5);
+  console.log(sevenDaysLater);
+
   return (
     <View className="mx-4 mt-4">
       {/* header */}
@@ -305,7 +376,7 @@ const BookCourtPage = () => {
       {/* turf image */}
       <View className="max-w-fit mx-auto mt-[20px] drop-shadow-md">
         <Image
-          source={{uri: `${API_SERVER}/${userData.turf.image}`}}
+          source={{uri: `${API_SERVER}/${isSuccess && data.turf.image}`}}
           style={{
             width: 364,
             height: 172.86,
@@ -374,7 +445,7 @@ const BookCourtPage = () => {
       {/* price per hour wala section */}
       <View className="pt-4 pb-2 mx-2">
         <Text className="text-black text-base font-semibold">
-          Price - {turfData.turf.price} hourly
+          Price - {isSuccess && data.turf.price} hourly
         </Text>
         <View className="pt-3 flex-row flex-wrap gap-3 mx-auto">
           {/* <TouchableHighlight
@@ -435,7 +506,7 @@ const BookCourtPage = () => {
         }}
         onPress={onPressHandler}>
         <Text className="text-lg text-center text-white py-3">
-          Proceed to Pay ₹{turfData.turf.price * selectedSlot.length}
+          Proceed to Pay ₹{isSuccess && data.turf.price * selectedSlot.length}
         </Text>
       </TouchableHighlight>
 
@@ -444,7 +515,7 @@ const BookCourtPage = () => {
         <View className="w-80 absolute top-40 left-10">
           <Calendar
             minDate={today}
-            maxDate={today + 8}
+            maxDate={sevenDaysLater}
             onDayPress={(day: any) => {
               // console.log('selected day', day);
               setCurrentDay('selectedDay');

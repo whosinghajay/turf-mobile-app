@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Alert,
   FlatList,
@@ -34,13 +34,21 @@ const FavouriteScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation<any>();
 
-  const {isLoading, isError, isSuccess, data, error} = useGetBookingQuery();
+  const {
+    isLoading,
+    isError,
+    isSuccess,
+    data,
+    error,
+    refetch: refetchBookings,
+  } = useGetBookingQuery();
   const {
     isLoading: turfIsLoading,
     isError: turfIsError,
     isSuccess: turfIsSuccess,
     data: turfData,
     error: turfError,
+    refetch: refetchTurfs,
   } = useGetTurfQuery();
 
   const [bookingData, setBookingData] = useState<Booking[]>([]);
@@ -119,6 +127,12 @@ const FavouriteScreen = () => {
       setBookingData(filteredBookings);
     }
   }, [isLoading, isError, isSuccess, data, error, user.id]);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchBookings();
+    }, []),
+  );
 
   const renderItem = ({item}: {item: Booking}) => {
     const time = item.turfInfo.slot.map(a => a.time);
@@ -238,6 +252,8 @@ const FavouriteScreen = () => {
     await deleteBooking(bookingInfo?._id!);
 
     setModalVisible(false);
+    refetchBookings();
+    refetchTurfs();
   };
 
   return (

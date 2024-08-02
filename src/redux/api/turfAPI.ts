@@ -9,6 +9,11 @@ interface TurfResponse {
   total: number;
   turf: Turf[];
 }
+interface SingleTurfResponse {
+  success: boolean;
+  total: number;
+  turf: Turf;
+}
 
 export const turfAPI = createApi({
   reducerPath: 'turfApi',
@@ -17,6 +22,12 @@ export const turfAPI = createApi({
   }),
   endpoints: builder => ({
     getTurf: builder.query<TurfResponse, void>({query: () => 'all'}),
+    getSingleTurf: builder.query<SingleTurfResponse, string>({
+      query: id => ({
+        url: `${id}`,
+        method: 'GET',
+      }),
+    }),
     updateTurf: builder.mutation<updateTurfResponse, updateTurfRequest>({
       query: ({body, turfId}) => ({
         url: `${turfId}`,
@@ -27,4 +38,5 @@ export const turfAPI = createApi({
   }),
 });
 
-export const {useGetTurfQuery, useUpdateTurfMutation} = turfAPI;
+export const {useGetTurfQuery, useUpdateTurfMutation, useGetSingleTurfQuery} =
+  turfAPI;
