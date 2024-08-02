@@ -5,6 +5,11 @@ import {Booking, User} from '../../types/types';
 // import {server} from '../store';
 import {API_SERVER} from '../../../envVar';
 
+interface BookingResponse {
+  success: boolean;
+  bookings: Booking[];
+}
+
 export const bookingAPI = createApi({
   reducerPath: 'bookingApi',
   baseQuery: fetchBaseQuery({
@@ -18,7 +23,18 @@ export const bookingAPI = createApi({
         body: booking,
       }),
     }),
+    getBooking: builder.query<BookingResponse, void>({query: () => 'all'}),
+    cancelBooking: builder.mutation<BookingMessageResponse, string>({
+      query: id => ({
+        url: `${id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
-export const {useCreateBookingMutation} = bookingAPI;
+export const {
+  useCreateBookingMutation,
+  useGetBookingQuery,
+  useCancelBookingMutation,
+} = bookingAPI;

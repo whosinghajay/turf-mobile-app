@@ -28,6 +28,10 @@ const BookCourtRecieptPage = () => {
     date: string;
   };
 
+  // console.log(time, 'timetime');
+  const slotLength = time.split(',');
+  // console.log(slotLength.length);
+
   const turfData = useAppSelector(state => state.turf);
   // console.log(turfData.turf.turfName, 'turfdata');
 
@@ -138,7 +142,7 @@ const BookCourtRecieptPage = () => {
               {userData.phoneNumber}
             </Text>
             <Text className="text-sm font-[500] text-black">
-              {turfData.turf.price}
+              {turfData.turf.price * slotLength.length}
             </Text>
             <Text className="text-sm font-[500] text-black">10%</Text>
           </View>

@@ -66,6 +66,7 @@ export interface turfDataInfoType {
 }
 
 export interface Booking {
+  _id?: string;
   userId: string;
   status: string;
   turfInfo: {
