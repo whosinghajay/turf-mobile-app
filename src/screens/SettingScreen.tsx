@@ -194,7 +194,7 @@ const SettingScreen = () => {
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => setModalVisible(false)}>
-          <View className="w-[90%] mx-auto my-auto items-center border-[3px] bg-white border-[#ff1414] rounded-2xl py-6 px-6">
+          <View className="w-[90%] mx-auto my-auto items-center bg-white rounded-2xl py-6 px-6">
             <Text
               className="w-[80%] font-semibold text-black text-center"
               style={{fontSize: 16}}>
@@ -204,13 +204,13 @@ const SettingScreen = () => {
               <TouchableHighlight
                 underlayColor={'white'}
                 onPress={logoutHandler}
-                className="border-2 border-[#ff1414] w-[45%] py-[6px] rounded-full items-center">
-                <Text className="text-black text-lg font-semibold">Logout</Text>
+                className="bg-red-600 w-[45%] py-[6px] rounded-full items-center">
+                <Text className="text-white text-lg font-semibold">Logout</Text>
               </TouchableHighlight>
               <TouchableHighlight
                 underlayColor={'white'}
                 onPress={() => setModalVisible(false)}
-                className="border-2 border-[#ff1414] w-[45%] py-[6px] rounded-full items-center">
+                className="border-slate-400 border-2 w-[45%] py-[6px] rounded-full items-center">
                 <Text className="text-black text-lg font-semibold">Cancel</Text>
               </TouchableHighlight>
             </View>
@@ -223,7 +223,7 @@ const SettingScreen = () => {
           transparent={true}
           visible={modalDeleteVisible}
           onRequestClose={() => setModalDeleteVisible(false)}>
-          <View className="w-[90%] mx-auto my-auto items-center border-[3px] bg-white border-[#ff1414] rounded-2xl py-6 px-6">
+          <View className="w-[90%] mx-auto my-auto items-center bg-white rounded-2xl py-6 px-6">
             <Text
               className="w-[80%] font-semibold text-black text-center"
               style={{fontSize: 16}}>
@@ -233,13 +233,13 @@ const SettingScreen = () => {
               <TouchableHighlight
                 underlayColor={'white'}
                 onPress={deleteHandler}
-                className="border-2 border-[#ff1414] w-[45%] py-[6px] rounded-full items-center">
-                <Text className="text-black text-lg font-semibold">Delete</Text>
+                className="bg-[#ff1414] w-[45%] py-[6px] rounded-full items-center">
+                <Text className="text-white text-lg font-semibold">Delete</Text>
               </TouchableHighlight>
               <TouchableHighlight
                 underlayColor={'white'}
                 onPress={() => setModalDeleteVisible(false)}
-                className="border-2 border-[#ff1414] w-[45%] py-[6px] rounded-full items-center">
+                className="border-2 border-slate-400 w-[45%] py-[6px] rounded-full items-center">
                 <Text className="text-black text-lg font-semibold">Cancel</Text>
               </TouchableHighlight>
             </View>

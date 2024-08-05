@@ -225,16 +225,12 @@ const FavouriteScreen = () => {
             </Text>
           </TouchableHighlight>
           <TouchableHighlight
-            underlayColor={'white'}
-            // className="border-[1.8px] px-4 py-2 rounded-xl border-slate-400"
             className="px-4 py-2 rounded-xl bg-red-600"
             onPress={() => {
               setModalVisible(true);
               setBookingInfo(item);
             }}>
-            <Text
-              // className="text-black font-semibold text-lg"
-              className="text-white font-semibold text-lg">
+            <Text className="text-white font-semibold text-lg">
               Cancel Booking
             </Text>
           </TouchableHighlight>
@@ -356,7 +352,11 @@ const FavouriteScreen = () => {
               }}>
               Select Date
             </Text>
-            <CalendarIcon name="calendar" size={20} color="#000000" />
+            <CalendarIcon
+              name="calendar"
+              size={20}
+              color={currentDay === 'selectedDay' ? '#fffff' : '#000000'}
+            />
           </View>
         </TouchableHighlight>
       </View>
