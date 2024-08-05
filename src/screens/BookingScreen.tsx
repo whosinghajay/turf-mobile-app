@@ -22,6 +22,7 @@ import {Booking, Turf} from '../types/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useGetTurfQuery} from '../redux/api/turfAPI';
 import {API_SERVER} from '../../envVar';
+import {Calendar} from 'react-native-calendars';
 
 interface Slot {
   courtNumber: number;
@@ -31,6 +32,11 @@ interface Slot {
 }
 
 const FavouriteScreen = () => {
+  const [calendarState, setCalendarState] = useState(false);
+  const [selectedDate, setSeletedDate] = useState('alldates');
+  const [currentDay, setCurrentDay] = useState('all');
+  console.log(selectedDate, 'Date');
+
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation<any>();
 
@@ -120,13 +126,33 @@ const FavouriteScreen = () => {
     }
     if (isSuccess && data) {
       console.log('Data fetched successfully: ', data);
-      const filteredBookings = data.bookings.filter(
-        booking => booking.userId === user.id,
-      );
+      if (selectedDate === 'alldates') {
+        const filteredBookings = data.bookings.filter(
+          booking => booking.userId === user.id,
+        );
 
-      setBookingData(filteredBookings);
+        setBookingData(filteredBookings);
+      } else if (selectedDate === new Date().toISOString().split('T')[0]) {
+        const filteredBookings = data.bookings.filter(
+          booking =>
+            booking.userId === user.id &&
+            booking.turfInfo.slot.find(
+              c => c.date === new Date().toISOString().split('T')[0],
+            ),
+        );
+
+        setBookingData(filteredBookings);
+      } else {
+        const filteredBookings = data.bookings.filter(
+          booking =>
+            booking.userId === user.id &&
+            booking.turfInfo.slot.find(c => c.date === selectedDate),
+        );
+
+        setBookingData(filteredBookings);
+      }
     }
-  }, [isLoading, isError, isSuccess, data, error, user.id]);
+  }, [isLoading, isError, isSuccess, data, error, user.id, currentDay]);
 
   useFocusEffect(
     useCallback(() => {
@@ -148,7 +174,7 @@ const FavouriteScreen = () => {
     }
 
     return (
-      <View className="mt-5 pt-2 border-2 border-slate-300 rounded-xl">
+      <View className="mb-5 pt-2 border-2 border-slate-300 rounded-xl">
         <View className="flex-row justify-between mx-4 items-center">
           <Text className="font-semibold text-base text-black">
             {/* Booking ID: RJ023NP */}
@@ -200,12 +226,15 @@ const FavouriteScreen = () => {
           </TouchableHighlight>
           <TouchableHighlight
             underlayColor={'white'}
-            className="border-[1.8px] px-4 py-2 rounded-xl border-slate-400"
+            // className="border-[1.8px] px-4 py-2 rounded-xl border-slate-400"
+            className="px-4 py-2 rounded-xl bg-red-600"
             onPress={() => {
               setModalVisible(true);
               setBookingInfo(item);
             }}>
-            <Text className="text-black font-semibold text-lg">
+            <Text
+              // className="text-black font-semibold text-lg"
+              className="text-white font-semibold text-lg">
               Cancel Booking
             </Text>
           </TouchableHighlight>
@@ -272,22 +301,70 @@ const FavouriteScreen = () => {
       </View>
 
       {/* date and calender section */}
-      {/* <View className="flex-row w-full mt-5">
-        <View className="border-[1px] border-slate-400 px-6 py-2 rounded-xl bg-[#49B114] mr-6">
-          <Text className="text-white text-base font-semibold">All</Text>
-        </View>
-        <View className="border-[1px] border-slate-400 px-6 py-2 rounded-xl bg-[#e0e0e0] mr-6">
-          <Text className="text-black text-base font-semibold">Today</Text>
-        </View>
-        <View className="flex-row items-center border-[1px] border-slate-400 px-4 py-2 rounded-xl bg-[#e0e0e0]">
-          <Text className="text-black mr-1 font-semibold">31st May 2024</Text>
-          <CalendarIcon name="calendar" size={20} color="#000000" />
-        </View>
-      </View> */}
+      <View className="flex-row mt-5 mb-5 justify-between px-4">
+        <TouchableHighlight
+          onPress={() => {
+            setCurrentDay('all');
+            setSeletedDate('alldates');
+          }}
+          underlayColor={'transparent'}>
+          <View
+            className="border-[1px] border-slate-400 px-6 py-2 rounded-xl"
+            style={{
+              backgroundColor: currentDay === 'all' ? '#49B114' : '#e0e0e0',
+            }}>
+            <Text
+              className="text-base font-semibold"
+              style={{color: currentDay === 'all' ? 'white' : 'black'}}>
+              All
+            </Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => {
+            setCurrentDay('today');
+            setSeletedDate(new Date().toISOString().split('T')[0]);
+          }}
+          underlayColor={'transparent'}>
+          <View
+            className="border-[1px] border-slate-400 px-6 py-2 rounded-xl"
+            style={{
+              backgroundColor: currentDay === 'today' ? '#49B114' : '#e0e0e0',
+            }}>
+            <Text
+              className="text-base font-semibold"
+              style={{
+                color: currentDay === 'today' ? 'white' : 'black',
+              }}>
+              Today
+            </Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => setCalendarState(true)}
+          underlayColor={'transparent'}>
+          <View
+            className="flex-row items-center border-[1px] border-slate-400 px-4 py-[9.5px] rounded-xl bg-[#e0e0e0]"
+            style={{
+              backgroundColor:
+                currentDay === 'selectedDay' ? '#49B114' : '#e0e0e0',
+            }}>
+            <Text
+              className=" mr-1 font-semibold"
+              style={{
+                color: currentDay === 'selectedDay' ? 'white' : 'black',
+              }}>
+              Select Date
+            </Text>
+            <CalendarIcon name="calendar" size={20} color="#000000" />
+          </View>
+        </TouchableHighlight>
+      </View>
 
       {/* <ScrollView> */}
       {/* Booking id  */}
-      <FlatList data={bookingData} renderItem={renderItem} />
+      {/* <FlatList data={bookingData} renderItem={renderItem} inverted /> */}
+      <FlatList data={bookingData.reverse()} renderItem={renderItem} />
 
       {/* modal */}
       <Modal
@@ -295,7 +372,9 @@ const FavouriteScreen = () => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}>
-        <View className="w-[90%] mx-auto my-auto items-center border-[3px] bg-white border-[#49B114] rounded-2xl py-6 px-6">
+        <View
+          // className="w-[90%] mx-auto my-auto items-center border-[3px] bg-white border-[#49B114] rounded-2xl py-6 px-6"
+          className="w-[90%] mx-auto my-auto items-center bg-white rounded-2xl py-6 px-6">
           <Text
             className="w-[80%] font-semibold text-black text-center"
             style={{fontSize: 16}}>
@@ -303,14 +382,21 @@ const FavouriteScreen = () => {
           </Text>
           <View className="w-[100%] flex-row justify-between mt-6">
             <TouchableHighlight
-              className="border-2 border-[#49B114] w-[45%] py-[6px] rounded-full items-center"
+              // className="border-2 border-[#49B114] w-[45%] py-[6px] rounded-full items-center"
+              className="bg-red-600 w-[45%] py-[6px] rounded-full items-center"
               onPress={cancelBookingHandler}
               underlayColor={'transparent'}>
-              <Text className="text-black text-lg font-semibold">Confirm</Text>
+              <Text
+                // className="text-black text-lg font-semibold"
+                className="text-white text-lg font-semibold">
+                Confirm
+              </Text>
             </TouchableHighlight>
             <TouchableHighlight
               onPress={() => setModalVisible(false)}
-              className="border-2 border-[#49B114] w-[45%] py-[6px] rounded-full items-center"
+              // className="border-2 border-[#49B114] w-[45%] py-[6px] rounded-full items-center"
+              // className="border-2 border-[#1D1CA3] w-[45%] py-[6px] rounded-full items-center"
+              className="border-2 border-slate-400 w-[45%] py-[6px] rounded-full items-center"
               underlayColor={'transparent'}>
               <Text className="text-black text-lg font-semibold">Cancel</Text>
             </TouchableHighlight>
@@ -323,6 +409,21 @@ const FavouriteScreen = () => {
         <View
           className="absolute top-0 bottom-0 right-0 left-0 z-[1]"
           style={{backgroundColor: 'rgba(0, 0, 0, 0.6)'}}></View>
+      )}
+
+      {/* calendar */}
+      {calendarState && (
+        <View className="w-80 absolute top-40 left-10">
+          <Calendar
+            onDayPress={(day: any) => {
+              // console.log('selected day', day);
+              setCurrentDay('selectedDay');
+              setSeletedDate(day.dateString);
+              setCalendarState(false);
+            }}
+            // onDayPress={() => setCalendarState(false)}
+          />
+        </View>
       )}
     </View>
   );

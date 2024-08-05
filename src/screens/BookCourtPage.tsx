@@ -344,7 +344,6 @@ const BookCourtPage = () => {
     }, []),
   );
 
-  const todayy = new Date();
   const sevenDaysLater = new Date();
   sevenDaysLater.setDate(new Date().getDate() + 5);
   console.log(sevenDaysLater);
