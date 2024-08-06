@@ -1,16 +1,15 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {Alert, Image, Text, TouchableHighlight, View} from 'react-native';
+import {Image, Text, TouchableHighlight, View} from 'react-native';
 import {
-  default as CheckIcon,
   default as FavouriteIcon,
   default as LeftArrowIcon,
   default as ShareIcon,
 } from 'react-native-vector-icons/AntDesign';
 import LocationIcon from 'react-native-vector-icons/Octicons';
-import {useAppSelector} from '../redux/hooks';
 import {API_SERVER} from '../../envVar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useAppSelector} from '../redux/hooks';
 
 const BookCourtRecieptPage = () => {
   const navigation = useNavigation<any>();
@@ -28,12 +27,9 @@ const BookCourtRecieptPage = () => {
     date: string;
   };
 
-  // console.log(time, 'timetime');
   const slotLength = time.split(',');
-  // console.log(slotLength.length);
 
   const turfData = useAppSelector(state => state.turf);
-  // console.log(turfData.turf.turfName, 'turfdata');
 
   const getUserData = async () => {
     try {
@@ -42,7 +38,7 @@ const BookCourtRecieptPage = () => {
         const parsedData = JSON.parse(data);
         return parsedData;
       } else {
-        console.log('No data found');
+        console.error('No data found');
         return null;
       }
     } catch (error) {
@@ -51,16 +47,14 @@ const BookCourtRecieptPage = () => {
     }
   };
 
-  // Usage in an async function
   const logUserData = async () => {
     const data = await getUserData();
     if (data) {
       const {_id, fullName, phoneNumber} = data;
-      console.log(_id, fullName, phoneNumber, 'userData is here');
       setUserData({
         id: _id,
         name: fullName,
-        phoneNumber: phoneNumber, // Ensure this matches the state property name
+        phoneNumber: phoneNumber,
       });
     }
   };
@@ -111,7 +105,6 @@ const BookCourtRecieptPage = () => {
           {turfData.turf.turfName}
         </Text>
         <Text className="text-base text-black font-semibold">
-          {/* Wed,15 Feb,02:00 PM-05:00PM */}
           {date}, {time}
         </Text>
         <Image
@@ -159,7 +152,6 @@ const BookCourtRecieptPage = () => {
           <Text className="text-base font-semibold text-black mb-2">
             Location
           </Text>
-
           <View>
             <View className="flex-row gap-1 items-start">
               <LocationIcon name="location" size={20} color="black" />

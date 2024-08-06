@@ -1,5 +1,6 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
 import {
   ImageBackground,
   Text,
@@ -10,13 +11,19 @@ import {
 import Toast from 'react-native-toast-message';
 import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
 import RadioButtons from '../components/RadioButtons';
-import {useCreateUserMutation} from '../redux/api/userAPI';
-import {useAppDispatch, useAppSelector} from '../redux/hooks';
-import {userLogin} from '../redux/reducer/userReducer';
-import {User, userInfoType} from '../types/types';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useCreateUserMutation } from '../redux/api/userAPI';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { userLogin } from '../redux/reducer/userReducer';
+import { User, userInfoType } from '../types/types';
 
 const ProfileScreen = () => {
+  const [userInfo, setUserInfo] = useState<userInfoType>({
+    fullName: '',
+    location: '',
+    gender: '',
+    role: '',
+  });
+  
   const navigation = useNavigation<any>();
 
   const dispatch = useAppDispatch();
@@ -25,12 +32,6 @@ const ProfileScreen = () => {
 
   const userData = useAppSelector(state => state.user);
 
-  const [userInfo, setUserInfo] = useState<userInfoType>({
-    fullName: '',
-    location: '',
-    gender: '',
-    role: '',
-  });
 
   const onNameChangeHandler = (e: string) => {
     setUserInfo({...userInfo, fullName: e});

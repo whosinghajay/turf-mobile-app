@@ -23,19 +23,17 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {useGetTurfQuery} from '../redux/api/turfAPI';
 import {Turf} from '../types/types';
-// import {server} from '../redux/store';
 import {API_SERVER} from '../../envVar';
 import {useAppDispatch} from '../redux/hooks';
 import {turfData} from '../redux/reducer/turfReducer';
-// import Header from '../components/Header';
 
 const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const navigation = useNavigation<any>();
-  const {isLoading, isError, isSuccess, data, error} = useGetTurfQuery();
   const [turfList, setTurfList] = useState<Turf[]>([]);
+  
+  const {isLoading, isError, isSuccess, data, error} = useGetTurfQuery();
 
-  // console.log(process.env.API_SERVER, "server id hai yeh");
+  const navigation = useNavigation<any>();
 
   const dispatch = useAppDispatch();
 
@@ -48,7 +46,7 @@ const HomeScreen = () => {
     }
     if (isSuccess && data) {
       console.log('Data fetched successfully: ', data);
-      setTurfList(data.turf); // Ensure that `data.turf` is the correct path to your array of turfs
+      setTurfList(data.turf);
     }
   }, [isLoading, isError, isSuccess, data, error]);
 
@@ -60,7 +58,6 @@ const HomeScreen = () => {
     return (
       <TouchableHighlight
         underlayColor="#fff"
-        // onPress={() => navigation.navigate('TurfInformation', {turf: item})}>
         onPress={navigateHandler}>
         <View className="mx-2 mt-[12px] relative">
           <Image
@@ -151,7 +148,6 @@ const HomeScreen = () => {
           />
           <TouchableHighlight
             underlayColor={'transparent'}
-            // onPress={() => Alert.alert('filter button')}
             onPress={() => navigation.navigate('Map')}
             className="mr-7">
             <AntDesign name="filter" size={30} color="white" />

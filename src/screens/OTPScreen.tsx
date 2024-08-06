@@ -1,22 +1,23 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
-import {ImageBackground, Text, TouchableHighlight, View} from 'react-native';
-import {OtpInput} from 'react-native-otp-entry';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { ImageBackground, Text, TouchableHighlight, View } from 'react-native';
+import { OtpInput } from 'react-native-otp-entry';
 import Toast from 'react-native-toast-message';
 import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
-// import {server} from '../redux/store';
-import {useAppSelector} from '../redux/hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_SERVER } from '../../envVar';
+import { useAppSelector } from '../redux/hooks';
 
 const correctOTP = 1234;
 
 const OTP = () => {
-  const navigation = useNavigation<any>();
+  const [otp, setOtp] = useState<number>();
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
     undefined,
   );
-  const [otp, setOtp] = useState<number>();
+
+  const navigation = useNavigation<any>();
+
   const userData = useAppSelector(state => state.user);
 
   const textChangeHandler = (e: string) => {
@@ -31,7 +32,6 @@ const OTP = () => {
 
   const nextPageHandler = async () => {
     if (otp === correctOTP) {
-      // navigation.navigate('ProfileScreen');
       const response = await fetch(`${API_SERVER}/api/v1/user/create`, {
         method: 'POST',
         headers: {

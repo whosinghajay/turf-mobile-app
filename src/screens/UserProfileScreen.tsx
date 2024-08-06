@@ -1,27 +1,24 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
+  Alert,
   Image,
+  Text,
   TextInput,
   TouchableHighlight,
-  Alert,
+  View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {default as ShareIcon} from 'react-native-vector-icons/FontAwesome';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {userDataType} from '../types/types';
+import { default as ShareIcon } from 'react-native-vector-icons/FontAwesome';
+import { userDataType } from '../types/types';
 
 const UserProfileScreen = () => {
   const [userData, setUserData] = useState<userDataType>();
-  console.log(userData?.location, "hjhjhjhjh")
 
   useEffect(() => {
     const getUser = async () => {
       const jsonValue = await AsyncStorage.getItem('my-data');
       const data = jsonValue != null ? JSON.parse(jsonValue) : null;
       setUserData(data);
-      console.log(data, "here is the data");
-      
     };
     getUser();
   }, []);

@@ -1,52 +1,21 @@
-// import {View, Text, SafeAreaView, ScrollView, StyleSheet} from 'react-native';
-// import React from 'react';
-// import Home from './src/pages/Home';
-// import Footer from './src/components/Footer';
-// import Header from './src/components/Header';
-// import Screen1 from './src/components/SplashScreen/Screen1';
-
-// const App = () => {
-//   return (
-//     // <SafeAreaView style={styles.container}>
-//     //   <Header />
-//     //   <ScrollView contentContainerStyle={styles.scrollContent}>
-//     //     <Home />
-//     //   </ScrollView>
-//     //   <Footer />
-//     // </SafeAreaView>
-//     <Screen1/>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//   },
-//   scrollContent: {
-//     flexGrow: 1,
-//     paddingBottom: 78.86, // Adjust this value according to the height of your footer
-//   },
-// });
-
-// export default App;
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React, {useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
+import Toast from 'react-native-toast-message';
+import { Provider } from 'react-redux';
 import TabNavigation from './src/navigators/TabNavigation';
+import { store } from './src/redux/store';
 import BookCourtPage from './src/screens/BookCourtPage';
 import BookCourtRecieptPage from './src/screens/BookCourtRecieptPage';
+import FavouritePage from './src/screens/FavouritePage';
+import Map from './src/screens/Map';
+import OTP from './src/screens/OTPScreen';
+import PhoneNumber from './src/screens/PhoneNumber';
 import ProfileScreen from './src/screens/ProfileScreen';
 import SplashScreen from './src/screens/SplashScreen';
 import TurfInformation from './src/screens/TurfInformation';
-import FavouritePage from './src/screens/FavouritePage';
-import PhoneNumber from './src/screens/PhoneNumber';
-import OTP from './src/screens/OTPScreen';
-import {Provider} from 'react-redux';
-import {store} from './src/redux/store';
-import Toast from 'react-native-toast-message';
-import Map from './src/screens/Map';
-import {ActivityIndicator, View} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
@@ -83,7 +52,9 @@ const App = () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={initialRoute}>
+        <Stack.Navigator
+          screenOptions={{headerShown: false}}
+          initialRouteName={initialRoute}>
           <Stack.Screen
             name="Splash Screen"
             component={SplashScreen}

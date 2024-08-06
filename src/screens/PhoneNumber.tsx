@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
 import {
   Image,
   ImageBackground,
@@ -11,35 +11,34 @@ import {
 import Toast from 'react-native-toast-message';
 import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
 import DownArrowIcon from 'react-native-vector-icons/MaterialIcons';
-import {useAppDispatch} from '../redux/hooks';
-import {userLogin} from '../redux/reducer/userReducer';
-import {User} from '../types/types';
+import { useAppDispatch } from '../redux/hooks';
+import { userLogin } from '../redux/reducer/userReducer';
+import { User } from '../types/types';
 
 const PhoneNumber = () => {
-  const navigation = useNavigation<any>();
+  const [phoneNumber, setPhoneNumber] = useState<number>();
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
     undefined,
   );
-  const [phoneNumber, setPhoneNumber] = useState<number>();
+  
+  const navigation = useNavigation<any>();
 
   const dispatch = useAppDispatch();
 
   const onChangeHandler = (e: string) => {
-    // Clear the previous timeout
+    // Clearing the previous timeout
     if (timeoutId) {
       clearTimeout(timeoutId);
     }
 
-    // Set a new timeout to log the value after 1000ms (1 second)
+    // Setting a new timeout to log the value after 1000ms (1 second)
     const newTimeoutId = setTimeout(() => {
       setPhoneNumber(Number(e));
     }, 300);
 
-    // Save the timeout ID to state
+    // Saving the timeout ID to state
     setTimeoutId(newTimeoutId);
   };
-
-  // const onPressHandler = () => navigation.navigate('OTP');
 
   const onPressHandler = () => {
     if (!phoneNumber) {

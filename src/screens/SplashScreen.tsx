@@ -1,14 +1,15 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
-import {Image, StatusBar, Text, TouchableHighlight, View} from 'react-native';
-import {SplashScreenData} from '../assests/data/SplashScreenData';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { Image, StatusBar, Text, TouchableHighlight, View } from 'react-native';
 import RightArrowIcon from 'react-native-vector-icons/Ionicons';
+import { SplashScreenData } from '../assests/data/SplashScreenData';
 
 const data = SplashScreenData;
 const dataLength = data.length;
 
 const SplashScreen = () => {
   const [index, setIndex] = useState(0);
+  
   const navigation = useNavigation<any>();
 
   const skipToProfile = () => navigation.navigate('PhoneNumber');
@@ -62,7 +63,7 @@ const SplashScreen = () => {
               underlayColor="#0074D2"
               onPress={nextIndex}
               className="bg-[#0064D2] w-[48%] items-center justify-center h-12 rounded-lg">
-              <View className='flex-row items-center gap-1'>
+              <View className="flex-row items-center gap-1">
                 <Text className="text-lg text-white">
                   {data[index].buttonTwoText}
                 </Text>

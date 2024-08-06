@@ -25,18 +25,15 @@ const SettingScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [userData, setUserData] = useState<User | null>(null);
+
   const navigation = useNavigation<any>();
   const [deleteUser, {isLoading, error}] = useDeleteUserMutation();
-
-  // console.log(userData?.data.user._id, 'userData at setting screen');
-  console.log(userData, 'userData at setting screen');
 
   useEffect(() => {
     const getUser = async () => {
       const jsonValue = await AsyncStorage.getItem('my-data');
       const data: User = jsonValue != null ? JSON.parse(jsonValue) : null;
       setUserData(data);
-      console.log(data, 'data data');
     };
     getUser();
   }, []);
@@ -52,19 +49,12 @@ const SettingScreen = () => {
   };
 
   // const deleteHandler = async () => {
-  //   await deleteUser(userData?._id!);
   //   await AsyncStorage.removeItem('my-data');
-  //   setModalVisible(false);
-  //   navigation.navigate('Splash Screen');
-  // };
-
-  // const deleteHandler = async () => {
   //   try {
   //     if (userData?._id) {
-  //       const aa = await deleteUser(userData?._id);
-  //       console.log(aa);
+  //       const response = await deleteUser(userData?._id).unwrap();
+  //       console.log('Delete response:', response);
 
-  //       await AsyncStorage.removeItem('my-data');
   //       setModalDeleteVisible(false);
   //       navigation.navigate('Splash Screen');
   //     } else {
@@ -76,24 +66,8 @@ const SettingScreen = () => {
   //   }
   // };
 
-  const deleteHandler = async () => {
-    await AsyncStorage.removeItem('my-data');
-    try {
-      if (userData?._id) {
-        const response = await deleteUser(userData?._id).unwrap();
-        console.log('Delete response:', response);
-
-        setModalDeleteVisible(false);
-        navigation.navigate('Splash Screen');
-      } else {
-        console.error('User ID is missing');
-      }
-    } catch (error) {
-      console.error('Failed to delete user:', error);
-      Alert.alert('Error', 'Failed to delete user. Please try again.');
-    }
-  };
-
+  const deleteHandler = () => {};
+  
   return (
     <>
       {/* header */}

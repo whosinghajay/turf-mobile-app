@@ -1,6 +1,6 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
-import {Image, Text, TouchableHighlight, View} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { Image, Text, TouchableHighlight, View } from 'react-native';
 import {
   default as CheckIcon,
   default as FavouriteIcon,
@@ -8,21 +8,17 @@ import {
   default as ShareIcon,
 } from 'react-native-vector-icons/AntDesign';
 import LocationIcon from 'react-native-vector-icons/Octicons';
-// import {server} from '../redux/store';
-import {API_SERVER} from '../../envVar';
-import {useAppSelector} from '../redux/hooks';
+import { API_SERVER } from '../../envVar';
+import { useAppSelector } from '../redux/hooks';
 
 const TurfInformation = () => {
-  const navigation = useNavigation<any>();
-  // const route = useRoute<any>();
-  // const {turf} = route.params;
-  const userData = useAppSelector(state => state.turf);
-  // console.log(userData, 'hellllllll');
-
   const [selectedCourt, setSelectedCourt] = useState(null);
+
+  const navigation = useNavigation<any>();
+  const userData = useAppSelector(state => state.turf);
+
   const isDisabled = !selectedCourt;
 
-  // const courts = ['Court 1', 'Court 2', 'Court 3', 'Court 4'];
   const courts: string[] = [];
 
   for (let i = 0; i < userData.turf.courtNumbers; i++) {
@@ -31,7 +27,6 @@ const TurfInformation = () => {
 
   const handleCourtClick = (court: any) => {
     setSelectedCourt(court);
-    // Alert.alert(`You clicked on ${court}`);
   };
 
   return (
@@ -175,7 +170,7 @@ const TurfInformation = () => {
         underlayColor="#4141eb"
         className="mt-3 rounded-xl"
         style={{
-          backgroundColor: isDisabled ? '#A9A9A9' : '#1D1CA3', // Gray when disabled, original color when enabled
+          backgroundColor: isDisabled ? '#A9A9A9' : '#1D1CA3',
         }}
         disabled={isDisabled}
         onPress={() =>

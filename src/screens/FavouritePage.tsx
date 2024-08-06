@@ -1,7 +1,7 @@
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import {Image, Text, TouchableHighlight, View} from 'react-native';
-import {default as LeftArrowIcon} from 'react-native-vector-icons/AntDesign';
+import { Image, Text, TouchableHighlight, View } from 'react-native';
+import { default as LeftArrowIcon } from 'react-native-vector-icons/AntDesign';
 
 const FavouritePage = () => {
   const navigation = useNavigation<any>();

@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   useFocusEffect,
   useNavigation,
@@ -13,12 +14,9 @@ import {
   default as ShareIcon,
 } from 'react-native-vector-icons/AntDesign';
 import {API_SERVER} from '../../envVar';
-import {useAppSelector} from '../redux/hooks';
 import {useCreateBookingMutation} from '../redux/api/bookingAPI';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useGetSingleTurfQuery} from '../redux/api/turfAPI';
-// import {useUpdateTurfMutation} from '../redux/api/turfAPI';
-// import { format, parseISO } from 'date-fns';
+import {useAppSelector} from '../redux/hooks';
 
 type FlattenedSlot = {
   date: string;
@@ -26,7 +24,6 @@ type FlattenedSlot = {
   booked: boolean;
 };
 
-// Define the type for the output slot
 interface UpdatedSlot {
   courtNumber: number;
   date: string;
@@ -45,15 +42,11 @@ const BookCourtPage = () => {
   const [currentDay, setCurrentDay] = useState('today');
   const [selectedSlot, setSelectedSlot] = useState<string[]>([]);
 
-  // console.log(calendarState);
-
   const [user, setUser] = useState({
     id: '',
     name: '',
     phoneNumber: '',
   });
-
-  // const [updateTurf] = useUpdateTurfMutation();
 
   const [createBooking] = useCreateBookingMutation();
   const turfData = useAppSelector(state => state.turf);
@@ -82,7 +75,7 @@ const BookCourtPage = () => {
       return null;
     }
   };
-  // Usage in an async function
+
   const logUserData = async () => {
     const data = await getUserData();
     if (data) {
@@ -95,6 +88,7 @@ const BookCourtPage = () => {
       });
     }
   };
+
   useEffect(() => {
     logUserData();
   }, []);
@@ -105,48 +99,16 @@ const BookCourtPage = () => {
 
   const courtNumber = Number(court.split(' ')[1]);
 
-  // const userData = useAppSelector(state => state.turf);
-
-  // const selectedCourt = userData.turf.slot.find(
-  //   court => court.courtNumber === courtNumber,
-  // );
   const selectedCourt =
     isSuccess &&
     data?.turf.slot.find(court => court.courtNumber === courtNumber);
-  console.log(selectedCourt, 'llll');
 
   const today = new Date().toISOString().split('T')[0];
 
   const tomorrowDate = new Date();
   tomorrowDate.setDate(tomorrowDate.getDate() + 1);
 
-  // Format tomorrow's date in YYYY-MM-DD format
   const tomorrow = tomorrowDate.toISOString().split('T')[0];
-
-  // useEffect(() => {
-  //   const newFlattenedSlots: FlattenedSlot[] =
-  //     selectedCourt?.days.reduce<FlattenedSlot[]>((acc, day) => {
-  //       // const dayDate = new Date(day.date).toISOString().split('T')[0];
-
-  //       // if (dayDate === selectedDate) {
-  //       if (day.date === selectedDate) {
-  //         // console.log(today);
-  //         // console.log(dayDate);
-
-  //         day.slots.forEach(slot => {
-  //           acc.push({
-  //             date: day.date,
-  //             time: slot.time,
-  //             booked: slot.booked,
-  //           });
-  //         });
-  //       }
-  //       return acc;
-  //     }, []) || [];
-  //   // console.log(flattenedSlots);
-  //   setFlattenedSlots(newFlattenedSlots);
-  //   setSelectedSlot([]);
-  // }, [selectedDate]);
 
   useEffect(() => {
     if (selectedCourt) {
@@ -191,7 +153,6 @@ const BookCourtPage = () => {
     }
   };
 
-  // const isDisabled = !selectedSlot;
   const isDisabled = selectedSlot.length === 0;
 
   const bookingData = {
@@ -203,13 +164,6 @@ const BookCourtPage = () => {
       turfPrice: isSuccess ? data.turf.price : 0,
       turfLocation: isSuccess ? data.turf.turfLocation : '',
       turfId: isSuccess ? data.turf._id : '',
-      //   slot: {
-      //     courtNumber,
-      //     date: selectedDate,
-      //     time: selectedSlot,
-      //     booked: true,
-      //   },
-      // },
       slot: selectedSlot.map(slot => ({
         courtNumber,
         date: selectedDate,
@@ -217,7 +171,6 @@ const BookCourtPage = () => {
         booked: true,
       })),
     },
-    // total: turfData.turf.price,
     total: isSuccess ? data.turf.price * selectedSlot.length : 0,
   };
 
@@ -447,33 +400,19 @@ const BookCourtPage = () => {
           Price - {isSuccess && data.turf.price} hourly
         </Text>
         <View className="pt-3 flex-row flex-wrap gap-3 mx-auto">
-          {/* <TouchableHighlight
-            underlayColor={'transparent'}
-            onPress={() => Alert.alert('hello boss')}
-            className="border-2 border-slate-300 rounded-xl">
-            <View className="px-2 py-3">
-              <Text className="text-xs font-semibold">01:11 AM</Text>
-            </View>
-          </TouchableHighlight> */}
           {flattenedSlots?.map((slot, index) => (
             <TouchableHighlight
               key={index}
               underlayColor={'transparent'}
-              // onPress={() => Alert.alert('Slot selected', `Time: ${slot.time}`)}
-              // onPress={() => setSelectedSlot([...selectedSlot, slot.time])}
               onPress={() => toggleSlotSelection(slot.time)}
               className="border-2 border-slate-300 rounded-xl"
-              // style={{
-              //   backgroundColor: slot.booked === true ? 'grey' : 'transparent',
-              // }}
               disabled={slot.booked === true}>
               <View
                 className="px-2 py-3 rounded-xl"
                 style={{
                   backgroundColor: slot.booked
                     ? 'grey'
-                    : // : selectedSlot === slot.time
-                    selectedSlot.includes(slot.time)
+                    : selectedSlot.includes(slot.time)
                     ? '#49B114'
                     : '#e0e0e0',
                 }}>
@@ -482,8 +421,7 @@ const BookCourtPage = () => {
                   style={{
                     color: slot.booked
                       ? 'white'
-                      : // : selectedSlot === slot.time
-                      selectedSlot.includes(slot.time)
+                      : selectedSlot.includes(slot.time)
                       ? '#fff'
                       : '#000',
                   }}>
@@ -501,7 +439,7 @@ const BookCourtPage = () => {
         underlayColor="#4141eb"
         className=" mt-3 rounded-xl"
         style={{
-          backgroundColor: isDisabled ? '#A9A9A9' : '#1D1CA3', // Gray when disabled, original color when enabled
+          backgroundColor: isDisabled ? '#A9A9A9' : '#1D1CA3',
         }}
         onPress={onPressHandler}>
         <Text className="text-lg text-center text-white py-3">
@@ -516,12 +454,10 @@ const BookCourtPage = () => {
             minDate={today}
             maxDate={sevenDaysLater}
             onDayPress={(day: any) => {
-              // console.log('selected day', day);
               setCurrentDay('selectedDay');
               setSeletedDate(day.dateString);
               setCalendarState(false);
             }}
-            // onDayPress={() => setCalendarState(false)}
           />
         </View>
       )}
