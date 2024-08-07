@@ -1,6 +1,6 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { Image, Text, TouchableHighlight, View } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import React, {useState} from 'react';
+import {Image, Text, TouchableHighlight, View} from 'react-native';
 import {
   default as CheckIcon,
   default as FavouriteIcon,
@@ -8,14 +8,15 @@ import {
   default as ShareIcon,
 } from 'react-native-vector-icons/AntDesign';
 import LocationIcon from 'react-native-vector-icons/Octicons';
-import { API_SERVER } from '../../envVar';
-import { useAppSelector } from '../redux/hooks';
+import {API_SERVER} from '../../envVar';
+import {useAppSelector} from '../redux/hooks';
 
 const TurfInformation = () => {
   const [selectedCourt, setSelectedCourt] = useState(null);
 
   const navigation = useNavigation<any>();
   const userData = useAppSelector(state => state.turf);
+  const newServiceArray = userData.turf.services[0].split(',');
 
   const isDisabled = !selectedCourt;
 
@@ -76,7 +77,9 @@ const TurfInformation = () => {
               <CheckIcon
                 name="checkcircle"
                 size={15}
-                color={userData.turf.services[0] ? '#09AB10' : '#FF0000'}
+                color={
+                  newServiceArray.includes('Parking') ? '#09AB10' : '#FF0000'
+                }
               />
               <Text className="text-black text-base">Parking</Text>
             </View>
@@ -84,7 +87,9 @@ const TurfInformation = () => {
               <CheckIcon
                 name="checkcircle"
                 size={15}
-                color={userData.turf.services[1] ? '#09AB10' : '#FF0000'}
+                color={
+                  newServiceArray.includes('Washroom') ? '#09AB10' : '#FF0000'
+                }
               />
               <Text className="text-black text-base">Washroom</Text>
             </View>
@@ -94,7 +99,9 @@ const TurfInformation = () => {
               <CheckIcon
                 name="checkcircle"
                 size={15}
-                color={userData.turf.services[2] ? '#09AB10' : '#FF0000'}
+                color={
+                  newServiceArray.includes('Cafeteria') ? '#09AB10' : '#FF0000'
+                }
               />
               <Text className="text-black text-base">Cafeteria</Text>
             </View>
@@ -102,7 +109,11 @@ const TurfInformation = () => {
               <CheckIcon
                 name="checkcircle"
                 size={15}
-                color={userData.turf.services[3] ? '#09AB10' : '#FF0000'}
+                color={
+                  newServiceArray.includes('Locker & Dressing Room')
+                    ? '#09AB10'
+                    : '#FF0000'
+                }
               />
               <Text className="text-black text-base">
                 Locker & Dressing Room

@@ -2,7 +2,12 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {Turf} from '../../types/types';
 // import {server} from '../store';
 import {API_SERVER} from '../../../envVar';
-import {updateTurfRequest, updateTurfResponse} from '../../types/api-types';
+import {
+  createTurfRequest,
+  createTurfResponse,
+  updateTurfRequest,
+  updateTurfResponse,
+} from '../../types/api-types';
 
 interface TurfResponse {
   success: boolean;
@@ -35,8 +40,22 @@ export const turfAPI = createApi({
         body,
       }),
     }),
+    createTurf: builder.mutation<createTurfResponse, FormData>({
+      query: formData => ({
+        url: 'create',
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }),
+    }),
   }),
 });
 
-export const {useGetTurfQuery, useUpdateTurfMutation, useGetSingleTurfQuery} =
-  turfAPI;
+export const {
+  useGetTurfQuery,
+  useUpdateTurfMutation,
+  useGetSingleTurfQuery,
+  useCreateTurfMutation,
+} = turfAPI;

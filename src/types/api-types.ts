@@ -21,3 +21,18 @@ export interface updateTurfRequest {
   turfId: string;
   body: Turf;
 }
+
+export interface createTurfResponse {
+  success: boolean;
+  turf: Turf;
+}
+
+export interface createTurfRequest {
+  turfName: string;
+  turfLocation: string;
+  services: string[];
+  courtNumbers: number;
+  price: number;
+  typeOfCourt: string;
+  image: any;
+}
