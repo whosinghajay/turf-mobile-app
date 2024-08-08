@@ -17,6 +17,7 @@ import SettingScreen from '../screens/SettingScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CreateTurfScreen from '../screens/CreateTurfScreen';
+import TurfHomeScreen from '../screens/TurfHomeScreen';
 
 interface UserInfoType {
   _id: string;
@@ -57,22 +58,41 @@ const TabNavigation = () => {
           borderTopRightRadius: 20,
         },
       }}>
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({focused}) => (
-            <View className="gap-1 items-center">
-              <HomeIcon
-                name={focused ? 'home' : 'home-outline'}
-                size={27}
-                color="white"
-              />
-              <Text className="text-white font-semibold text-xs">Home</Text>
-            </View>
-          ),
-        }}
-      />
+      {userInfo?.role === 'user' ? (
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <View className="gap-1 items-center">
+                <HomeIcon
+                  name={focused ? 'home' : 'home-outline'}
+                  size={27}
+                  color="white"
+                />
+                <Text className="text-white font-semibold text-xs">Home</Text>
+              </View>
+            ),
+          }}
+        />
+      ) : (
+        <Tab.Screen
+          name="TurfHome"
+          component={TurfHomeScreen}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <View className="gap-1 items-center">
+                <HomeIcon
+                  name={focused ? 'home' : 'home-outline'}
+                  size={27}
+                  color="white"
+                />
+                <Text className="text-white font-semibold text-xs">Home</Text>
+              </View>
+            ),
+          }}
+        />
+      )}
       <Tab.Screen
         name="Booking"
         component={BookingScreen}

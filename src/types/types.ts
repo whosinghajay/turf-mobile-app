@@ -41,6 +41,7 @@ export interface Turf {
   slot: SlotType[];
   createdAt: Date;
   updatedAt: Date;
+  turfId?: any;
 }
 
 export interface userDataType {

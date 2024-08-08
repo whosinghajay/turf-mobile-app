@@ -1,18 +1,33 @@
 import React, {useEffect, useState} from 'react';
 import {
+  FlatList,
   Image,
   ImageBackground,
   StyleSheet,
   Text,
   TextInput,
+  TouchableHighlight,
   TouchableOpacity,
   View,
-  FlatList,
-  Alert,
 } from 'react-native';
-import {launchImageLibrary} from 'react-native-image-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 import {useCreateTurfMutation} from '../redux/api/turfAPI';
+import {default as LeftArrowIcon} from 'react-native-vector-icons/AntDesign';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
+
+interface User {
+  _id: string;
+  phoneNumber: number;
+  gender: string;
+  fullName: string;
+  location: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
 
 const MULTI_SELECT_OPTIONS = [
   {label: 'Parking', value: 'Parking'},
@@ -25,6 +40,7 @@ const CreateTurfScreen = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
+  const [userData, setUserData] = useState<User | null>(null);
   const [turfDataEntries, setTurfDataEntries] = useState({
     turfName: '',
     turfLocation: '',
@@ -33,10 +49,22 @@ const CreateTurfScreen = () => {
     price: 0,
     typeOfCourt: '',
     image: '',
+    turfId: '',
   });
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(
     null,
   );
+
+  const navigation = useNavigation<any>();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const jsonValue = await AsyncStorage.getItem('my-data');
+      const data: User = jsonValue != null ? JSON.parse(jsonValue) : null;
+      setUserData(data);
+    };
+    getUser();
+  }, []);
 
   useEffect(() => {
     if (selectedImage) {
@@ -218,6 +246,7 @@ const CreateTurfScreen = () => {
                 setTurfDataEntries({
                   ...turfDataEntries,
                   price: Number(e),
+                  turfId: userData?._id!,
                 })
               }
             />
@@ -243,6 +272,7 @@ const CreateTurfScreen = () => {
   formData.append('courtNumbers', turfDataEntries.courtNumbers.toString());
   formData.append('price', turfDataEntries.price.toString());
   formData.append('typeOfCourt', turfDataEntries.typeOfCourt);
+  formData.append('turfId', turfDataEntries.turfId);
 
   if (selectedImage) {
     formData.append('image', {
@@ -261,14 +291,26 @@ const CreateTurfScreen = () => {
       }, 5000);
     } catch (error) {
       console.error(error);
+      setConfirmationMessage('Error Posting Turf! Try Again');
+      setTimeout(() => {
+        setConfirmationMessage(null);
+      }, 5000);
     }
   };
 
   const renderConfirmationMessage = () => {
-    if (confirmationMessage) {
+    if (confirmationMessage?.includes('Turf created successfully!')) {
       return (
         <View style={styles.confirmationContainer}>
           <Text style={styles.confirmationText}>{confirmationMessage}</Text>
+        </View>
+      );
+    } else if (confirmationMessage?.includes('Error Posting Turf')) {
+      return (
+        <View className="mt-1 p-[6px] bg-red-600 rounded-[2px]">
+          <Text className="text-white text-center font-medium">
+            {confirmationMessage}
+          </Text>
         </View>
       );
     }
@@ -280,6 +322,25 @@ const CreateTurfScreen = () => {
       source={require('../assests/images/turfCreateBGimage.png')}
       resizeMode="cover">
       <View className="h-full">
+        {/* header */}
+        <View className="flex-row justify-between mt-4 mx-4">
+          <View className="flex-row gap-2 items-center">
+            <TouchableHighlight
+              onPress={() => {
+                if (userData?.role === 'user') {
+                  navigation.navigate('Home');
+                } else if (userData?.role === 'turfPoster') {
+                  navigation.navigate('TurfHome');
+                }
+              }}
+              underlayColor="transparent">
+              <LeftArrowIcon name="arrowleft" size={23} color="#fff" />
+            </TouchableHighlight>
+            <Text className="text-white text-[18px] font-semibold">Create</Text>
+          </View>
+        </View>
+
+        {/* rest creation body */}
         <FlatList
           data={[renderForm()]}
           renderItem={renderItem}
@@ -336,13 +397,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   confirmationContainer: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#d4edda',
+    marginTop: 10,
+    padding: 8,
+    backgroundColor: 'green',
     borderRadius: 5,
   },
   confirmationText: {
-    color: '#155724',
+    color: 'white',
     fontSize: 16,
     textAlign: 'center',
   },

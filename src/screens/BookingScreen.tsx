@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import React, { useCallback, useEffect, useState } from 'react';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -9,19 +9,19 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import { Calendar } from 'react-native-calendars';
+import {Calendar} from 'react-native-calendars';
 import {
   default as CalendarIcon,
   default as LeftArrowIcon,
 } from 'react-native-vector-icons/AntDesign';
 import LocationIcon from 'react-native-vector-icons/Octicons';
-import { API_SERVER } from '../../envVar';
+import {API_SERVER} from '../../envVar';
 import {
   useCancelBookingMutation,
   useGetBookingQuery,
 } from '../redux/api/bookingAPI';
-import { useGetTurfQuery } from '../redux/api/turfAPI';
-import { Booking, Turf } from '../types/types';
+import {useGetTurfQuery} from '../redux/api/turfAPI';
+import {Booking, Turf} from '../types/types';
 
 interface Slot {
   courtNumber: number;
@@ -40,6 +40,7 @@ const FavouriteScreen = () => {
     id: '',
     name: '',
     phoneNumber: '',
+    role: '',
   });
   const [bookingInfo, setBookingInfo] = useState<Booking>();
   const [turfInfo, setTurfInfo] = useState<Turf[]>();
@@ -64,12 +65,10 @@ const FavouriteScreen = () => {
     refetch: refetchTurfs,
   } = useGetTurfQuery();
 
-
   const [
     deleteBooking,
     {isLoading: isDeleting, isError: deleteError, isSuccess: deleteSuccess},
   ] = useCancelBookingMutation();
-
 
   useEffect(() => {
     if (turfIsLoading) {
@@ -102,12 +101,13 @@ const FavouriteScreen = () => {
   const logUserData = async () => {
     const data = await getUserData();
     if (data) {
-      const {_id, fullName, phoneNumber} = data;
+      const {_id, fullName, phoneNumber, role} = data;
       console.log(_id, fullName, phoneNumber, 'userData is here');
       setUser({
         id: _id,
         name: fullName,
         phoneNumber: phoneNumber,
+        role: role,
       });
     }
   };
@@ -178,9 +178,7 @@ const FavouriteScreen = () => {
           <Text className="font-semibold text-base text-black">
             Your Booking
           </Text>
-          <Text className="text-xs">
-            {date[0]}
-          </Text>
+          <Text className="text-xs">{date[0]}</Text>
         </View>
 
         <View className="flex-row mx-4 mt-4">
@@ -207,9 +205,7 @@ const FavouriteScreen = () => {
             <Text className="text-black text-base pb-1">
               {user.phoneNumber}
             </Text>
-            <Text className="text-black text-base pb-1">
-              {timeString}
-            </Text>
+            <Text className="text-black text-base pb-1">{timeString}</Text>
             <Text className="text-black text-base pb-1">Rs {item.total}</Text>
           </View>
         </View>
@@ -280,12 +276,17 @@ const FavouriteScreen = () => {
 
   return (
     <View className="h-full px-4 pt-4">
-
       {/* header */}
       <View className="flex-row justify-between">
         <View className="flex-row gap-2 items-center">
           <TouchableHighlight
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => {
+              if(user.role==='user'){
+                navigation.navigate('Home')
+              }else if(user.role==='turfPoster'){
+                navigation.navigate('TurfHome')
+              }
+            }}
             underlayColor={'#EFEFEF'}>
             <LeftArrowIcon name="arrowleft" size={23} color="#000000" />
           </TouchableHighlight>
@@ -386,8 +387,7 @@ const FavouriteScreen = () => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}>
-        <View
-          className="w-[90%] mx-auto my-auto items-center bg-white rounded-2xl py-6 px-6">
+        <View className="w-[90%] mx-auto my-auto items-center bg-white rounded-2xl py-6 px-6">
           <Text
             className="w-[80%] font-semibold text-black text-center"
             style={{fontSize: 16}}>
@@ -398,10 +398,7 @@ const FavouriteScreen = () => {
               className="bg-red-600 w-[45%] py-[6px] rounded-full items-center"
               onPress={cancelBookingHandler}
               underlayColor={'transparent'}>
-              <Text
-                className="text-white text-lg font-semibold">
-                Confirm
-              </Text>
+              <Text className="text-white text-lg font-semibold">Confirm</Text>
             </TouchableHighlight>
             <TouchableHighlight
               onPress={() => setModalVisible(false)}

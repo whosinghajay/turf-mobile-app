@@ -67,14 +67,20 @@ const SettingScreen = () => {
   // };
 
   const deleteHandler = () => {};
-  
+
   return (
     <>
       {/* header */}
       <View className="flex-row justify-between mt-4 mx-4">
         <View className="flex-row gap-2 items-center">
           <TouchableHighlight
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => {
+              if (userData?.role === 'user') {
+                navigation.navigate('Home');
+              } else if (userData?.role === 'turfPoster') {
+                navigation.navigate('TurfHome');
+              }
+            }}
             underlayColor={'#EFEFEF'}>
             <LeftArrowIcon name="arrowleft" size={23} color="#000000" />
           </TouchableHighlight>
