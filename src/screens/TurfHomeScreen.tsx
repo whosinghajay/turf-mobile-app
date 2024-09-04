@@ -1,26 +1,30 @@
-import {
-  View,
-  Text,
-  StatusBar,
-  Image,
-  TouchableHighlight,
-  Alert,
-  Dimensions,
-  FlatList,
-} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {default as RightArrowIcon} from 'react-native-vector-icons/MaterialIcons';
-import {default as MoreIcon} from 'react-native-vector-icons/Feather';
-import {useGetTurfQuery} from '../redux/api/turfAPI';
-import {Turf} from '../types/types';
-import {API_SERVER} from '../../envVar';
-import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import {default as EditIcon} from 'react-native-vector-icons/Entypo';
-import {default as DeleteIcon} from 'react-native-vector-icons/MaterialCommunityIcons';
-import CommentIcon from 'react-native-vector-icons/Feather';
 import {useFocusEffect} from '@react-navigation/native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  Alert,
+  FlatList,
+  Image,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableHighlight,
+  View,
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import {default as EditIcon} from 'react-native-vector-icons/Entypo';
+import CommentIcon, {
+  default as MoreIcon,
+} from 'react-native-vector-icons/Feather';
+import {default as DeleteIcon} from 'react-native-vector-icons/MaterialCommunityIcons';
+import {default as RightArrowIcon} from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import {API_SERVER} from '../../envVar';
+import {useGetBookingQuery} from '../redux/api/bookingAPI';
+import {useGetTurfQuery} from '../redux/api/turfAPI';
+import {useGetUsersQuery} from '../redux/api/userAPI';
+import {Booking, Turf, User} from '../types/types';
+import {BarChart} from 'react-native-gifted-charts';
 
 interface UserInfoType {
   _id: string;
@@ -36,7 +40,9 @@ interface UserInfoType {
 const TurfHomeScreen = () => {
   const [userInfo, setUserInfo] = useState<UserInfoType>();
   const [turfList, setTurfList] = useState<Turf[]>([]);
-  const [userBookedTurf, setUserBookedTurf] = useState();
+  const [userBookedTurf, setUserBookedTurf] = useState<Booking[]>([]);
+  const [allUser, setAllUser] = useState<User[]>([]);
+  const [userarray, setuserarray] = useState<any>([]);
 
   useEffect(() => {
     const userData = async () => {
@@ -51,6 +57,24 @@ const TurfHomeScreen = () => {
   const {isLoading, isError, isSuccess, data, error, refetch} =
     useGetTurfQuery();
 
+  const {
+    isLoading: isBookingLoading,
+    isError: isBookingError,
+    isSuccess: isBookingSuccess,
+    data: bookingData,
+    error: bookingError,
+    refetch: refetchBookings,
+  } = useGetBookingQuery();
+
+  const {
+    isLoading: isUserLoading,
+    isError: isUserError,
+    isSuccess: isUserSuccess,
+    data: userData,
+    error: userError,
+    // refetch: refetchUsers,
+  } = useGetUsersQuery();
+
   useEffect(() => {
     if (isLoading) {
       console.log('Loading...');
@@ -64,11 +88,61 @@ const TurfHomeScreen = () => {
     }
   }, [isLoading, isError, isSuccess, data, error, userInfo]);
 
+  useEffect(() => {
+    if (isUserLoading) {
+      console.log('Loading...');
+    }
+    if (isUserError) {
+      console.error('Error fetching turf data: ', userError);
+    }
+    if (isUserSuccess && userData) {
+      setAllUser(userData.user);
+    }
+  }, [isUserLoading, isUserError, isUserSuccess, userData, userError]);
+
+  useEffect(() => {
+    if (isBookingLoading) {
+      console.log('Loading...');
+    }
+    if (isBookingError) {
+      console.error('Error fetching turf data: ', isBookingError);
+    }
+    if (isBookingSuccess && bookingData) {
+      const userTurfsIds = turfList.map(turf => turf._id);
+      const users = bookingData.bookings.filter(booking =>
+        userTurfsIds.includes(booking.turfInfo.turfId),
+      );
+      setUserBookedTurf(users);
+    }
+  }, [
+    isBookingLoading,
+    isBookingError,
+    isBookingSuccess,
+    bookingData,
+    bookingError,
+    turfList,
+  ]);
+
   useFocusEffect(
     useCallback(() => {
       refetch();
+      refetchBookings();
     }, []),
   );
+
+  useEffect(() => {
+    const userArray = () => {
+      const userid = userBookedTurf.map(c => c.userId);
+      let turff: any = [];
+
+      for (let i = 0; i < userid.length; i++) {
+        const foundUser = allUser.filter(c => c._id === userid[i]);
+        turff = [...turff, ...foundUser];
+      }
+      setuserarray(turff);
+    };
+    userArray();
+  }, [userBookedTurf, allUser, setuserarray]);
 
   const renderItem = ({item}: {item: Turf}) => {
     return (
@@ -139,8 +213,48 @@ const TurfHomeScreen = () => {
     );
   };
 
+  const renderUser = ({item}: {item: User}) => {
+    const book = bookingData?.bookings.find(c => c.userId === item._id);
+
+    return (
+      <View className="bg-white rounded-lg shadow-lg p-4 mt-3 mx-3">
+        <View className="flex-row justify-between">
+          <View className="">
+            <Text className="text-gray-600 font-semibold mb-2">User</Text>
+            <Text className="text-gray-600 font-semibold mb-2">Phn no.</Text>
+            <Text className="text-gray-600 font-semibold mb-2">Turf</Text>
+            <Text className="text-gray-600 font-semibold">Slot</Text>
+          </View>
+          <View className="">
+            <Text className="text-black font-bold text-lg mb-2">
+              {item.fullName}
+            </Text>
+            <Text className="text-gray-700 mb-2">{item.phoneNumber}</Text>
+            <Text className="text-blue-600 mb-2">
+              {book?.turfInfo.turfName}
+            </Text>
+            <Text className="text-gray-700">
+              {book?.turfInfo.slot.map(c => c.date)[0]} /{' '}
+              {book?.turfInfo.slot.map(c => c.time).join(', ')}
+            </Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  const barData = [
+    {value: 250, label: 'M'},
+    {value: 500, label: 'T', frontColor: '#177AD5'},
+    {value: 745, label: 'W', frontColor: '#177AD5'},
+    {value: 320, label: 'T'},
+    {value: 600, label: 'F', frontColor: '#177AD5'},
+    {value: 256, label: 'S'},
+    {value: 300, label: 'S'},
+  ];
+
   return (
-    <View>
+    <ScrollView>
       {/* header */}
       <StatusBar backgroundColor="#1D1CA3" />
       <View className="bg-[#1D1CA3] pt-5 pb-4 pl-5 rounded-b-3xl flex-row">
@@ -212,18 +326,37 @@ const TurfHomeScreen = () => {
         </Text>
 
         <View>
-          {/* <FlatList
-            data={turfList}
-            renderItem={renderItem}
+          <FlatList
+            data={userarray.reverse()}
+            renderItem={renderUser}
             keyExtractor={item => item._id.toString()}
             contentContainerStyle={{paddingBottom: 20}}
             horizontal={true}
-          /> */}
+          />
         </View>
 
         <View className="border-[0.5px] border-gray-500 w-[70%] self-center"></View>
       </View>
-    </View>
+
+      {/* booking chart section */}
+      <View className="mx-3 mt-5">
+        <Text className="text-base font-medium mx-2 mb-3">Booking Chart</Text>
+
+        <View>
+          <BarChart
+            barWidth={22}
+            noOfSections={3}
+            barBorderRadius={4}
+            frontColor="lightgray"
+            data={barData}
+            yAxisThickness={0}
+            xAxisThickness={0}
+          />
+        </View>
+
+        <View className="border-[0.5px] border-gray-500 w-[70%] self-center my-5"></View>
+      </View>
+    </ScrollView>
   );
 };
 

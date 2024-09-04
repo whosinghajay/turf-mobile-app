@@ -4,6 +4,13 @@ export interface User {
   fullName: string;
   location: string;
   role: string;
+  _id?: any;
+}
+
+export interface UserResponse {
+  success: boolean;
+  total: number;
+  user: User[];
 }
 
 export interface userInfoType {

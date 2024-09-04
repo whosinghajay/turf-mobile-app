@@ -1,6 +1,6 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 // import {server} from '../store';
-import {User} from '../../types/types';
+import {User, UserResponse} from '../../types/types';
 // import {server} from '../store';
 import {API_SERVER} from '../../../envVar';
 import {UserMessageResponse} from '../../types/api-types';
@@ -18,7 +18,7 @@ export const userAPI = createApi({
         body: user,
       }),
     }),
-    getUsers: builder.query<User[], void>({query: () => 'all'}),
+    getUsers: builder.query<UserResponse, void>({query: () => 'all'}),
     deleteUser: builder.mutation<UserMessageResponse, string>({
       query: id => ({
         url: `${id}`,
