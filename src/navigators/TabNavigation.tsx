@@ -18,6 +18,7 @@ import UserProfileScreen from '../screens/UserProfileScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CreateTurfScreen from '../screens/CreateTurfScreen';
 import TurfHomeScreen from '../screens/TurfHomeScreen';
+import SlotPage from '../screens/SlotPage';
 
 interface UserInfoType {
   _id: string;
@@ -93,22 +94,46 @@ const TabNavigation = () => {
           }}
         />
       )}
-      <Tab.Screen
-        name="Booking"
-        component={BookingScreen}
-        options={{
-          tabBarIcon: ({focused}) => (
-            <View className="gap-1 items-center">
-              <BookingIcon
-                name={focused ? 'calendar' : 'calendar-o'}
-                size={26}
-                color="white"
-              />
-              <Text className="text-white font-semibold text-xs">Booking</Text>
-            </View>
-          ),
-        }}
-      />
+      {userInfo?.role === 'user' ? (
+        <Tab.Screen
+          name="Booking"
+          component={BookingScreen}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <View className="gap-1 items-center">
+                <BookingIcon
+                  name={focused ? 'calendar' : 'calendar-o'}
+                  size={26}
+                  color="white"
+                />
+                <Text className="text-white font-semibold text-xs">
+                  Booking
+                </Text>
+              </View>
+            ),
+          }}
+        />
+      ) : (
+        <Tab.Screen
+          name="SlotPage"
+          component={SlotPage}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <View className="gap-1 items-center">
+                <BookingIcon
+                  name={focused ? 'calendar' : 'calendar-o'}
+                  size={26}
+                  color="white"
+                />
+                <Text className="text-white font-semibold text-xs">
+                  Slots
+                </Text>
+              </View>
+            ),
+          }}
+        />
+      )}
+
       {userInfo?.role === 'user' ? (
         <Tab.Screen
           name="Notification"

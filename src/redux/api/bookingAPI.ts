@@ -1,8 +1,6 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-// import {server} from '../store';
 import {BookingMessageResponse} from '../../types/api-types';
 import {Booking, User} from '../../types/types';
-// import {server} from '../store';
 import {API_SERVER} from '../../../envVar';
 
 interface BookingResponse {

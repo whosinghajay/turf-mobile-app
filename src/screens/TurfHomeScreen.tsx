@@ -19,12 +19,12 @@ import CommentIcon, {
 import {default as DeleteIcon} from 'react-native-vector-icons/MaterialCommunityIcons';
 import {default as RightArrowIcon} from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import {API_SERVER} from '../../envVar';
 import {useGetBookingQuery} from '../redux/api/bookingAPI';
 import {useGetTurfQuery} from '../redux/api/turfAPI';
 import {useGetUsersQuery} from '../redux/api/userAPI';
 import {Booking, Turf, User} from '../types/types';
 import {BarChart} from 'react-native-gifted-charts';
+import {API_SERVER} from '../../envVar';
 
 interface UserInfoType {
   _id: string;
@@ -221,19 +221,21 @@ const TurfHomeScreen = () => {
         <View className="flex-row justify-between">
           <View className="">
             <Text className="text-gray-600 font-semibold mb-2">User</Text>
-            <Text className="text-gray-600 font-semibold mb-2">Phn no.</Text>
+            <Text className="text-gray-600 font-semibold mb-2">Phone no.</Text>
             <Text className="text-gray-600 font-semibold mb-2">Turf</Text>
             <Text className="text-gray-600 font-semibold">Slot</Text>
           </View>
-          <View className="">
-            <Text className="text-black font-bold text-lg mb-2">
+          <View className="ml-4">
+            <Text className="text-black font-bold mb-2">
               {item.fullName}
             </Text>
-            <Text className="text-gray-700 mb-2">{item.phoneNumber}</Text>
-            <Text className="text-blue-600 mb-2">
+            <Text className="text-black font-bold mb-2">
+              {item.phoneNumber}
+            </Text>
+            <Text className="text-black font-bold mb-2">
               {book?.turfInfo.turfName}
             </Text>
-            <Text className="text-gray-700">
+            <Text className="text-black font-bold">
               {book?.turfInfo.slot.map(c => c.date)[0]} /{' '}
               {book?.turfInfo.slot.map(c => c.time).join(', ')}
             </Text>

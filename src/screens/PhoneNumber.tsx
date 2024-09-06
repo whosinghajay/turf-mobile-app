@@ -1,5 +1,5 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -11,16 +11,16 @@ import {
 import Toast from 'react-native-toast-message';
 import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
 import DownArrowIcon from 'react-native-vector-icons/MaterialIcons';
-import { useAppDispatch } from '../redux/hooks';
-import { userLogin } from '../redux/reducer/userReducer';
-import { User } from '../types/types';
+import {useAppDispatch} from '../redux/hooks';
+import {userLogin} from '../redux/reducer/userReducer';
+import {User} from '../types/types';
 
 const PhoneNumber = () => {
   const [phoneNumber, setPhoneNumber] = useState<number>();
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
     undefined,
   );
-  
+
   const navigation = useNavigation<any>();
 
   const dispatch = useAppDispatch();
