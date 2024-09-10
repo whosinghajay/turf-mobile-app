@@ -295,7 +295,7 @@ const FavouriteScreen = () => {
       </View>
 
       {/* date and calender section */}
-      {bookingData.length > 0 && (
+      {/* {bookingData.length > 0 && ( */}
         <View className="flex-row mt-5 mb-5 justify-between px-4">
           <TouchableHighlight
             onPress={() => {
@@ -359,7 +359,7 @@ const FavouriteScreen = () => {
             </View>
           </TouchableHighlight>
         </View>
-      )}
+      {/* )} */}
 
       {/* empty */}
       {bookingData.length === 0 && (

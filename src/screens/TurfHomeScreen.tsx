@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   Alert,
@@ -43,6 +43,8 @@ const TurfHomeScreen = () => {
   const [userBookedTurf, setUserBookedTurf] = useState<Booking[]>([]);
   const [allUser, setAllUser] = useState<User[]>([]);
   const [userarray, setuserarray] = useState<any>([]);
+
+  const navigation = useNavigation<any>();
 
   useEffect(() => {
     const userData = async () => {
@@ -226,9 +228,7 @@ const TurfHomeScreen = () => {
             <Text className="text-gray-600 font-semibold">Slot</Text>
           </View>
           <View className="ml-4">
-            <Text className="text-black font-bold mb-2">
-              {item.fullName}
-            </Text>
+            <Text className="text-black font-bold mb-2">{item.fullName}</Text>
             <Text className="text-black font-bold mb-2">
               {item.phoneNumber}
             </Text>
@@ -275,7 +275,7 @@ const TurfHomeScreen = () => {
             </Text>
 
             <TouchableHighlight
-              onPress={() => Alert.alert("You're viewing this Profile")}
+              onPress={() => navigation.navigate('UserProfile')}
               underlayColor={'transparent'}>
               <View className="flex-row items-center mt-1">
                 <Text className="text-white text-xs ml-4 font-light">
@@ -302,7 +302,7 @@ const TurfHomeScreen = () => {
         </View>
       </View>
 
-      {/* body section */}
+      {/* body section - list of turves created*/}
       <View className="mx-3 mt-1">
         <Text className="text-base font-medium mx-2">
           Here's the list of turves created
