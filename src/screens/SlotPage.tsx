@@ -11,16 +11,14 @@ import {
   View,
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
+import DropDownPicker from 'react-native-dropdown-picker';
 import {
   default as CalendarIcon,
   default as LeftArrowIcon,
 } from 'react-native-vector-icons/AntDesign';
-import {default as ArrowDownIcon} from 'react-native-vector-icons/MaterialIcons';
 import {API_SERVER} from '../../envVar';
-import {useGetTurfQuery} from '../redux/api/turfAPI';
-import {useAppSelector} from '../redux/hooks';
+import {useGetSingleTurfQuery, useGetTurfQuery} from '../redux/api/turfAPI';
 import {Turf} from '../types/types';
-import DropDownPicker from 'react-native-dropdown-picker';
 
 interface User {
   _id: string;
@@ -51,6 +49,13 @@ type FlattenedSlot = {
   booked: boolean;
 };
 
+interface UpdatedSlot {
+  courtNumber: number;
+  date: string;
+  time: string;
+  booked: boolean;
+}
+
 const SlotPage = () => {
   const [userInfo, setUserInfo] = useState<UserInfoType>();
   const [userData, setUserData] = useState<User | null>(null);
@@ -64,8 +69,6 @@ const SlotPage = () => {
   const [selectedSlot, setSelectedSlot] = useState<string[]>([]);
   const [flattenedSlots, setFlattenedSlots] = useState<FlattenedSlot[]>([]);
   const [courtNumber, setCourtNumber] = useState<Number | null>();
-
-  const userDataa = useAppSelector(state => state.turf);
 
   const navigation = useNavigation<any>();
 
@@ -156,6 +159,81 @@ const SlotPage = () => {
 
   const handleOutsidePress = () => calendarState && setCalendarState(false);
 
+  const {
+    isLoading: isSingleTurfLoading,
+    isError: isSingleTurfError,
+    isSuccess: isSingleTurfSuccess,
+    data: isSingleTurfData,
+    error: isSingleTurfError2,
+    refetch: refetchSingleTurf,
+  } = useGetSingleTurfQuery(turfInfo?._id);
+
+  const onPressHandler = async () => {
+    const updatedSlot: UpdatedSlot[] =
+      isSuccess && isSingleTurfData?.turf.slot
+        ? isSingleTurfData?.turf.slot.reduce((acc: UpdatedSlot[], court) => {
+            if (court.courtNumber === courtNumber) {
+              court.days.forEach(day => {
+                if (day.date === selectedDate) {
+                  day.slots.forEach(slot => {
+                    if (selectedSlot.includes(slot.time)) {
+                      acc.push({
+                        courtNumber: court.courtNumber,
+                        date: day.date,
+                        time: slot.time,
+                        booked: true,
+                      });
+                    }
+                  });
+                }
+              });
+            }
+            return acc;
+          }, [])
+        : [];
+
+    // Create the body for the update request
+    const updateRequest = {
+      turfId: isSuccess && turfInfo?._id,
+      body: {
+        // ...turfData.turf,
+        // slot: updatedSlots,
+        slot: updatedSlot,
+        // createdAt: turfData.turf.createdAt, // Add createdAt from existing turf data
+        updatedAt: new Date(), // Set updatedAt to the current date
+      },
+    };
+    // console.log(JSON.stringify(updateRequest, null, 2), 'hhhhh');
+    console.log(updateRequest, 'hhhhhh');
+
+    // Update the turf slots
+    // const turfSlotUpdate = await updateTurf(updateRequest);
+    fetch(`${API_SERVER}/api/v1/turf/${updateRequest.turfId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updateRequest.body),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Turf updated successfully:', data);
+      })
+      .catch(error => {
+        console.error('Error updating turf:', error);
+      });
+    // console.log(JSON.stringify(turfSlotUpdate, null, 2), 'yeh errr');
+
+    // navigation.navigate('BookCourtReciept', {
+    //   courtNumber,
+    //   date: selectedDate,
+    //   // time: selectedSlot,
+    //   time: selectedSlot.join(', '),
+    // });
+  };
+
+  const isDisabled = selectedSlot.length === 0;
+
   return (
     <TouchableWithoutFeedback onPress={handleOutsidePress}>
       <View style={{flex: 1}}>
@@ -228,12 +306,10 @@ const SlotPage = () => {
 
         {/* turf image */}
         <View className="max-w-fit mx-auto mt-[10px] drop-shadow-md">
-          {turfList.length > 0 && turfList[0].image ? (
+          {turfInfo && turfInfo.image ? (
             <Image
               source={{
-                uri: turfInfo
-                  ? `${API_SERVER}/${turfInfo.image}`
-                  : `${API_SERVER}/${turfList[0].image}`,
+                uri: `${API_SERVER}/${turfInfo.image}`,
               }}
               style={{
                 width: 364,
@@ -242,7 +318,17 @@ const SlotPage = () => {
               }}
             />
           ) : (
-            <Text>No Image Available</Text>
+            <View
+              style={{
+                width: 364,
+                height: 172.86,
+                borderRadius: 12,
+              }}
+              className="items-center justify-center bg-slate-200">
+              <Text className="text-semibold text-base">
+                No Image Available
+              </Text>
+            </View>
           )}
         </View>
 
@@ -304,6 +390,20 @@ const SlotPage = () => {
             ))}
           </View>
         </View>
+
+        {/* button section */}
+        <TouchableHighlight
+          disabled={isDisabled}
+          underlayColor="#4141eb"
+          className=" mt-3 rounded-xl mx-4"
+          style={{
+            backgroundColor: isDisabled ? '#A9A9A9' : '#1D1CA3',
+          }}
+          onPress={onPressHandler}>
+          <Text className="text-lg text-center text-white py-2">
+            Fill Slot{selectedSlot.length > 1 ? 's' : ''}
+          </Text>
+        </TouchableHighlight>
 
         {/* calendar */}
         {calendarState && (
