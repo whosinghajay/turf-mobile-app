@@ -68,7 +68,7 @@ const SlotPage = () => {
   const [open, setOpen] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState<string[]>([]);
   const [flattenedSlots, setFlattenedSlots] = useState<FlattenedSlot[]>([]);
-  const [courtNumber, setCourtNumber] = useState<Number | null>();
+  const [courtNumber, setCourtNumber] = useState<number | null>();
 
   const navigation = useNavigation<any>();
 
@@ -169,28 +169,47 @@ const SlotPage = () => {
   } = useGetSingleTurfQuery(turfInfo?._id);
 
   const onPressHandler = async () => {
-    const updatedSlot: UpdatedSlot[] =
-      isSuccess && isSingleTurfData?.turf.slot
-        ? isSingleTurfData?.turf.slot.reduce((acc: UpdatedSlot[], court) => {
-            if (court.courtNumber === courtNumber) {
-              court.days.forEach(day => {
-                if (day.date === selectedDate) {
-                  day.slots.forEach(slot => {
-                    if (selectedSlot.includes(slot.time)) {
-                      acc.push({
-                        courtNumber: court.courtNumber,
-                        date: day.date,
-                        time: slot.time,
-                        booked: true,
-                      });
-                    }
-                  });
-                }
-              });
-            }
-            return acc;
-          }, [])
-        : [];
+    // const updatedSlot: UpdatedSlot[] =
+    //   isSuccess && isSingleTurfData?.turf.slot
+    //     ? isSingleTurfData?.turf.slot.reduce((acc: UpdatedSlot[], court) => {
+    //         if (court.courtNumber === courtNumber) {
+    //           court.days.forEach(day => {
+    //             if (day.date === selectedDate) {
+    //               day.slots.forEach(slot => {
+    //                 if (selectedSlot.includes(slot.time)) {
+    //                   acc.push({
+    //                     courtNumber: court.courtNumber,
+    //                     date: day.date,
+    //                     time: slot.time,
+    //                     booked: true,
+    //                   });
+    //                 }
+    //               });
+    //             }
+    //           });
+    //         }
+    //         return acc;
+    //       }, [])
+    //     : [];
+
+    // Optimistic UI update: mark selected slots as booked in state
+    const updatedSlot: UpdatedSlot[] = flattenedSlots
+      .filter(slot => selectedSlot.includes(slot.time))
+      .map(slot => ({
+        courtNumber: courtNumber!,
+        date: slot.date,
+        time: slot.time,
+        booked: true,
+      }));
+
+    // Optimistically mark slots as booked in state to update UI immediately
+    const newFlattenedSlots = flattenedSlots.map(slot => {
+      if (selectedSlot.includes(slot.time)) {
+        return {...slot, booked: true};
+      }
+      return slot;
+    });
+    setFlattenedSlots(newFlattenedSlots);
 
     // Create the body for the update request
     const updateRequest = {
@@ -216,6 +235,9 @@ const SlotPage = () => {
       .catch(error => {
         console.error('Error updating turf:', error);
       });
+
+    // Clearing selected slots and disable the button
+    setSelectedSlot([]);
   };
 
   const isDisabled = selectedSlot.length === 0;
