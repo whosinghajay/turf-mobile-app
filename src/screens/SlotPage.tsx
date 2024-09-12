@@ -348,16 +348,16 @@ const SlotPage = () => {
                 </View>
               </TouchableOpacity>
             )}
-            showsHorizontalScrollIndicator={false} // Optional: Hides the scroll indicator
+            showsHorizontalScrollIndicator={false}
           />
         </View>
 
         {/* slot section */}
-        <View className="pt-4 pb-2 mx-2">
+        <View className="pb-2 mx-2">
           <Text className="text-black text-base font-semibold">
             {/* Price - {isSuccess && data.turf.price} hourly */}
           </Text>
-          <View className="pt-3 flex-row flex-wrap gap-3 mx-auto">
+          <View className="pt-2 flex-row flex-wrap gap-3 mx-auto">
             {flattenedSlots?.map((slot, index) => (
               <TouchableHighlight
                 key={index}
