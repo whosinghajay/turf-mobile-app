@@ -196,18 +196,12 @@ const SlotPage = () => {
     const updateRequest = {
       turfId: isSuccess && turfInfo?._id,
       body: {
-        // ...turfData.turf,
-        // slot: updatedSlots,
         slot: updatedSlot,
-        // createdAt: turfData.turf.createdAt, // Add createdAt from existing turf data
-        updatedAt: new Date(), // Set updatedAt to the current date
+        updatedAt: new Date(),
       },
     };
-    // console.log(JSON.stringify(updateRequest, null, 2), 'hhhhh');
-    console.log(updateRequest, 'hhhhhh');
 
     // Update the turf slots
-    // const turfSlotUpdate = await updateTurf(updateRequest);
     fetch(`${API_SERVER}/api/v1/turf/${updateRequest.turfId}`, {
       method: 'PUT',
       headers: {
@@ -222,14 +216,6 @@ const SlotPage = () => {
       .catch(error => {
         console.error('Error updating turf:', error);
       });
-    // console.log(JSON.stringify(turfSlotUpdate, null, 2), 'yeh errr');
-
-    // navigation.navigate('BookCourtReciept', {
-    //   courtNumber,
-    //   date: selectedDate,
-    //   // time: selectedSlot,
-    //   time: selectedSlot.join(', '),
-    // });
   };
 
   const isDisabled = selectedSlot.length === 0;
