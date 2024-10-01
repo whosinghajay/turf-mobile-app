@@ -47,9 +47,12 @@ const SettingScreen = () => {
     try {
       await AsyncStorage.removeItem('my-data');
       setModalVisible(false);
-      navigation.navigate('Splash Screen');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Splash Screen'}],
+      });
     } catch (error) {
-      console.error("Error during logout:", error);
+      console.error('Error during logout:', error);
       Toast.show({
         type: 'error',
         text1: String(error),

@@ -1,12 +1,12 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { ImageBackground, Text, TouchableHighlight, View } from 'react-native';
-import { OtpInput } from 'react-native-otp-entry';
+import {useNavigation} from '@react-navigation/native';
+import React, {useState} from 'react';
+import {ImageBackground, Text, TouchableHighlight, View} from 'react-native';
+import {OtpInput} from 'react-native-otp-entry';
 import Toast from 'react-native-toast-message';
 import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { API_SERVER } from '../../envVar';
-import { useAppSelector } from '../redux/hooks';
+import {API_SERVER} from '../../envVar';
+import {useAppSelector} from '../redux/hooks';
 
 const correctOTP = 1234;
 
@@ -47,7 +47,10 @@ const OTP = () => {
       if (data.success) {
         if (data.message.includes('Welcome back')) {
           await AsyncStorage.setItem('my-data', JSON.stringify(data.user));
-          navigation.navigate('Tab');
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Tab'}], // Navigate to the main app screen (e.g., Tab navigator)
+          });
         }
       } else {
         navigation.navigate('ProfileScreen');
@@ -75,6 +78,7 @@ const OTP = () => {
 
         <View className="max-h-full my-auto mx-4">
           <View className="gap-5 mt-[40px]">
+            {/* heading text */}
             <View>
               <View className="items-center">
                 <Text className="text-white text-base pb-[1px] pl-[2px]">

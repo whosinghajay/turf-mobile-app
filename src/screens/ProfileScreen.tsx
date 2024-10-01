@@ -75,7 +75,10 @@ const ProfileScreen = () => {
       dispatch(userLogin(user));
       const newUser = await createUser(user);
       await AsyncStorage.setItem('my-data', JSON.stringify(newUser.data?.user));
-      navigation.navigate('Tab');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Tab'}],
+      });
       Toast.show({
         type: 'success',
         text1: `Welcome! ${user.fullName}`,
