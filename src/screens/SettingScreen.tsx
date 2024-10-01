@@ -7,6 +7,7 @@ import {default as ToggleIcon} from 'react-native-vector-icons/FontAwesome6';
 import {default as LogoutIcon} from 'react-native-vector-icons/MaterialCommunityIcons';
 import {default as RightArrowIcon} from 'react-native-vector-icons/MaterialIcons';
 import {useDeleteUserMutation} from '../redux/api/userAPI';
+import Toast from 'react-native-toast-message';
 
 interface User {
   _id: string;
@@ -43,9 +44,18 @@ const SettingScreen = () => {
   };
 
   const logoutHandler = async () => {
-    await AsyncStorage.removeItem('my-data');
-    setModalVisible(false);
-    navigation.navigate('Splash Screen');
+    try {
+      await AsyncStorage.removeItem('my-data');
+      setModalVisible(false);
+      navigation.navigate('Splash Screen');
+    } catch (error) {
+      console.error("Error during logout:", error);
+      Toast.show({
+        type: 'error',
+        text1: String(error),
+        text2: 'Error during logout',
+      });
+    }
   };
 
   // const deleteHandler = async () => {
