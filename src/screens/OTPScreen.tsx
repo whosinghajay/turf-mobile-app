@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ImageBackground, Text, TouchableHighlight, View} from 'react-native';
 import {OtpInput} from 'react-native-otp-entry';
 import Toast from 'react-native-toast-message';
@@ -8,35 +8,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {API_SERVER} from '../../envVar';
 import {useAppSelector} from '../redux/hooks';
 
-const correctOTP = 1234;
-
 const OTP = () => {
-  const [otp, setOtp] = useState<number>();
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
-    undefined,
-  );
-
+  const [otp, setOtp] = useState<string>('');
+  const [sentOtp, setSentOtp] = useState<string | null>(null);
+  console.log(sentOtp, "jjjj")
   const navigation = useNavigation<any>();
-
   const userData = useAppSelector(state => state.user);
 
-  // const textChangeHandler = (e: string) => {
-  //   if (timeoutId) clearTimeout(timeoutId);
-
-  //   const newTimeoutId = setTimeout(() => {
-  //     setOtp(Number(e));
-  //   }, 1000);
-
-  //   setTimeoutId(newTimeoutId);
-  // };
-
-  const textChangeHandler = (e: string) => {
-    setOtp(Number(e)); // Update the OTP directly
-  };
-
-  const nextPageHandler = async () => {
-    if (otp === correctOTP) {
-      const response = await fetch(`${API_SERVER}/api/v1/user/create`, {
+  useEffect(() => {
+    const sendOtp = async () => {
+      const response = await fetch(`${API_SERVER}/api/v1/otp/request-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -47,15 +28,101 @@ const OTP = () => {
       });
 
       const data = await response.json();
+      if (data.message === 'OTP sent successfully') {
+        setSentOtp(data.otp); // Store sent OTP (or manage in a better way)
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Failed to send OTP',
+        });
+      }
+    };
 
-      if (data.success) {
-        if (data.message.includes('Welcome back')) {
-          await AsyncStorage.setItem('my-data', JSON.stringify(data.user));
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'Tab'}], // Navigate to the main app screen (e.g., Tab navigator)
-          });
-        }
+    sendOtp();
+  }, [userData.user.phoneNumber]);
+
+  const textChangeHandler = (e: string) => {
+    setOtp(e);
+  };
+
+  // const nextPageHandler = async () => {
+  //   if (otp === correctOTP) {
+  //     const response = await fetch(`${API_SERVER}/api/v1/user/create`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         phoneNumber: userData.user.phoneNumber,
+  //       }),
+  //     });
+
+  //     const data = await response.json();
+
+  //     if (data.success) {
+  //       if (data.message.includes('Welcome back')) {
+  //         await AsyncStorage.setItem('my-data', JSON.stringify(data.user));
+  //         navigation.reset({
+  //           index: 0,
+  //           routes: [{name: 'Tab'}], // Navigate to the main app screen (e.g., Tab navigator)
+  //         });
+  //       }
+  //     } else {
+  //       navigation.navigate('ProfileScreen');
+  //     }
+  //   } else {
+  //     Toast.show({
+  //       type: 'error',
+  //       text1: 'Wrong OTP',
+  //       text2: 'Enter Correct OTP',
+  //     });
+  //   }
+  // };
+
+  const nextPageHandler = async () => {
+    if (!sentOtp) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'OTP not sent yet',
+      });
+      return;
+    }
+
+    const response = await fetch(`${API_SERVER}/api/v1/otp/verify-otp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        phoneNumber: userData.user.phoneNumber,
+        otp: otp,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.message === 'OTP verified successfully') {
+      // Proceed to create user or navigate accordingly
+      const createUserResponse = await fetch(`${API_SERVER}/api/v1/user/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phoneNumber: userData.user.phoneNumber,
+        }),
+      });
+
+      const createUserData = await createUserResponse.json();
+
+      if (createUserData.success) {
+        await AsyncStorage.setItem('my-data', JSON.stringify(createUserData.user));
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Tab' }],
+        });
       } else {
         navigation.navigate('ProfileScreen');
       }
