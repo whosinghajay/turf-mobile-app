@@ -365,7 +365,7 @@ const SlotPage = () => {
           <Text className="text-black text-base font-semibold">
             {/* Price - {isSuccess && data.turf.price} hourly */}
           </Text>
-          <View className="pt-2 flex-row flex-wrap gap-3 mx-auto">
+          <View className="pt-2 flex-row flex-wrap gap-3 justify-center">
             {flattenedSlots?.map((slot, index) => (
               <TouchableHighlight
                 key={index}

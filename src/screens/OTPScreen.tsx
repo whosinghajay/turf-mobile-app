@@ -20,14 +20,18 @@ const OTP = () => {
 
   const userData = useAppSelector(state => state.user);
 
+  // const textChangeHandler = (e: string) => {
+  //   if (timeoutId) clearTimeout(timeoutId);
+
+  //   const newTimeoutId = setTimeout(() => {
+  //     setOtp(Number(e));
+  //   }, 1000);
+
+  //   setTimeoutId(newTimeoutId);
+  // };
+
   const textChangeHandler = (e: string) => {
-    if (timeoutId) clearTimeout(timeoutId);
-
-    const newTimeoutId = setTimeout(() => {
-      setOtp(Number(e));
-    }, 1000);
-
-    setTimeoutId(newTimeoutId);
+    setOtp(Number(e)); // Update the OTP directly
   };
 
   const nextPageHandler = async () => {
