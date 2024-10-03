@@ -1,8 +1,14 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
+  Alert,
   FlatList,
   Image,
   ImageBackground,
+  Linking,
+  PermissionsAndroid,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -12,10 +18,9 @@ import {
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {useCreateTurfMutation} from '../redux/api/turfAPI';
+import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {default as LeftArrowIcon} from 'react-native-vector-icons/AntDesign';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useNavigation} from '@react-navigation/native';
+import {useCreateTurfMutation} from '../redux/api/turfAPI';
 
 interface User {
   _id: string;
@@ -86,7 +91,85 @@ const CreateTurfScreen = () => {
 
   const [createTurf] = useCreateTurfMutation();
 
-  const selectImage = () => {
+  // Permission Request Function
+  const requestGalleryPermission = async () => {
+    try {
+      if (Platform.OS === 'android') {
+        const apiLevel = Platform.Version; // Android API Level as a number
+  
+        let permission;
+  
+        if (apiLevel >= 33) {
+          // For Android 13 and above
+          permission = PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES;
+        } else {
+          // For Android 12 and below
+          permission = PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
+        }
+  
+        // Check if permission is already granted
+        const hasPermission = await PermissionsAndroid.check(permission);
+        if (!hasPermission) {
+          const result = await PermissionsAndroid.request(permission);
+  
+          if (result === PermissionsAndroid.RESULTS.GRANTED) {
+            return true;
+          } else if (result === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+            Alert.alert(
+              'Permission Denied',
+              'Please enable gallery access in settings.',
+              [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Open Settings', onPress: () => Linking.openSettings() },
+              ],
+            );
+            return false;
+          }
+          return false;
+        }
+        return true;
+      } else {
+        // iOS Permission Handling (unchanged)
+        const status = await check(PERMISSIONS.IOS.PHOTO_LIBRARY);
+        console.log('iOS PHOTO_LIBRARY permission status:', status);
+  
+        if (status === RESULTS.DENIED) {
+          const result = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
+          console.log('iOS permission request result:', result);
+          return result === RESULTS.GRANTED || result === RESULTS.LIMITED;
+        }
+        if (status === RESULTS.GRANTED || status === RESULTS.LIMITED) {
+          return true;
+        }
+        if (status === RESULTS.BLOCKED) {
+          Alert.alert(
+            'Permission Blocked',
+            'Please enable photo library access in settings.',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              { text: 'Open Settings', onPress: () => Linking.openSettings() },
+            ],
+          );
+          return false;
+        }
+        return false;
+      }
+    } catch (error) {
+      console.warn('Permission error:', error);
+      return false;
+    }
+  };
+
+  const selectImage = async () => {
+    const hasPermission = await requestGalleryPermission();
+    if (!hasPermission) {
+      Alert.alert(
+        'Permission Denied',
+        'Cannot access gallery without permission.',
+      );
+      return;
+    }
+
     launchImageLibrary(
       {
         mediaType: 'photo',
