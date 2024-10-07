@@ -3,12 +3,12 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
   Alert,
-  FlatList,
   Image,
   ImageBackground,
+  KeyboardAvoidingView,
   Linking,
-  PermissionsAndroid,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -19,8 +19,9 @@ import {
 import DropDownPicker from 'react-native-dropdown-picker';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import {default as LeftArrowIcon} from 'react-native-vector-icons/AntDesign';
+import LeftArrowIcon from 'react-native-vector-icons/AntDesign';
 import {useCreateTurfMutation} from '../redux/api/turfAPI';
+import {PermissionsAndroid} from 'react-native';
 
 interface User {
   _id: string;
@@ -59,8 +60,11 @@ const CreateTurfScreen = () => {
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(
     null,
   );
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigation = useNavigation<any>();
+
+  const [createTurf] = useCreateTurfMutation();
 
   useEffect(() => {
     const getUser = async () => {
@@ -89,86 +93,85 @@ const CreateTurfScreen = () => {
     }
   }, [selectedServices]);
 
-  const [createTurf] = useCreateTurfMutation();
-
   // Permission Request Function
-  const requestGalleryPermission = async () => {
-    try {
-      if (Platform.OS === 'android') {
-        const apiLevel = Platform.Version; // Android API Level as a number
-  
-        let permission;
-  
-        if (apiLevel >= 33) {
-          // For Android 13 and above
-          permission = PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES;
-        } else {
-          // For Android 12 and below
-          permission = PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
-        }
-  
-        // Check if permission is already granted
-        const hasPermission = await PermissionsAndroid.check(permission);
-        if (!hasPermission) {
-          const result = await PermissionsAndroid.request(permission);
-  
-          if (result === PermissionsAndroid.RESULTS.GRANTED) {
-            return true;
-          } else if (result === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-            Alert.alert(
-              'Permission Denied',
-              'Please enable gallery access in settings.',
-              [
-                { text: 'Cancel', style: 'cancel' },
-                { text: 'Open Settings', onPress: () => Linking.openSettings() },
-              ],
-            );
-            return false;
-          }
-          return false;
-        }
-        return true;
-      } else {
-        // iOS Permission Handling (unchanged)
-        const status = await check(PERMISSIONS.IOS.PHOTO_LIBRARY);
-        console.log('iOS PHOTO_LIBRARY permission status:', status);
-  
-        if (status === RESULTS.DENIED) {
-          const result = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
-          console.log('iOS permission request result:', result);
-          return result === RESULTS.GRANTED || result === RESULTS.LIMITED;
-        }
-        if (status === RESULTS.GRANTED || status === RESULTS.LIMITED) {
-          return true;
-        }
-        if (status === RESULTS.BLOCKED) {
-          Alert.alert(
-            'Permission Blocked',
-            'Please enable photo library access in settings.',
-            [
-              { text: 'Cancel', style: 'cancel' },
-              { text: 'Open Settings', onPress: () => Linking.openSettings() },
-            ],
-          );
-          return false;
-        }
-        return false;
-      }
-    } catch (error) {
-      console.warn('Permission error:', error);
-      return false;
-    }
-  };
+
+  // const requestGalleryPermission = async () => {
+  //   try {
+  //     if (Platform.OS === 'android') {
+  //       const apiLevel = Platform.Version; // Android API Level as a number
+
+  //       let permission;
+
+  //       if (apiLevel >= 33) {
+  //         // For Android 13 and above
+  //         permission = PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES;
+  //       } else {
+  //         // For Android 12 and below
+  //         permission = PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
+  //       }
+
+  //       // Check if permission is already granted
+  //       const hasPermission = await PermissionsAndroid.check(permission);
+  //       if (!hasPermission) {
+  //         const result = await PermissionsAndroid.request(permission);
+
+  //         if (result === PermissionsAndroid.RESULTS.GRANTED) {
+  //           return true;
+  //         } else if (result === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+  //           Alert.alert(
+  //             'Permission Denied',
+  //             'Please enable gallery access in settings.',
+  //             [
+  //               { text: 'Cancel', style: 'cancel' },
+  //               { text: 'Open Settings', onPress: () => Linking.openSettings() },
+  //             ],
+  //           );
+  //           return false;
+  //         }
+  //         return false;
+  //       }
+  //       return true;
+  //     } else {
+  //       // iOS Permission Handling (unchanged)
+  //       const status = await check(PERMISSIONS.IOS.PHOTO_LIBRARY);
+  //       console.log('iOS PHOTO_LIBRARY permission status:', status);
+
+  //       if (status === RESULTS.DENIED) {
+  //         const result = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
+  //         console.log('iOS permission request result:', result);
+  //         return result === RESULTS.GRANTED || result === RESULTS.LIMITED;
+  //       }
+  //       if (status === RESULTS.GRANTED || status === RESULTS.LIMITED) {
+  //         return true;
+  //       }
+  //       if (status === RESULTS.BLOCKED) {
+  //         Alert.alert(
+  //           'Permission Blocked',
+  //           'Please enable photo library access in settings.',
+  //           [
+  //             { text: 'Cancel', style: 'cancel' },
+  //             { text: 'Open Settings', onPress: () => Linking.openSettings() },
+  //           ],
+  //         );
+  //         return false;
+  //       }
+  //       return false;
+  //     }
+  //   } catch (error) {
+  //     console.warn('Permission error:', error);
+  //     return false;
+  //   }
+  // };
 
   const selectImage = async () => {
-    const hasPermission = await requestGalleryPermission();
-    if (!hasPermission) {
-      Alert.alert(
-        'Permission Denied',
-        'Cannot access gallery without permission.',
-      );
-      return;
-    }
+    // const hasPermission = await requestGalleryPermission();
+    // if (!hasPermission) {
+    //   Alert.alert(
+    //     'Permission Denied',
+    //     'Cannot access gallery without permission.',
+    //   );
+    //   return;
+    // }
 
     launchImageLibrary(
       {
@@ -191,167 +194,153 @@ const CreateTurfScreen = () => {
     setSelectedImage(null);
   };
 
-  const renderItem = ({item}: {item: any}) => {
-    return item;
-  };
-
   const renderForm = () => {
     return (
-      <>
-        <View className="pt-6 pl-5 pb-6">
-          <Text className="text-white text-3xl mb-8 font-bold">
-            Create Turf
-          </Text>
+      <View style={styles.formContainer}>
+        <Text style={styles.title}>Create Turf</Text>
 
-          {/* name field */}
-          <View className="w-80">
-            <Text className="text-white text-base">Turf Name</Text>
-            <TextInput
-              placeholder="Enter turf name here"
-              placeholderTextColor={'rgba(255, 255, 255, 0.5)'}
-              className="border-b-[1px] text-white border-white p-1 text-base"
-              onChangeText={e =>
-                setTurfDataEntries({
-                  ...turfDataEntries,
-                  turfName: e,
-                })
-              }
-            />
-          </View>
-
-          {/* location field */}
-          <View className="w-80 mt-4">
-            <Text className="text-white text-base">Location</Text>
-            <TextInput
-              placeholder="Enter turf location here"
-              placeholderTextColor={'rgba(255, 255, 255, 0.5)'}
-              className="border-b-[1px] text-white border-white p-1 text-base"
-              onChangeText={e =>
-                setTurfDataEntries({
-                  ...turfDataEntries,
-                  turfLocation: e,
-                })
-              }
-            />
-          </View>
-
-          {/* image field */}
-          <View className="w-80 mt-4">
-            <Text className="text-white text-base">Image</Text>
-            <TouchableOpacity style={styles.button} onPress={selectImage}>
-              <Text style={styles.buttonText}>Select Image</Text>
-            </TouchableOpacity>
-            {selectedImage && (
-              <View style={styles.imageContainer}>
-                <Image
-                  source={{uri: selectedImage}}
-                  style={styles.imagePreview}
-                />
-                <TouchableOpacity
-                  style={styles.crossButton}
-                  onPress={deselectImage}>
-                  <Text style={styles.crossButtonText}>X</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            <View className="h-[1.04px] bg-white mt-3"></View>
-          </View>
-
-          {/* court number field */}
-          <View className="w-80 mt-4">
-            <Text className="text-white text-base">Number of Courts</Text>
-            <TextInput
-              placeholder="Enter number of courts here"
-              placeholderTextColor={'rgba(255, 255, 255, 0.5)'}
-              className="border-b-[1px] text-white border-white p-1 text-base"
-              keyboardType="numeric"
-              onChangeText={e =>
-                setTurfDataEntries({
-                  ...turfDataEntries,
-                  courtNumbers: Number(e),
-                })
-              }
-            />
-          </View>
-
-          {/* court type field */}
-          <View className="w-80 mt-4">
-            <Text className="text-white text-base">Court Type</Text>
-            <TextInput
-              placeholder="Enter court's type here"
-              placeholderTextColor={'rgba(255, 255, 255, 0.5)'}
-              className="border-b-[1px] text-white border-white p-1 text-base"
-              onChangeText={e =>
-                setTurfDataEntries({
-                  ...turfDataEntries,
-                  typeOfCourt: e,
-                })
-              }
-            />
-          </View>
-
-          {/* services field */}
-          <View className="w-80 mt-4">
-            <Text className="text-white text-base">Services</Text>
-            <View className="pt-2">
-              <DropDownPicker
-                multiple={true}
-                open={open}
-                value={selectedServices}
-                items={MULTI_SELECT_OPTIONS}
-                setOpen={setOpen}
-                setValue={setSelectedServices}
-                setItems={() => {}}
-                placeholder="Select Services"
-                dropDownContainerStyle={{
-                  backgroundColor: 'white',
-                }}
-                style={{backgroundColor: '#E5E4E2'}}
-                placeholderStyle={{
-                  color: 'black',
-                  fontWeight: 700,
-                  fontSize: 14,
-                }}
-              />
-            </View>
-            <View className="h-[1.04px] bg-white mt-3"></View>
-          </View>
-
-          {/* price field */}
-          <View className="w-80 mt-4">
-            <Text className="text-white text-base">Price</Text>
-            <TextInput
-              placeholder="Enter hourly price here"
-              placeholderTextColor={'rgba(255, 255, 255, 0.5)'}
-              className="border-b-[1px] text-white border-white p-1 text-base"
-              keyboardType="numeric"
-              onChangeText={e =>
-                setTurfDataEntries({
-                  ...turfDataEntries,
-                  price: Number(e),
-                  turfId: userData?._id!,
-                })
-              }
-            />
-          </View>
-
-          {/* create button */}
-          <TouchableOpacity onPress={createTurfHandler}>
-            <View className="w-80 mt-4 py-2 bg-green-800 rounded-xl">
-              <Text className="text-white mx-auto text-lg font-semibold">
-                Create
-              </Text>
-            </View>
-          </TouchableOpacity>
+        {/* Turf Name */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Turf Name</Text>
+          <TextInput
+            placeholder="Enter turf name here"
+            placeholderTextColor="rgba(255, 255, 255, 0.5)"
+            style={styles.textInput}
+            onChangeText={e =>
+              setTurfDataEntries({
+                ...turfDataEntries,
+                turfName: e,
+              })
+            }
+          />
         </View>
-      </>
+
+        {/* Turf Location */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Location</Text>
+          <TextInput
+            placeholder="Enter turf location here"
+            placeholderTextColor="rgba(255, 255, 255, 0.5)"
+            style={styles.textInput}
+            onChangeText={e =>
+              setTurfDataEntries({
+                ...turfDataEntries,
+                turfLocation: e,
+              })
+            }
+          />
+        </View>
+
+        {/* Image Selection */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Image</Text>
+          <TouchableOpacity style={styles.button} onPress={selectImage}>
+            <Text style={styles.buttonText}>Select Image</Text>
+          </TouchableOpacity>
+          {selectedImage && (
+            <View style={styles.imageContainer}>
+              <Image
+                source={{uri: selectedImage}}
+                style={styles.imagePreview}
+              />
+              <TouchableOpacity
+                style={styles.crossButton}
+                onPress={deselectImage}>
+                <Text style={styles.crossButtonText}>X</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          <View style={styles.separator} />
+        </View>
+
+        {/* Number of Courts */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Number of Courts</Text>
+          <TextInput
+            placeholder="Enter number of courts here"
+            placeholderTextColor="rgba(255, 255, 255, 0.5)"
+            style={styles.textInput}
+            keyboardType="numeric"
+            onChangeText={e =>
+              setTurfDataEntries({
+                ...turfDataEntries,
+                courtNumbers: Number(e),
+              })
+            }
+          />
+        </View>
+
+        {/* Court Type */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Court Type</Text>
+          <TextInput
+            placeholder="Enter court's type here"
+            placeholderTextColor="rgba(255, 255, 255, 0.5)"
+            style={styles.textInput}
+            onChangeText={e =>
+              setTurfDataEntries({
+                ...turfDataEntries,
+                typeOfCourt: e,
+              })
+            }
+          />
+        </View>
+
+        {/* Services */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Services</Text>
+          <DropDownPicker
+            multiple={true}
+            open={open}
+            value={selectedServices}
+            items={MULTI_SELECT_OPTIONS}
+            setOpen={setOpen}
+            setValue={setSelectedServices}
+            setItems={() => {}}
+            placeholder="Select Services"
+            dropDownContainerStyle={styles.dropDownContainer}
+            style={styles.dropDown}
+            placeholderStyle={styles.dropDownPlaceholder}
+          />
+          <View style={styles.separator} />
+        </View>
+
+        {/* Price */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Price</Text>
+          <TextInput
+            placeholder="Enter hourly price here"
+            placeholderTextColor="rgba(255, 255, 255, 0.5)"
+            style={styles.textInput}
+            keyboardType="numeric"
+            onChangeText={e =>
+              setTurfDataEntries({
+                ...turfDataEntries,
+                price: Number(e),
+                turfId: userData?._id!,
+              })
+            }
+          />
+        </View>
+
+        {/* Create Button */}
+        <TouchableOpacity
+          style={styles.createButton}
+          onPress={createTurfHandler}
+          disabled={isSubmitting}>
+          <Text style={styles.createButtonText}>
+            {isSubmitting ? 'Creating...' : 'Create'}
+          </Text>
+        </TouchableOpacity>
+      </View>
     );
   };
 
+  // FormData
   const formData = new FormData();
   formData.append('turfName', turfDataEntries.turfName);
   formData.append('turfLocation', turfDataEntries.turfLocation);
-  formData.append('services', turfDataEntries.services);
+  formData.append('services', JSON.stringify(turfDataEntries.services)); // Ensure services are sent as a JSON string
   formData.append('courtNumbers', turfDataEntries.courtNumbers.toString());
   formData.append('price', turfDataEntries.price.toString());
   formData.append('typeOfCourt', turfDataEntries.typeOfCourt);
@@ -366,17 +355,37 @@ const CreateTurfScreen = () => {
   }
 
   const createTurfHandler = async () => {
+    if (
+      !turfDataEntries.turfName.trim() ||
+      !turfDataEntries.turfLocation.trim() ||
+      turfDataEntries.services.length === 0 ||
+      turfDataEntries.courtNumbers <= 0 ||
+      turfDataEntries.price <= 0 ||
+      !turfDataEntries.typeOfCourt.trim() ||
+      !selectedImage
+    ) {
+      Alert.alert(
+        'Validation Error',
+        'Please fill out all required fields correctly.',
+      );
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
       await createTurf(formData).unwrap();
       setConfirmationMessage('Turf created successfully!');
       setTimeout(() => {
         setConfirmationMessage(null);
+        setIsSubmitting(false);
+        navigation.navigate('TurfHome');
       }, 5000);
     } catch (error) {
-      console.error(error);
+      console.error(error, 'yeyey');
       setConfirmationMessage('Error Posting Turf! Try Again');
       setTimeout(() => {
         setConfirmationMessage(null);
+        setIsSubmitting(false);
       }, 5000);
     }
   };
@@ -390,10 +399,8 @@ const CreateTurfScreen = () => {
       );
     } else if (confirmationMessage?.includes('Error Posting Turf')) {
       return (
-        <View className="mt-1 p-[6px] bg-red-600 rounded-[2px]">
-          <Text className="text-white text-center font-medium">
-            {confirmationMessage}
-          </Text>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{confirmationMessage}</Text>
         </View>
       );
     }
@@ -401,43 +408,93 @@ const CreateTurfScreen = () => {
   };
 
   return (
-    <ImageBackground
-      source={require('../assests/images/turfCreateBGimage.png')}
-      resizeMode="cover">
-      <View className="h-full">
-        {/* header */}
-        <View className="flex-row justify-between mt-4 mx-4">
-          <View className="flex-row gap-2 items-center">
-            <TouchableHighlight
-              onPress={() => {
-                if (userData?.role === 'user') {
-                  navigation.navigate('Home');
-                } else if (userData?.role === 'turfPoster') {
-                  navigation.navigate('TurfHome');
-                }
-              }}
-              underlayColor="transparent">
-              <LeftArrowIcon name="arrowleft" size={23} color="#fff" />
-            </TouchableHighlight>
-            <Text className="text-white text-[18px] font-semibold">Create</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.keyboardAvoidingView}>
+      <ImageBackground
+        source={require('../assests/images/turfCreateBGimage.png')}
+        resizeMode="cover"
+        style={styles.imageBackground}>
+        <View style={styles.headerContainer}>
+          {/* Header */}
+          <View className="flex-row justify-between mt-4 mx-4">
+            <View className="flex-row gap-2 items-center">
+              <TouchableHighlight
+                onPress={() => {
+                  if (userData?.role === 'user') {
+                    navigation.navigate('Home');
+                  } else if (userData?.role === 'turfPoster') {
+                    navigation.navigate('TurfHome');
+                  }
+                }}
+                underlayColor="transparent">
+                <LeftArrowIcon name="arrowleft" size={23} color="#fff" />
+              </TouchableHighlight>
+              <Text className="text-white text-[18px] font-semibold">
+                Create
+              </Text>
+            </View>
           </View>
         </View>
 
-        {/* rest creation body */}
-        <FlatList
-          data={[renderForm()]}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-        />
+        {/* Scrollable Form */}
+        <ScrollView
+          contentContainerStyle={styles.scrollContainer}
+          keyboardShouldPersistTaps="handled">
+          {renderForm()}
+        </ScrollView>
+
+        {/* Confirmation Message */}
         {renderConfirmationMessage()}
-      </View>
-    </ImageBackground>
+      </ImageBackground>
+    </KeyboardAvoidingView>
   );
 };
 
 export default CreateTurfScreen;
 
 const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  imageBackground: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  headerContainer: {
+    // Adjust as needed
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    padding: 20,
+    paddingBottom: 40, // Extra padding at the bottom
+  },
+  formContainer: {
+    // Optional: Additional styling
+  },
+  title: {
+    color: 'white',
+    fontSize: 32,
+    marginBottom: 20,
+    fontWeight: 'bold',
+  },
+  inputContainer: {
+    width: '100%',
+    marginBottom: 20,
+  },
+  label: {
+    color: 'white',
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  textInput: {
+    borderBottomWidth: 1,
+    borderColor: 'white',
+    color: 'white',
+    paddingVertical: 8,
+    fontSize: 16,
+  },
   button: {
     backgroundColor: 'white',
     paddingVertical: 12,
@@ -445,28 +502,28 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 16, // Optional: adds some space above the button
+    marginTop: 8,
   },
   buttonText: {
-    color: 'black', // white
+    color: 'black',
     fontSize: 16,
     fontWeight: 'bold',
   },
   imageContainer: {
     position: 'relative',
+    marginTop: 10,
   },
   imagePreview: {
-    width: 320,
-    height: 172.86,
+    width: '100%',
+    height: 200,
     borderRadius: 8,
     borderColor: '#1f2937',
     borderWidth: 1,
-    marginTop: 10,
   },
   crossButton: {
     position: 'absolute',
-    top: 16,
-    right: 8,
+    top: 10,
+    right: 10,
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
     borderRadius: 12,
     width: 24,
@@ -479,6 +536,34 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  dropDownContainer: {
+    backgroundColor: 'white',
+  },
+  dropDown: {
+    backgroundColor: '#E5E4E2',
+  },
+  dropDownPlaceholder: {
+    color: 'black',
+    fontWeight: '700',
+    fontSize: 14,
+  },
+  separator: {
+    height: 1.04,
+    backgroundColor: 'white',
+    marginTop: 10,
+  },
+  createButton: {
+    backgroundColor: '#2F855A', // Green-800 equivalent
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  createButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '600',
+  },
   confirmationContainer: {
     marginTop: 10,
     padding: 8,
@@ -486,6 +571,17 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   confirmationText: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  errorContainer: {
+    marginTop: 10,
+    padding: 8,
+    backgroundColor: 'red',
+    borderRadius: 5,
+  },
+  errorText: {
     color: 'white',
     fontSize: 16,
     textAlign: 'center',
