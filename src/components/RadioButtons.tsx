@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
+import React, {useState} from 'react';
+import RadioGroup, {RadioButtonProps} from 'react-native-radio-buttons-group';
 
 interface Props {
   optionOne: string;
@@ -7,11 +7,15 @@ interface Props {
   onSelectionChange: (selectedValue: string) => void; // Callback to pass selected value back to parent
 }
 
-const RadioButtons: React.FC<Props> = ({ optionOne, optionTwo, onSelectionChange }) => {
+const RadioButtons: React.FC<Props> = ({
+  optionOne,
+  optionTwo,
+  onSelectionChange,
+}) => {
   const radioButtons: RadioButtonProps[] = [
     {
       id: optionOne,
-      label: optionOne,
+      label: optionOne === 'user' ? 'User' : 'Male',
       value: optionOne,
       borderColor: 'white',
       labelStyle: {
@@ -21,7 +25,7 @@ const RadioButtons: React.FC<Props> = ({ optionOne, optionTwo, onSelectionChange
     },
     {
       id: optionTwo,
-      label: optionTwo,
+      label: optionTwo === 'turfPoster' ? 'Turf Creater' : 'Female',
       value: optionTwo,
       borderColor: 'white',
       labelStyle: {
