@@ -16,7 +16,7 @@ const TurfInformation = () => {
 
   const navigation = useNavigation<any>();
   const userData = useAppSelector(state => state.turf);
-  const newServiceArray = userData.turf.services[0].split(',');
+  const newServiceArray = userData.turf.services;
 
   const isDisabled = !selectedCourt;
 

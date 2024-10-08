@@ -35,6 +35,17 @@ interface User {
   __v: number;
 }
 
+interface TurfData {
+  turfName: string;
+  turfLocation: string;
+  services: string[]; // Change from never[] to string[]
+  courtNumbers: number;
+  price: number;
+  typeOfCourt: string;
+  image: string;
+  turfId: string;
+}
+
 const MULTI_SELECT_OPTIONS = [
   {label: 'Parking', value: 'Parking'},
   {label: 'Washroom', value: 'Washroom'},
@@ -47,10 +58,10 @@ const CreateTurfScreen = () => {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
   const [userData, setUserData] = useState<User | null>(null);
-  const [turfDataEntries, setTurfDataEntries] = useState({
+  const [turfDataEntries, setTurfDataEntries] = useState<TurfData>({
     turfName: '',
     turfLocation: '',
-    services: [''],
+    services: [],
     courtNumbers: 0,
     price: 0,
     typeOfCourt: '',
@@ -340,7 +351,10 @@ const CreateTurfScreen = () => {
   const formData = new FormData();
   formData.append('turfName', turfDataEntries.turfName);
   formData.append('turfLocation', turfDataEntries.turfLocation);
-  formData.append('services', JSON.stringify(turfDataEntries.services)); // Ensure services are sent as a JSON string
+  // formData.append('services', JSON.stringify(turfDataEntries.services)); // Ensure services are sent as a JSON string
+  turfDataEntries.services.forEach(service => {
+    formData.append('services[]', service); // Append each service as a separate entry
+  });
   formData.append('courtNumbers', turfDataEntries.courtNumbers.toString());
   formData.append('price', turfDataEntries.price.toString());
   formData.append('typeOfCourt', turfDataEntries.typeOfCourt);
