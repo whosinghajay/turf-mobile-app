@@ -61,25 +61,23 @@ const SettingScreen = () => {
     }
   };
 
-  // const deleteHandler = async () => {
-  //   await AsyncStorage.removeItem('my-data');
-  //   try {
-  //     if (userData?._id) {
-  //       const response = await deleteUser(userData?._id).unwrap();
-  //       console.log('Delete response:', response);
+  const deleteHandler = async () => {
+    await AsyncStorage.removeItem('my-data');
+    try {
+      if (userData?._id) {
+        const response = await deleteUser(userData?._id).unwrap();
+        console.log('Delete response:', response);
 
-  //       setModalDeleteVisible(false);
-  //       navigation.navigate('Splash Screen');
-  //     } else {
-  //       console.error('User ID is missing');
-  //     }
-  //   } catch (error) {
-  //     console.error('Failed to delete user:', error);
-  //     Alert.alert('Error', 'Failed to delete user. Please try again.');
-  //   }
-  // };
-
-  const deleteHandler = () => {};
+        setModalDeleteVisible(false);
+        navigation.navigate('Splash Screen');
+      } else {
+        console.error('User ID is missing');
+      }
+    } catch (error) {
+      console.error('Failed to delete user:', error);
+      Alert.alert('Error', 'Failed to delete user. Please try again.');
+    }
+  };
 
   return (
     <>
