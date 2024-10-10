@@ -103,7 +103,7 @@ const SettingScreen = () => {
       <View className="mt-4 mx-4">
         {/* language */}
         <TouchableHighlight
-          onPress={() => Alert.alert('clicked')}
+          onPress={() => navigation.navigate('LanguageSelection')}
           underlayColor={'#EFEFEF'}>
           <View className="flex-row items-center justify-between border-b-2 pb-2 my-2 border-slate-200">
             <Text className="text-black text-base">Language</Text>
@@ -131,7 +131,7 @@ const SettingScreen = () => {
 
         {/* privacy policy */}
         <TouchableHighlight
-          onPress={() => Alert.alert('clicked')}
+          onPress={() => navigation.navigate('PrivacyPolicy')}
           underlayColor={'#EFEFEF'}>
           <View className="flex-row items-center justify-between border-b-2 pb-2 my-2 border-slate-200">
             <Text className="text-black text-base">Privacy Policy</Text>
@@ -141,7 +141,7 @@ const SettingScreen = () => {
 
         {/* terms and condition */}
         <TouchableHighlight
-          onPress={() => Alert.alert('clicked')}
+          onPress={() => navigation.navigate('TermsAndCondition')}
           underlayColor={'#EFEFEF'}>
           <View className="flex-row items-center justify-between border-b-2 pb-2 my-2 border-slate-200">
             <Text className="text-black text-base">Terms and Condition</Text>
@@ -151,11 +151,18 @@ const SettingScreen = () => {
 
         {/* rate app */}
         <TouchableHighlight
-          onPress={() => Alert.alert('clicked')}
+          onPress={() => navigation.navigate('RateApp')}
           underlayColor={'#EFEFEF'}>
           <View className="flex-row items-center justify-between border-b-2 pb-2 my-2 border-slate-200">
             <Text className="text-black text-base">Rate App</Text>
-            <Text className="text-black text-base">v4.87.2</Text>
+            <View className="flex-row items-center gap-1">
+              <Text className="text-black text-base">v4.87.2</Text>
+              <RightArrowIcon
+                name="arrow-forward-ios"
+                size={18}
+                color="black"
+              />
+            </View>
           </View>
         </TouchableHighlight>
 

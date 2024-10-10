@@ -16,6 +16,10 @@ import PhoneNumber from './src/screens/PhoneNumber';
 import ProfileScreen from './src/screens/ProfileScreen';
 import SplashScreen from './src/screens/SplashScreen';
 import TurfInformation from './src/screens/TurfInformation';
+import PrivacyPolicy from './src/screens/PrivacyPolicyScreen';
+import TermsAndCondition from './src/screens/TermsAndConditionScreen';
+import RateApp from './src/screens/RateAppScreen';
+import LanguageSelection from './src/screens/LanguageSelectScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -94,6 +98,22 @@ const App = () => {
           <Stack.Screen
             name="Map"
             component={Map}
+            options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          <Stack.Screen
+            name="PrivacyPolicy"
+            component={PrivacyPolicy}
+            options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          <Stack.Screen
+            name="TermsAndCondition"
+            component={TermsAndCondition}
+            options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          <Stack.Screen
+            name="RateApp"
+            component={RateApp}
+            options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          <Stack.Screen
+            name="LanguageSelection"
+            component={LanguageSelection}
             options={{animation: 'slide_from_bottom'}}></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
