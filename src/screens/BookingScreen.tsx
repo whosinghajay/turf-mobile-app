@@ -174,25 +174,29 @@ const FavouriteScreen = () => {
 
     return (
       <View className="mb-5 pt-2 border-2 border-slate-300 rounded-xl">
+        {/* booking header */}
         <View className="flex-row justify-between mx-4 items-center">
           <Text className="font-semibold text-base text-black">
-            Your Booking
+            {user.name}!! your booking
           </Text>
-          <Text className="text-xs">{date[0]}</Text>
+          <Text className="text-sm">{date[0]}</Text>
         </View>
 
+        {/* turf name and location */}
         <View className="flex-row mx-4 mt-4">
-          <Text className="w-[40%] text-black text-lg font-semibold">
+          <Text className="w-[47%] text-black text-lg font-semibold">
             {item.turfInfo.turfName}
           </Text>
+
           <View className="flex-row w-[60%]">
             <View className="mt-[1.5px]">
               <LocationIcon name="location" size={20} color="black" />
             </View>
-            <Text className="text-xs ml-2">{item.turfInfo.turfLocation}</Text>
+            <Text className="text-md ml-2">{item.turfInfo.turfLocation}</Text>
           </View>
         </View>
 
+        {/* info */}
         <View className="flex-row mx-4 mt-1">
           <View className="w-[47%]">
             <Text className="text-black text-base pb-1">Contact</Text>
@@ -201,6 +205,7 @@ const FavouriteScreen = () => {
               {time.length} {time.length > 1 ? 'Slots' : 'Slot'}
             </Text>
           </View>
+
           <View>
             <Text className="text-black text-base pb-1">
               {user.phoneNumber}
@@ -212,13 +217,17 @@ const FavouriteScreen = () => {
 
         {/* buttons - cancel & confirm */}
         <View className="flex-row mx-4 justify-between mt-2 mb-4">
-          <TouchableHighlight className="border-[1.8px] px-4 py-2 rounded-xl border-slate-400">
+          <TouchableHighlight
+            underlayColor={'none'}
+            className="border-[1.8px] px-4 py-1 rounded-3xl border-slate-400">
             <Text className="text-black font-semibold text-lg">
               Change Time
             </Text>
           </TouchableHighlight>
+
           <TouchableHighlight
-            className="px-4 py-2 rounded-xl bg-red-600"
+            underlayColor={'none'}
+            className="px-4 py-1 rounded-3xl bg-red-600"
             onPress={() => {
               setModalVisible(true);
               setBookingInfo(item);
@@ -281,10 +290,10 @@ const FavouriteScreen = () => {
         <View className="flex-row gap-2 items-center">
           <TouchableHighlight
             onPress={() => {
-              if(user.role==='user'){
-                navigation.navigate('Home')
-              }else if(user.role==='turfPoster'){
-                navigation.navigate('TurfHome')
+              if (user.role === 'user') {
+                navigation.navigate('Home');
+              } else if (user.role === 'turfPoster') {
+                navigation.navigate('TurfHome');
               }
             }}
             underlayColor={'#EFEFEF'}>
@@ -296,69 +305,69 @@ const FavouriteScreen = () => {
 
       {/* date and calender section */}
       {/* {bookingData.length > 0 && ( */}
-        <View className="flex-row mt-5 mb-5 justify-between px-4">
-          <TouchableHighlight
-            onPress={() => {
-              setCurrentDay('all');
-              setSeletedDate('alldates');
-            }}
-            underlayColor={'transparent'}>
-            <View
-              className="border-[1px] border-slate-400 px-6 py-2 rounded-xl"
+      <View className="flex-row mt-5 mb-5 justify-between px-4">
+        <TouchableHighlight
+          onPress={() => {
+            setCurrentDay('all');
+            setSeletedDate('alldates');
+          }}
+          underlayColor={'transparent'}>
+          <View
+            className="border-[1px] border-slate-400 px-6 py-2 rounded-xl"
+            style={{
+              backgroundColor: currentDay === 'all' ? '#49B114' : '#e0e0e0',
+            }}>
+            <Text
+              className="text-base font-semibold"
+              style={{color: currentDay === 'all' ? 'white' : 'black'}}>
+              All
+            </Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => {
+            setCurrentDay('today');
+            setSeletedDate(new Date().toISOString().split('T')[0]);
+          }}
+          underlayColor={'transparent'}>
+          <View
+            className="border-[1px] border-slate-400 px-6 py-2 rounded-xl"
+            style={{
+              backgroundColor: currentDay === 'today' ? '#49B114' : '#e0e0e0',
+            }}>
+            <Text
+              className="text-base font-semibold"
               style={{
-                backgroundColor: currentDay === 'all' ? '#49B114' : '#e0e0e0',
+                color: currentDay === 'today' ? 'white' : 'black',
               }}>
-              <Text
-                className="text-base font-semibold"
-                style={{color: currentDay === 'all' ? 'white' : 'black'}}>
-                All
-              </Text>
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight
-            onPress={() => {
-              setCurrentDay('today');
-              setSeletedDate(new Date().toISOString().split('T')[0]);
-            }}
-            underlayColor={'transparent'}>
-            <View
-              className="border-[1px] border-slate-400 px-6 py-2 rounded-xl"
+              Today
+            </Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => setCalendarState(true)}
+          underlayColor={'transparent'}>
+          <View
+            className="flex-row items-center border-[1px] border-slate-400 px-4 py-[9.5px] rounded-xl bg-[#e0e0e0]"
+            style={{
+              backgroundColor:
+                currentDay === 'selectedDay' ? '#49B114' : '#e0e0e0',
+            }}>
+            <Text
+              className=" mr-1 font-semibold"
               style={{
-                backgroundColor: currentDay === 'today' ? '#49B114' : '#e0e0e0',
+                color: currentDay === 'selectedDay' ? 'white' : 'black',
               }}>
-              <Text
-                className="text-base font-semibold"
-                style={{
-                  color: currentDay === 'today' ? 'white' : 'black',
-                }}>
-                Today
-              </Text>
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight
-            onPress={() => setCalendarState(true)}
-            underlayColor={'transparent'}>
-            <View
-              className="flex-row items-center border-[1px] border-slate-400 px-4 py-[9.5px] rounded-xl bg-[#e0e0e0]"
-              style={{
-                backgroundColor:
-                  currentDay === 'selectedDay' ? '#49B114' : '#e0e0e0',
-              }}>
-              <Text
-                className=" mr-1 font-semibold"
-                style={{
-                  color: currentDay === 'selectedDay' ? 'white' : 'black',
-                }}>
-                Select Date
-              </Text>
-              <CalendarIcon
-                name="calendar"
-                size={20}
-                color={currentDay === 'selectedDay' ? '#fffff' : '#000000'}
-              />
-            </View>
-          </TouchableHighlight>
-        </View>
+              Select Date
+            </Text>
+            <CalendarIcon
+              name="calendar"
+              size={20}
+              color={currentDay === 'selectedDay' ? '#fffff' : '#000000'}
+            />
+          </View>
+        </TouchableHighlight>
+      </View>
       {/* )} */}
 
       {/* empty */}
