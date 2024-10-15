@@ -10,6 +10,7 @@ import {
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -154,7 +155,7 @@ const HomeScreen = () => {
           />
           <TouchableHighlight
             underlayColor={'transparent'}
-            onPress={() => navigation.navigate('Map')}
+            onPress={() => navigation.navigate('Filter')}
             className="mr-7">
             <AntDesign name="filter" size={30} color="white" />
           </TouchableHighlight>
@@ -167,61 +168,75 @@ const HomeScreen = () => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}>
-        <View className="w-full absolute bottom-0 bg-white rounded-t-2xl py-6 px-6">
-          <View className="flex-row-reverse">
-            <TouchableHighlight
-              underlayColor={'transparent'}
-              onPress={() => setModalVisible(false)}>
-              <CrossIcon name="circle-with-cross" size={30} color="black" />
-            </TouchableHighlight>
-          </View>
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={{flex: 1}}>
+            <TouchableWithoutFeedback>
+              <View className="w-full absolute bottom-0 bg-white rounded-t-2xl py-6 px-6">
+                <View className="flex-row-reverse">
+                  <TouchableHighlight
+                    underlayColor={'transparent'}
+                    onPress={() => setModalVisible(false)}>
+                    <CrossIcon
+                      name="circle-with-cross"
+                      size={30}
+                      color="black"
+                    />
+                  </TouchableHighlight>
+                </View>
 
-          <Text className="text-black text-lg font-bold">
-            Set Your Location
-          </Text>
-
-          <TextInput
-            placeholder="Enter your location"
-            className="mt-1 w-full border-[1.5px] rounded-lg border-black text-black pl-5"
-            style={{height: 52}}
-            placeholderTextColor="black"
-          />
-
-          <Text className="text-center mt-4 text-black font-semibold text-base">
-            Or
-          </Text>
-
-          <TouchableHighlight
-            underlayColor={'transparent'}
-            onPress={() => Alert.alert('location button')}>
-            <View className="mt-4 w-full bg-[#1D1CA3] border rounded-xl">
-              <View className="flex-row gap-2 py-3 items-center max-w-fit mx-auto">
-                <LocationIcon2
-                  name="location-crosshairs"
-                  size={18}
-                  color="white"
-                />
-                <Text className="text-white text-base">
-                  Use Current Location
+                <Text className="text-black text-lg font-bold">
+                  Set Your Location
                 </Text>
+
+                <TextInput
+                  placeholder="Enter your location"
+                  className="mt-1 w-full border-[1.5px] rounded-lg border-black text-black pl-5"
+                  style={{height: 52}}
+                  placeholderTextColor="black"
+                />
+
+                <Text className="text-center mt-4 text-black font-semibold text-base">
+                  Or
+                </Text>
+
+                <TouchableHighlight
+                  underlayColor={'transparent'}
+                  onPress={() => Alert.alert('location button')}>
+                  <View className="mt-4 w-full bg-[#1D1CA3] border rounded-xl">
+                    <View className="flex-row gap-2 py-3 items-center max-w-fit mx-auto">
+                      <LocationIcon2
+                        name="location-crosshairs"
+                        size={18}
+                        color="white"
+                      />
+                      <Text className="text-white text-base">
+                        Use Current Location
+                      </Text>
+                    </View>
+                  </View>
+                </TouchableHighlight>
+
+                <Text className="text-black font-semibold mt-4">Recent</Text>
+
+                <View className="flex-row mt-2">
+                  <Octicons name="location" size={20} color="black" />
+                  <View className="ml-2">
+                    <Text
+                      className="text-black font-bold"
+                      style={{fontSize: 14}}>
+                      Vijay Nagar
+                    </Text>
+                    <Text
+                      className="text-black text-base"
+                      style={{fontSize: 14}}>
+                      Vijay Nagar, Indore Madhya Pradesh, Indore
+                    </Text>
+                  </View>
+                </View>
               </View>
-            </View>
-          </TouchableHighlight>
-
-          <Text className="text-black font-semibold mt-4">Recent</Text>
-
-          <View className="flex-row mt-2">
-            <Octicons name="location" size={20} color="black" />
-            <View className="ml-2">
-              <Text className="text-black font-bold" style={{fontSize: 14}}>
-                Vijay Nagar
-              </Text>
-              <Text className="text-black text-base" style={{fontSize: 14}}>
-                Vijay Nagar, Indore Madhya Pradesh, Indore
-              </Text>
-            </View>
+            </TouchableWithoutFeedback>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
 
       {/* dim background */}
