@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {
+  Alert,
   FlatList,
   Image,
   Modal,
@@ -219,7 +220,8 @@ const FavouriteScreen = () => {
         <View className="flex-row mx-4 justify-between mt-2 mb-4">
           <TouchableHighlight
             underlayColor={'none'}
-            className="border-[1.8px] px-4 py-1 rounded-3xl border-slate-400">
+            className="border-[1.8px] px-4 py-1 rounded-3xl border-slate-400"
+            onPress={() => Alert.alert('Under-Progress!')}>
             <Text className="text-black font-semibold text-lg">
               Change Time
             </Text>
