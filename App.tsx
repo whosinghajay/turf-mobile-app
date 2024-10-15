@@ -20,6 +20,7 @@ import PrivacyPolicy from './src/screens/PrivacyPolicyScreen';
 import TermsAndCondition from './src/screens/TermsAndConditionScreen';
 import RateApp from './src/screens/RateAppScreen';
 import LanguageSelection from './src/screens/LanguageSelectScreen';
+import FilterScreen from './src/screens/FilterScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -114,6 +115,10 @@ const App = () => {
           <Stack.Screen
             name="LanguageSelection"
             component={LanguageSelection}
+            options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          <Stack.Screen
+            name="Filter"
+            component={FilterScreen}
             options={{animation: 'slide_from_bottom'}}></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
