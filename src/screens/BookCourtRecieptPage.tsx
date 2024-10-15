@@ -81,7 +81,9 @@ const BookCourtRecieptPage = () => {
           <TouchableHighlight>
             <ShareIcon name="sharealt" size={23} color="black" />
           </TouchableHighlight>
-          <TouchableHighlight>
+          <TouchableHighlight
+            underlayColor={'transparent'}
+            onPress={() => navigation.navigate('Favourite')}>
             <FavouriteIcon name="hearto" size={23} color="black" />
           </TouchableHighlight>
         </View>
