@@ -5,10 +5,14 @@ import {
   Alert,
   FlatList,
   Image,
+  Modal,
   ScrollView,
   StatusBar,
+  StyleSheet,
   Text,
   TouchableHighlight,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -43,6 +47,7 @@ const TurfHomeScreen = () => {
   const [userBookedTurf, setUserBookedTurf] = useState<Booking[]>([]);
   const [allUser, setAllUser] = useState<User[]>([]);
   const [userarray, setuserarray] = useState<any>([]);
+  const [modalVis, setModalVis] = useState(false);
 
   const navigation = useNavigation<any>();
 
@@ -293,7 +298,7 @@ const TurfHomeScreen = () => {
 
         <View className="absolute right-5 top-11">
           <TouchableHighlight
-            onPress={() => Alert.alert("You're viewing this Profile")}
+            onPress={() => setModalVis(true)}
             underlayColor={'transparent'}>
             <View className="flex-row items-center mt-1">
               <MoreIcon name="more-vertical" size={28} color="white" />
@@ -358,8 +363,102 @@ const TurfHomeScreen = () => {
 
         <View className="border-[0.5px] border-gray-500 w-[70%] self-center my-5"></View>
       </View>
+
+      {/* modal for more button */}
+      <Modal
+        transparent={true}
+        animationType="slide"
+        visible={modalVis}
+        onRequestClose={() => setModalVis(false)}>
+        <TouchableWithoutFeedback onPress={() => setModalVis(false)}>
+            <View style={styles.modalContainer}>
+              <TouchableWithoutFeedback>
+                <View style={styles.modalContent}>
+                  <Text style={styles.title}>Need Help?</Text>
+                  <Text style={styles.message}>
+                    If you encounter any problems or need assistance, feel free
+                    to contact the admin of this application.
+                  </Text>
+
+                  <View style={styles.contactInfo}>
+                    <Text style={styles.label}>Name:</Text>
+                    <Text style={styles.infoText}>John Doe</Text>
+                  </View>
+
+                  <View style={styles.contactInfo}>
+                    <Text style={styles.label}>Phone:</Text>
+                    <Text style={styles.infoText}>+1234567890</Text>
+                  </View>
+
+                  <View style={styles.contactInfo}>
+                    <Text style={styles.label}>Email:</Text>
+                    <Text style={styles.infoText}>admin@turfbooking.com</Text>
+                  </View>
+
+                  <TouchableOpacity
+                    style={styles.closeButton}
+                    onPress={() => setModalVis(false)}>
+                    <Text style={styles.closeButtonText}>Close</Text>
+                  </TouchableOpacity>
+                </View>
+              </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </ScrollView>
   );
 };
 
 export default TurfHomeScreen;
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
+  modalContent: {
+    width: '90%',
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    elevation: 5, // Shadow effect
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  message: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#555',
+  },
+  contactInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 5,
+  },
+  label: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  infoText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#007BFF',
+    alignItems: 'center',
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+});
