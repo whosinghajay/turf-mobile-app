@@ -9,6 +9,7 @@ import {
   Text,
   TextInput,
   TouchableHighlight,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -30,7 +31,8 @@ import {turfData} from '../redux/reducer/turfReducer';
 const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [turfList, setTurfList] = useState<Turf[]>([]);
-  
+  const [favMark, setFavMark] = useState(false);
+
   const {isLoading, isError, isSuccess, data, error} = useGetTurfQuery();
 
   const navigation = useNavigation<any>();
@@ -56,9 +58,7 @@ const HomeScreen = () => {
       navigation.navigate('TurfInformation');
     };
     return (
-      <TouchableHighlight
-        underlayColor="#fff"
-        onPress={navigateHandler}>
+      <TouchableHighlight underlayColor="#fff" onPress={navigateHandler}>
         <View className="mx-2 mt-[12px] relative">
           <Image
             source={{uri: `${API_SERVER}/${item.image}`}}
@@ -106,7 +106,13 @@ const HomeScreen = () => {
             </View>
           </View>
           <View className="absolute right-5 top-3">
-            <FavouriteIcon name="hearto" size={20} color="white" />
+            <TouchableOpacity onPress={() => setFavMark(!favMark)}>
+              <FavouriteIcon
+                name={favMark ? 'heart' : 'hearto'}
+                size={20}
+                color={favMark ? 'red' : 'white'}
+              />
+            </TouchableOpacity>
           </View>
         </View>
       </TouchableHighlight>
