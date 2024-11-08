@@ -162,7 +162,7 @@ const FavouriteScreen = () => {
 
   const renderItem = ({item}: {item: Booking}) => {
     const time = item.turfInfo.slot.map(a => a.time);
-    const date = item.turfInfo.slot.map(a => a.date);
+    const date = item.turfInfo.slot.map(a => a.date);    
 
     let timeString = '';
     for (let i = 0; i < time.length; i++) {
@@ -172,6 +172,22 @@ const FavouriteScreen = () => {
         timeString += String(time[i] + ' | ');
       }
     }
+
+    // Get the booking date and time from the first slot (assuming all slots have the same date for this booking)
+    const bookingDate = date[0]; // e.g., "2024-11-08"
+    const bookingTime = time[0]; // e.g., "15:00" (3 PM)
+
+    // Combine booking date and time into a single string for comparison
+    const bookingDateTimeString = `${bookingDate}T${bookingTime}:00`; // "2024-11-08T15:00:00"
+
+    // Convert the booking date and time to a Date object
+    const bookingDateTime = new Date(bookingDateTimeString);
+
+    // Get the current date and time
+    const currentDateTime = new Date();
+
+    // Check if the booking has passed
+    const isBookingPast = bookingDateTime < currentDateTime;
 
     return (
       <View className="mb-5 pt-2 border-2 border-slate-300 rounded-xl">
@@ -239,6 +255,33 @@ const FavouriteScreen = () => {
             </Text>
           </TouchableHighlight>
         </View>
+
+        {/* dim background */}
+        {isBookingPast && (
+          <View
+            className="absolute top-0 bottom-0 right-0 left-0 z-[1] rounded-xl"
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.2)',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{
+                transform: [{rotate: '-30deg'}],
+                fontSize: 24,
+                fontWeight: 'bold',
+                color: 'white',
+                letterSpacing: 2,
+                textAlign: 'center',
+                backgroundColor: 'rgba(0, 0, 0, 0.4)', // Optional background to enhance contrast
+                padding: 10,
+                borderRadius: 10,
+              }}>
+              You are over with this
+            </Text>
+          </View>
+        )}
       </View>
     );
   };
@@ -392,7 +435,7 @@ const FavouriteScreen = () => {
         <FlatList data={bookingData.reverse()} renderItem={renderItem} />
       )}
 
-      {/* modal */}
+      {/* modal for cancellation */}
       <Modal
         animationType="fade"
         transparent={true}
