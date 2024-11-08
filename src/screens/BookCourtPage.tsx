@@ -4,19 +4,33 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
-import { Calendar } from 'react-native-calendars';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  Alert,
+  Image,
+  Linking,
+  Modal,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {Calendar} from 'react-native-calendars';
 import {
   default as CalendarIcon,
   default as FavouriteIcon,
   default as LeftArrowIcon,
   default as ShareIcon,
 } from 'react-native-vector-icons/AntDesign';
-import { API_SERVER } from '../../envVar';
-import { useCreateBookingMutation } from '../redux/api/bookingAPI';
-import { useGetSingleTurfQuery } from '../redux/api/turfAPI';
-import { useAppSelector } from '../redux/hooks';
+import {API_SERVER} from '../../envVar';
+import {useCreateBookingMutation} from '../redux/api/bookingAPI';
+import {useGetSingleTurfQuery} from '../redux/api/turfAPI';
+import {useAppSelector} from '../redux/hooks';
+import {StyleSheet} from 'react-native';
+
+// import OneUpi from 'one-react-native-upi'
+import {Button} from 'react-native'
+
 type FlattenedSlot = {
   date: string;
   time: string;
@@ -238,31 +252,82 @@ const BookCourtPage = () => {
     }, []),
   );
 
-  // const handlePaymentAppSelect = async () => {
-  //   const recipientUPI = 'bharatpe.90068407581@fbpe';
-  //   const yourName = isSuccess && data?.turf.turfName;
-  //   const transactionId = Date.now().toString();
-  //   // const amount = isSuccess && data.turf.price * selectedSlot.length;
-  //   const amount = 2;
-  //   const currency = 'INR';
-
-  //   // Custom deep link callback URL to capture payment result
-  //   const callbackUrl = 'creasecrown://paymentresult'; // Replace with your custom deep link scheme
-
-  //   // UPI payment URL
-  //   const upiLink = `upi://pay?pa=${recipientUPI}&pn=${encodeURIComponent(
-  //     yourName,
-  //   )}&mc=0000&tid=${transactionId}&tt=Test%20Transaction&am=${amount}&cu=${currency}&url=${encodeURIComponent(
-  //     callbackUrl,
-  //   )}`;
-
-  //   try {
-  //     await Linking.openURL(upiLink);
-  //     // Wait for the payment process (You may need to handle the callback to check for success)
-  //   } catch (error) {
-  //     Alert.alert('Unable to find any UPI in your phone');
-  //   }
+  // type LinkingEvent = {
+  //   url: string; // The URL that is passed as the event object
   // };
+
+  // useEffect(() => {
+  //   // The event parameter now has a defined type
+  //   const handleDeepLink = (event: LinkingEvent) => {
+  //     const {url} = event;
+  //     try {
+  //       const queryParams = new URLSearchParams(url.split('?')[1]);
+  //       const paymentStatus = queryParams.get('status'); // Retrieve 'status' from the URL
+  
+  //       if (paymentStatus === 'success') {
+  //         // If payment was successful, call the onPressHandler to complete booking
+  //         onPressHandler();
+  //       } else {
+  //         // If payment failed, show an alert
+  //         Alert.alert('Payment failed');
+  //       }
+  //     } catch (error) {
+  //       console.error('Error parsing deep link:', error);
+  //       Alert.alert('Error handling payment result');
+  //     }
+  //   };
+
+  //   // Add listener for deep link event
+  //   const subscription = Linking.addEventListener('url', handleDeepLink);
+
+  //   // Cleanup listener on unmount using the subscription object
+  //   return () => {
+  //     // Remove event listener using the subscription object returned by addEventListener
+  //     if (subscription && subscription.remove) {
+  //       subscription.remove();
+  //     }
+  //   };
+  // }, []);
+
+  // const handlePaymentAppSelect = async () => {
+  //   // const recipientUPI = 'bharatpe.90068407581@fbpe';
+  //   // const yourName = isSuccess && data?.turf.turfName;
+  //   // const transactionId = Date.now().toString();
+  //   // // const amount = isSuccess && data.turf.price * selectedSlot.length;
+  //   // const amount = 2;
+  //   // const currency = 'INR';
+
+  //   // // Custom deep link callback URL to capture payment result
+  //   // const callbackUrl = 'creasecrown://paymentresult'; // Replace with your custom deep link scheme
+
+  //   // // UPI payment URL
+  //   // const upiLink = `upi://pay?pa=${recipientUPI}&pn=${encodeURIComponent(
+  //   //   yourName,
+  //   // )}&mc=0000&tid=${transactionId}&tt=Real%20Transaction&am=${amount}&cu=${currency}&url=${encodeURIComponent(
+  //   //   callbackUrl,
+  //   // )}`;
+
+  //   // try {
+  //   //   await Linking.openURL(upiLink);
+  //   //   // Wait for the payment process (You may need to handle the callback to check for success)
+  //   // } catch (error) {
+  //   //   Alert.alert('Unable to find any UPI in your phone');
+  //   }    
+
+    // const config =  {
+    //   upiId: 'bharatpe.90068407581@fbpe',
+    //   name: 'Sonu',
+    //   note: 'Test payment',
+    //   amount: '1',
+    //   targetPackage: "in.org.npci.upiapp",
+    //   }
+     
+    //   const onSuccess = (() => {
+    //       onPressHandler()
+    //   }) as any;
+    //   const onFailure = (() => {
+    //       Alert.alert("Payment Failed")
+    //   }) as any;
 
   const sevenDaysLater = new Date();
   sevenDaysLater.setDate(new Date().getDate() + 5);
@@ -412,6 +477,13 @@ const BookCourtPage = () => {
         }}
         // onPress={handlePaymentAppSelect}>
         onPress={onPressHandler}>
+        {/* onPress={() =>
+          OneUpi.initiate(
+            config,
+            onSuccess,
+            onFailure,
+          )
+        }> */}
         <Text className="text-lg text-center text-white py-3">
           Proceed to Pay ₹{isSuccess && data.turf.price * selectedSlot.length}
         </Text>
